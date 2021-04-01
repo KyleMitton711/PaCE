@@ -275,11 +275,11 @@ export default {
       },
     ],
     userprofile: [
-      { title: "My Contacts", to: "/apps/contact" },
-      { title: "My Balance", to: "/apps/contact-grid" },
-      { title: "Inbox", to: "/apps/email/inbox" },
-      { title: "Account Setting", to: "/form-layouts/flformbasic" },
-      { title: "Logout", to: "/authentication/boxedlogin" },
+      { title: "My Contacts", to: "/theme/apps/contact" },
+      { title: "My Balance", to: "/theme/apps/contact-grid" },
+      { title: "Inbox", to: "/theme/apps/email/inbox" },
+      { title: "Account Setting", to: "/theme/form-layouts/flformbasic" },
+      { title: "Logout", to: "/theme/authentication/boxedlogin" },
     ],
     href() {
       return undefined;

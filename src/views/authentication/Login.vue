@@ -64,9 +64,7 @@
 
 <script>
   export default {
-    name: 'PagesLogin',
-
-   
+    name: 'Login',
 
     data: () => ({
       socials: [
