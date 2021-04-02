@@ -1,26 +1,23 @@
 <template>
   <v-container id="login" class="fill-height justify-center" tag="section">
     <v-row justify="center">
-      <v-col lg="11" md="11" sm="8" xl="7">
+      <v-col lg="11" sm="8" xl="7">
         <v-card class="elevation-4">
           <v-row>
             <v-col lg="7" md="6" class="d-none d-md-flex login-image">
             </v-col>
-            <v-col lg="5" md="6">
-              <div class="pa-7 pa-sm-11">
-                <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
-                <h2 class="font-weight-bold mt-4 blue-grey--text text--darken-2">Sign in</h2>
-                <h6 class="subtitle-1">
-                  Don't have an account?
-                  <a href="#/pages/boxedregister" class="pace-orange--text">Sign Up</a>
+            <v-col lg="5" md="6" class="pr-0">
+              <div class="pa-7 pa-sm-12">
+                <p class="font-weight-bold mt-4 text-center blue-grey--text text--darken-2">Create an account</p>
+                <h6 class="subtitle-1 mb-5 text-center">
+                  Keep your data by recording your email address and setting a password
                 </h6>
 
-                <v-form ref="form" v-model="valid" lazy-validation action="/dashboards/analytical">
+                <v-form ref="form" v-model="valid" lazy-validation action="/pages/boxedlogin">
                   <v-text-field
                     v-model="email"
                     :rules="emailRules"
                     label="E-mail"
-                    class="mt-4"
                     required
                     outlined
                   ></v-text-field>
@@ -34,25 +31,13 @@
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="show1 ? 'text' : 'password'"
                   ></v-text-field>
-
-                  <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
-                    <div class="ml-auto text-right">
-                      <a href="/auth/resetpassword" class="link">Forgot your password</a>
-                    </div>
-                  </div>
                   <v-btn
                     :disabled="!valid"
                     block
-                    class="mr-4 bg-pace-yellow white--text"
+                    class="mr-4 white--text bg-pace-yellow"
                     submit
                     @click="submit"
-                  >Sign In</v-btn>
-
-                  <div class="d-block d-sm-flex align-center mb-4 mb-sm-0 mt-4">
-                    <div class="ml-auto text-center">
-                      <a href="/auth/register" class="link">Create your account</a>
-                    </div>
-                  </div>
+                  >Submit</v-btn>
                 </v-form>
               </div>
             </v-col>
@@ -65,8 +50,7 @@
 
 <script>
 export default {
-  name: "Login",
-
+  name: "Register",
   data: () => ({
     valid: true,
     password: "",
@@ -79,15 +63,13 @@ export default {
     emailRules: [
       v => !!v || "E-mail is required",
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-    ],
-    checkbox: false
+    ]
   }),
-  computed: {},
   methods: {
     submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
-        this.$router.push({ path: "/dashboards/analytical" });
+        this.$router.push({ path: "/auth/login" });
       }
     }
   }

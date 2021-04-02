@@ -36,8 +36,13 @@
                   ></v-text-field>
 
                   <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
-                    <div class="ml-auto text-right">
-                      <a href="/auth/resetpassword" class="link">Forgot your password</a>
+                    <v-checkbox
+                      v-model="checkbox"
+                      label="Remember me?"
+                      required
+                    ></v-checkbox>
+                    <div class="ml-auto">
+                      <a href="javascript:void(0)" class="link">Forgot?</a>
                     </div>
                   </div>
                   <v-btn
@@ -47,12 +52,6 @@
                     submit
                     @click="submit"
                   >Sign In</v-btn>
-
-                  <div class="d-block d-sm-flex align-center mb-4 mb-sm-0 mt-4">
-                    <div class="ml-auto text-center">
-                      <a href="/auth/register" class="link">Create your account</a>
-                    </div>
-                  </div>
                 </v-form>
               </div>
             </v-col>
@@ -65,7 +64,7 @@
 
 <script>
 export default {
-  name: "Login",
+  name: "AdminLogin",
 
   data: () => ({
     valid: true,
@@ -96,7 +95,7 @@ export default {
 
 <style lang="scss" scoped>
 .login-image {
-  background-image: url('../../assets/image1.png');
+  background-image: url('../../../assets/image1.png');
   background-position-x: center;
 }
 
