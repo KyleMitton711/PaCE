@@ -3,19 +3,39 @@ import Login from "@/views/pace-auth/Login";
 import Register from "@/views/pace-auth/Register";
 import ResetPassword from "@/views/pace-auth/ResetPassword";
 import NewPassword from "@/views/pace-auth/NewPassword";
+// User Main
+import Greeting from "@/views/pace-main/Greeting";
+import Search from "@/views/pace-main/Search";
 // Admin Auth
 import AdminLogin from "@/views/pace-admin/auth/AdminLogin";
 
 // layout
 import Layout from "@/layouts/full-layout/Layout";
 import Blanklayout from "@/layouts/blank-layout/Blanklayout";
+import Searchlayout from "@/layouts/blank-layout/Searchlayout";
 
 export const routes = [
-    { path: "/", redirect: "/admin/auth/login" },
+    {
+        path: "/",
+        redirect: "/",
+        component: Searchlayout,
+        children: [
+            {
+                name: "Greeting",
+                path: "/",
+                component: Greeting
+            },
+            {
+                name: "Search",
+                path: "search",
+                component: Search
+            },
+        ]
+    },
 
     {
         path: "/auth",
-        redirect: "login",
+        redirect: "auth/login",
         component: Blanklayout,
         children: [
             {
@@ -43,7 +63,7 @@ export const routes = [
 
     {
         path: "/admin/auth",
-        redirect: "login",
+        redirect: "admin/auth/login",
         component: Blanklayout,
         children: [
             {

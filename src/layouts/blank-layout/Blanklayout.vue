@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="blank">
      <router-view />
   </v-app>
 </template>
@@ -14,7 +14,7 @@
 </script>
 
 <style lang="scss">
-.v-application--wrap {
+#blank {
   background: url('../../assets/PaCE_Spider_GraphicElement.png') #939597;
 }
 </style>

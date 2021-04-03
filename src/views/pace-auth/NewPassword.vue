@@ -55,7 +55,7 @@
 export default {
   name: "NewPassword",
   data: () => ({
-      valid: true,
+    valid: true,
     password: "",
     show1: false,
     confirmpass: "",
