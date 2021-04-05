@@ -13,18 +13,26 @@ import AdminLogin from "@/views/pace-admin/auth/AdminLogin";
 import Layout from "@/layouts/full-layout/Layout";
 import Blanklayout from "@/layouts/blank-layout/Blanklayout";
 import Searchlayout from "@/layouts/blank-layout/Searchlayout";
+import Greetinglayout from "@/layouts/blank-layout/Greetinglayout";
 
 export const routes = [
     {
         path: "/",
         redirect: "/",
-        component: Searchlayout,
+        component: Greetinglayout,
         children: [
             {
                 name: "Greeting",
                 path: "/",
                 component: Greeting
             },
+        ]
+    },
+
+    {
+        path: "/",
+        component: Blanklayout,
+        children: [
             {
                 name: "Search",
                 path: "search",

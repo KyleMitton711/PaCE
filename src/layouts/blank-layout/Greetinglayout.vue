@@ -1,12 +1,13 @@
 <template>
   <v-app id="search">
-      <router-view />
+      <router-link to="/auth" class="v-underline ml-auto mr-3 mt-3 white--text signin-link d-block d-sm-none">Sign in ></router-link>
+     <router-view />
   </v-app>
 </template>
 
 <script>
   export default {
-    name: 'Searchlayout',
+    name: 'Greetinglayout',
     components: {
       
     },

@@ -1,12 +1,12 @@
 <template>
-  <v-app id="blank">
-     <router-view />
+  <v-app id="search">
+    <router-view />
   </v-app>
 </template>
 
 <script>
   export default {
-    name: 'Blanklayout',
+    name: 'Searchlayout',
     components: {
       
     },
@@ -14,7 +14,7 @@
 </script>
 
 <style lang="scss">
-#blank {
-  background: url('../../assets/PaCE_Spider_GraphicElement.png') #939597;
+#search {
+    background: url('../../assets/PaCE_Spider_GraphicElement.png') #F15F35;
 }
 </style>
