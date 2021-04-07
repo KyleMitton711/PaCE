@@ -4,7 +4,7 @@
       <v-col lg="11" md="11" sm="8" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4">
           <v-row>
-            <v-col lg="5" md="5" class="pa-0 full-height d-flex flex-column pt-0">
+            <v-col lg="5" md="5" class="pa-0 full-height-md d-flex flex-column pt-0">
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
                   <router-link to="/auth" class="v-underline white--text ml-auto mr-3 mt-3 white--text signin-link">Sign in ></router-link>
@@ -17,7 +17,7 @@
                   solo
                   class="search-input"
                 ></v-text-field>
-                <p class="text-right"><a class="white--text">Browse 816 results ></a></p>
+                <p class="text-right"><a class="white--text v-underline">Browse 816 results ></a></p>
               </div>
               <div class="search-info px-sm-10 px-1 pt-2">
                 <v-tabs
@@ -34,7 +34,7 @@
 
                 <v-tabs-items v-model="tab" class="ma-1 mt-2">
                   <v-tab-item>
-                    <v-card class="elevation-1 pa-5 tab-content">
+                    <v-card class="elevation-1 pa-5 tab-content" v-if="loggedIn">
                       <p class="mb-1">Too many results?</p>
                       <p>Take a minute to review your filters</p>
                       <p>Current filters</p>
@@ -44,47 +44,137 @@
                       <div class="mt-10">
                         <div class="text-right">
                           <span class="more-filters mr-5">More filters</span>
-                          <v-btn color="bg-pace-yellow" fab small @click="goToSearch">
+                          <v-btn color="bg-pace-yellow" fab small @click="tab = 1">
                             <v-icon color="white">mdi-chevron-right</v-icon>
                           </v-btn>
                         </div>
                       </div>
                       <p class="tip mt-5">Tip: Tap a filter above to edit your selection.</p>
                     </v-card>
-                  </v-tab-item>
-                  <v-tab-item>
-                    <v-card flat>
-                      <v-card-text></v-card-text>
+                    <v-card class="elevation-1 pa-5 tab-content" v-else>
+                      <p class="mb-1">Welcome to Palliative Care Education Directory</p> <br>
+                      <p>To help you find what you need, take a moment to set your search filters</p>
+                      <div class="mt-10">
+                        <div class="text-right">
+                          <span class="more-filters mr-5">Ok, show me</span>
+                          <v-btn color="bg-pace-yellow" fab small @click="tab = 1">
+                            <v-icon color="white">mdi-chevron-right</v-icon>
+                          </v-btn>
+                        </div>
+                      </div>
+                      <p class="tip mt-5">Tip: <router-link to="/auth/register" class="tip v-underline"> Create an account</router-link> to save your filters for future use<br>
+                        Note: You can clear your filters at any time to see all results.
+                      </p>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
-                    <v-card flat>
-                      <v-card-text></v-card-text>
+                    <v-card class="elevation-1 pa-5 tab-content">
+                      <div
+                        v-for="(item, i) in audienceItems"
+                        :key="i"
+                      >
+                        <v-checkbox
+                          v-model="audience"
+                          :label="item.text"
+                          :value="item.id"
+                          hide-details
+                        ></v-checkbox>
+                      </div>
+                      <div class="mt-10">
+                        <div class="text-right">
+                          <v-btn color="bg-pace-yellow" fab small @click="tab = 2">
+                            <v-icon color="white">mdi-chevron-right</v-icon>
+                          </v-btn>
+                        </div>
+                      </div>
                     </v-card>
                   </v-tab-item>
                   <v-tab-item>
-                    <v-card flat>
-                      <v-card-text></v-card-text>
+                    <v-card class="elevation-1 pa-5 tab-content">
+                      <div
+                        v-for="(item, i) in typeItems"
+                        :key="i"
+                      >
+                        <v-checkbox
+                          v-model="type"
+                          :label="item.text"
+                          :value="item.id"
+                          hide-details
+                        ></v-checkbox>
+                      </div>
+                      <div class="mt-10">
+                        <div class="text-right">
+                          <v-btn color="bg-pace-yellow" fab small @click="tab = 3">
+                            <v-icon color="white">mdi-chevron-right</v-icon>
+                          </v-btn>
+                        </div>
+                      </div>
+                    </v-card>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-card class="elevation-1 pa-5 tab-content">
+                      <div
+                        v-for="(item, i) in modeItems"
+                        :key="i"
+                      >
+                        <v-checkbox
+                          v-model="mode"
+                          :label="item.text"
+                          :value="item.id"
+                          hide-details
+                        ></v-checkbox>
+                      </div>
+                      <div class="mt-10">
+                        <div class="text-right">
+                          <v-btn color="bg-pace-yellow" fab small @click="tab = 0">
+                            <v-icon color="white">mdi-chevron-right</v-icon>
+                          </v-btn>
+                        </div>
+                      </div>
                     </v-card>
                   </v-tab-item>
                 </v-tabs-items>
               </div>
+              <div class="d-flex d-sm-none bg-pace-orange pa-2">
+                <h3 class="white--text">My resources</h3>
+              </div>
             </v-col>
-            <v-col lg="7" md="7" class="">
-              <v-expansion-panels accordion>
-                <v-expansion-panel
-                  v-for="(item,i) in 5"
-                  :key="i"
+            
+            <v-col lg="7" md="7" class="resource-block pa-2 white pa-md-5 d-flex flex-column">
+              <v-list two-line subheader class="pt-5 mb-10">
+                <v-list-item
+                  v-for="(item, i) in resources"
+                  :key="item.title"
+                  :class="item['status'] ? 'opened' : 'closed'"
                 >
-                  <v-expansion-panel-header>
-                    Item <br>
-                    Item33
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
+                  <v-list-item-avatar tile size="64">
+                    <v-icon
+                      :class="[item.iconClass]"
+                      v-text="item.icon"
+                    ></v-icon>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <router-link :to="`/resources/${item.id}`">{{item.title}}</router-link>
+                    <p v-html="item.content"></p>
+                  </v-list-item-content>
+
+                  <v-list-item-action>
+                    <v-btn icon @click="toggleResource(i)">
+                      <v-icon color="grey lighten-1">{{item['status'] ? "mdi-chevron-up" : "mdi-chevron-down"}}</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+              <div class="d-flex justify-space-between mt-auto mb-5">
+                <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
+                <div class="text-right">
+                  <span class="mr-2">1 / 22</span>
+                  <v-btn color="bg-pace-yellow" fab small @click="nextPage">
+                    <v-icon color="white">mdi-chevron-right</v-icon>
+                  </v-btn>
+                </div>
+              </div>
             </v-col>
           </v-row>
         </v-card>
@@ -98,18 +188,61 @@ export default {
   name: "Search",
 
   data: () => ({
+    loggedIn: false,
     tab: null,
     items: [
       { tab: 'Filters:', content: 'Tab 1 Content' },
       { tab: 'Audience', content: 'Tab 2 Content' },
       { tab: 'Type', content: 'Tab 2 Content' },
       { tab: 'Mode', content: 'Tab 2 Content' },
-    ]
+    ],
+    audience: [],
+    audienceItems: [
+      { text: 'Student', id: 1 },
+      { text: 'Academic', id: 2 },
+      { text: 'Clinician - Accute care', id: 3 },
+      { text: 'Clinician - Aged care', id: 4 },
+      { text: 'Clinician - Community', id: 5 },
+      { text: 'Clinician - Palliative care specialist', id: 6 },
+    ],
+    type: [],
+    typeItems: [
+      { text: 'Student', id: 7 },
+      { text: 'Academic', id: 8 },
+      { text: 'Clinician - Accute care', id: 9 },
+      { text: 'Clinician - Aged care', id: 10 },
+      { text: 'Clinician - Community', id: 11 },
+      { text: 'Clinician - Palliative care specialist', id: 12 },
+    ],
+    mode: [],
+    modeItems: [
+      { text: 'Student', id: 13 },
+      { text: 'Academic', id: 14 },
+      { text: 'Clinician - Accute care', id: 15 },
+      { text: 'Clinician - Aged care', id: 16 },
+      { text: 'Clinician - Community', id: 17 },
+      { text: 'Clinician - Palliative care specialist', id: 18 },
+    ],
+    resources: [
+        { id: 22, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Photos', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+        { id: 25, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Recipes', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+        { id: 26, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Work', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+      ],
   }),
 
   methods: {
     goToSearch() {
       this.$router.push({ name: 'Greeting' })
+    },
+
+    toggleResource(i) {
+      let tmp = Object.assign([], this.resources);
+      tmp[i]['status'] = tmp[i]['status'] ? !tmp[i]['status'] : true;
+      this.resources = Object.assign([], tmp);
+    },
+
+    nextPage() {
+
     }
   }
 };
@@ -180,6 +313,56 @@ export default {
 .tip {
   font-size: 12px;
   color: $pace-grey;
+}
+
+::v-deep .v-input--checkbox .v-input__slot {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+::v-deep .resource-block {
+  .v-list-item {
+    padding-left: 0;
+    &.closed {
+      height: 90px;
+      overflow: hidden;
+    }
+
+    &.opened {
+      height: auto;
+      transition: height 1s;
+    }
+  }
+
+  .v-list-item__avatar {
+    align-self: flex-start;
+  }
+
+  .v-list-item__action {
+    align-self: flex-start;
+  }
+
+  .v-list-item__content {
+    align-self: flex-start;
+    padding: 16px 0;
+
+    a {
+      font-size: 18px;
+      color: black;
+    }
+
+    p {
+      color: #4a4a4a;
+      letter-spacing: .5px;
+    }
+  }
+}
+
+.logo {
+  max-width: 264px;
+  max-height: 50px;
+  width: 100%;
+  height: auto;
 }
 
 @media (max-width: 600px) {
