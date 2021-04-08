@@ -52,6 +52,17 @@
     font-weight: normal;
 }
 
+.page-header-title {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.resource-dialog {
+    height: 100%;
+    width: 60%;
+    max-height: 100%!important;
+}
+
 @media (min-width: 1264px) {
     .full-height-lg {
         min-height: 100vh;
@@ -61,5 +72,12 @@
 @media (min-width: 960px) {
     .full-height-md {
         min-height: 100vh;
+    }
+}
+
+@media (max-width: 600px) {
+    .resource-dialog {
+        margin: 0;
+        width: 100%;
     }
 }

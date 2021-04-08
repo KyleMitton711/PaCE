@@ -155,7 +155,7 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <router-link :to="`/resources/${item.id}`">{{item.title}}</router-link>
+                    <span class="black--text " @click="viewResource(i)">{{item.title}}</span>
                     <p v-html="item.content"></p>
                   </v-list-item-content>
 
@@ -177,6 +177,9 @@
               </div>
             </v-col>
           </v-row>
+          <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
+            <Resource @close-modal="closeResource"/>
+          </v-dialog>
         </v-card>
       </v-col>
     </v-row>
@@ -184,8 +187,13 @@
 </template>
 
 <script>
+import Resource from '@/components/Pace-resource/Resource'
 export default {
   name: "Search",
+
+  components: {
+    Resource
+  },
 
   data: () => ({
     loggedIn: false,
@@ -228,6 +236,8 @@ export default {
         { id: 25, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Recipes', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
         { id: 26, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Work', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
       ],
+    selectedResource: null,
+    showResource: false,
   }),
 
   methods: {
@@ -239,6 +249,17 @@ export default {
       let tmp = Object.assign([], this.resources);
       tmp[i]['status'] = tmp[i]['status'] ? !tmp[i]['status'] : true;
       this.resources = Object.assign([], tmp);
+    },
+
+    viewResource(i) {
+      this.selectedResource = Object.assign({}, this.resources[i]);
+      this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
+      this.showResource = true;
+    },
+
+    closeResource() {
+      this.showResource = false;
+      this.selectedResource = null;
     },
 
     nextPage() {
@@ -346,9 +367,8 @@ export default {
     align-self: flex-start;
     padding: 16px 0;
 
-    a {
+    span {
       font-size: 18px;
-      color: black;
     }
 
     p {
@@ -368,6 +388,11 @@ export default {
 @media (max-width: 600px) {
   .search-info {
     // flex: unset;
+  }
+
+  .v-dialog {
+    margin: 0;
+    height: 100vh;
   }
 }
 
