@@ -10,7 +10,7 @@
               class="white--text"
             >
               <v-btn icon>
-                <v-icon>mdi-arrow-left</v-icon>
+                <v-icon color="white">mdi-arrow-left</v-icon>
               </v-btn>
               <v-toolbar-title>"Best Pracice" 81 Results</v-toolbar-title>
               <v-spacer></v-spacer>
