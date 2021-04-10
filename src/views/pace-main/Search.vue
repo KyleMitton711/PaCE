@@ -39,7 +39,7 @@
                       <p>Take a minute to review your filters</p>
                       <p>Current filters</p>
 
-                      <p class="mb-0"><b>Capabilities:</b> Graduate (HP1, HP2) <span class="text-right">X Clear</span></p>
+                      <p class="mb-0"><router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> Graduate (HP1, HP2) <span class="text-right">X Clear</span></p>
                       <p><b>Audiences:</b> Student; Academic <span class="text-right">X Clear</span></p>
                       <div class="mt-10">
                         <div class="text-right">
@@ -196,7 +196,7 @@ export default {
   },
 
   data: () => ({
-    loggedIn: false,
+    loggedIn: true,
     tab: null,
     items: [
       { tab: 'Filters:', content: 'Tab 1 Content' },
@@ -324,6 +324,9 @@ export default {
 
 .tab-content {
   color: #4a4a4a;
+  .capability-link {
+    color: #4a4a4a;
+  }
 }
 
 .more-filters {

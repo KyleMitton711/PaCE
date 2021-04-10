@@ -10,7 +10,7 @@
             aria-controls
             @click="closeDialog"
           >mdi-arrow-left</v-icon>
-          <span class="white--text page-header-title mr-3">{{ info.title }}</span>
+          <span class="white--text page-header-title mr-3">Enroled Nurse Toolkit</span>
           <v-icon
             class="pace-yellow--text bookmark-icon ml-auto"
             size="30"
@@ -27,31 +27,35 @@
           >mdi-close</v-icon>
         </div>
       </div>
-      <div class="pa-4">
-        <div class="d-flex align-center">
-          <v-avatar size="64">
-            <v-icon
-              class="grey"
-              v-text="''"
-            ></v-icon>
-          </v-avatar>
-          <h3 class="ml-4">ToolKit</h3>
-        </div>
-        <h3 class="mt-4">{{ info.title }}</h3>
-        <p class="mt-6">{{ info.overview }}</p>
+      <div class="pa-0">
+        <v-tabs
+          v-model="tab"
+          grow
+        >
+          <v-tab>
+            Modules
+          </v-tab>
+          <v-tab>
+            Summary
+          </v-tab>
+        </v-tabs>
 
-        <h4 class="mt-4">Learning theroy / approach</h4>
-        <ul>
-          <li>Experiental learning</li>
-          <li>Reflection</li>
-          <li>Story Telling</li>
-          <li>Information sharing</li>
-        </ul>
-
-        <p class="mt-4"><b>Duration</b> {{ info.duration }}</p>
-
-        <p class="mt-4 mb-0"><b>Audience:</b></p>
-        <p>Palliative care workforce</p>
+        <v-tabs-items v-model="tab" class="ma-1 mt-2">
+          <v-tab-item>
+            <div class="pa-4">
+              <div v-for="(item, index) in modules" :key="index">
+                <h3>{{item.title}}</h3>
+                <p class="pace-grey--text">{{item.content}}</p>
+              </div>
+            </div>
+          </v-tab-item>
+          <v-tab-item>
+            <div class="pa-4">
+              <h3>Enroled Nurse Toolkit</h3>
+              <p>A suite of online palliative care teaching and learning resources for integration into Enrolled Nurses courses. Curriculum aligned to HLTENN010 Apply a palliative approach in nursing practice and EN Standards of Practice.</p>
+            </div>
+          </v-tab-item>
+        </v-tabs-items>
       </div>
       <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-end">
         <v-btn color="bg-pace-yellow" small fab @click="shareResource">
@@ -68,26 +72,21 @@
 
 <script>
 export default {
-  name: "Resource",
+  name: "Program",
 
   data: () => ({
     tab: null,
-    isModule: true,
     isBookmarked: true,
-    info: {
-      projectLink: "",
-      title: "The Advance Project Toolkit",
-      overview: "The toolkit is a reference guide which is designed to complement the online training, so you have all the information in one place to refer to as needed after completing the online learning modules. It contains the resources that GPs, practice nurses and practice managers will need to get started, practise their skills and incorporate the Advance ProjectTM assessment tools into everyday clinical practice.",
-      url: "https://pcc4u.org.au/wp-content/uploads/2019/08/Principles.pdf",
-      learningOutcomes: "This document includes core values, desirable learning outcomes, principles for learning and teaching, and benchmarks for curricula.",
-      endorsements: "",
-      graduateCapabilities: ['E1', 'E2'],
-      audience: ["Allied Health Professional", "Medical Practitioner", "Nursing"],
-      type: ["Curriculum"], 
-      mode: [],
-      content: [],
-      duration: "2-3 Hrs. APNA Endrorsed 3 hrs CPD."
-    }
+    modules: [{
+      title: 'Module1: The role of law in end of life care',
+      content: 'Describe the role of law in end of life clinical practice.'
+    },{
+      title: 'Module2: Capacity and consent to medical treatment',
+      content: 'Identify when consent to medical treatment is required and when it will be valid'
+    },{
+      title: 'Module item 3',
+      content: 'Secondary text'
+    }]
   }),
 
   methods: {

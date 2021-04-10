@@ -6,6 +6,7 @@ import NewPassword from "@/views/pace-auth/NewPassword";
 // User Main
 import Greeting from "@/views/pace-main/Greeting";
 import Search from "@/views/pace-main/Search";
+import Test from "@/views/pace-main/Test";
 import Resources from "@/views/pace-resources/pace-resources";
 
 // Admin Auth
@@ -39,6 +40,11 @@ export const routes = [
                 name: "Search",
                 path: "search",
                 component: Search
+            },
+            {
+                name: "Test",
+                path: "test",
+                component: Test
             },
         ]
     },

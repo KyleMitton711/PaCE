@@ -145,6 +145,13 @@ export default {
     goToSearch() {
       this.$router.push({ name: 'Search' })
     }
+  },
+
+  mounted() {
+    if (this.$route.query.tab) {
+      this.tab = this.$route.query.tab;
+      this.selectedResource = 0; // need to update
+    }
   }
 };
 </script>
