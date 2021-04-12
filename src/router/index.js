@@ -591,7 +591,6 @@ const themeRoutes = [
   ];
 
 const finalRoutes = themeRoutes.concat(routes);
-console.log(themeRoutes)
 const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
