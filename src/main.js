@@ -7,6 +7,7 @@ import Vuebar from "vuebar";
 import "./plugins/base";
 import VueSkycons from "vue-skycons";
 import InstantSearch from "vue-instantsearch";
+import filter from "./utils/filters";
 
 Vue.use(VueSkycons, {
   color: "#1e88e5",
@@ -14,6 +15,7 @@ Vue.use(VueSkycons, {
 Vue.use(InstantSearch);
 Vue.config.productionTip = false;
 Vue.use(Vuebar);
+Vue.use(filter);
 
 new Vue({
   vuetify,

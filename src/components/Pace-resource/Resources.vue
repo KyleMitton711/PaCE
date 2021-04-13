@@ -9,7 +9,7 @@
               color="primary"
               class="white--text"
             >
-              <v-btn icon>
+              <v-btn icon @click="close">
                 <v-icon color="white">mdi-arrow-left</v-icon>
               </v-btn>
               <v-toolbar-title>"Best Practice" 81 Results</v-toolbar-title>
@@ -95,6 +95,10 @@ export default {
       this.selectedResource = Object.assign({}, this.resources[i]);
       this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
       this.showResource = true;
+    },
+
+    close() {
+      this.$emit('close-modal');
     },
 
     nextPage() {}

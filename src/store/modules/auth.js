@@ -1,3 +1,6 @@
+import AuthService from "@/services/AuthService.js";
+const Auth = new AuthService();
+
 const state = {
     user: {
         firstName: '',
@@ -13,11 +16,30 @@ const mutations = {
     setMessageCount: (state, payload) => {
         state.user.unreadReceivedMessages = payload;
     },
+    SET_USER: (state, payload) => {
+        state.user = Object.assign({}, payload);
+    }
 };
 
 const actions = {
-    setUnreadMessageCount: ({ commit }, payload) => {
-        commit('setMessageCount', payload)
+    Login: ({ commit }, payload) => {
+        return Auth.signIn(payload)
+            .then(result => {
+                var status;
+                if (result.data == null) {
+                    status = { successful: false, error: result.errors[0].errorMessage };
+                }
+                else {
+                    var token = result.data.access_token;
+                    localStorage.setItem("token", token);
+                    commit("SET_USER", result.data.user);
+                    status = { successful: true, userType: result.data.user.userType }
+                }
+                return status;
+            })
+            .catch(e => {
+                throw e;
+            });
     },
 };
 

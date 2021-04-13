@@ -26,7 +26,6 @@
                   ></v-text-field>
                   <v-text-field
                     v-model="password"
-                    :counter="10"
                     :rules="passwordRules"
                     label="Password"
                     required
@@ -64,6 +63,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: "Login",
 
@@ -73,7 +74,7 @@ export default {
     show1: false,
     passwordRules: [
       v => !!v || "Password is required",
-      v => (v && v.length <= 10) || "Password must be less than 10 characters"
+      // v => (v && v.length <= 10) || "Password must be less than 10 characters"
     ],
     email: "",
     emailRules: [
@@ -84,10 +85,17 @@ export default {
   }),
   computed: {},
   methods: {
+    ...mapActions("auth", ["Login"]),
     submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
-        this.$router.push({ path: "/dashboards/analytical" });
+        this.Login({
+          UserName: this.email,
+          Password: this.password
+        }).then(res => {
+          console.log(res);
+          this.$router.push({ path: "/dashboards/analytical" });
+        });
       }
     }
   }
