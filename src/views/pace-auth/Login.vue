@@ -94,7 +94,7 @@ export default {
           Password: this.password
         }).then(res => {
           console.log(res);
-          this.$router.push({ path: "/dashboards/analytical" });
+          this.$router.push({ path: "/search" });
         });
       }
     }

@@ -86,7 +86,7 @@ export default {
     submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
-        this.$router.push({ path: "/dashboards/analytical" });
+        this.$router.push({ path: "/admin/projects" });
       }
     }
   }

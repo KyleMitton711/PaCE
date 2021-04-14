@@ -10,9 +10,10 @@ import Test from "@/views/pace-main/Test";
 
 // Admin Auth
 import AdminLogin from "@/views/pace-admin/auth/AdminLogin";
+import AdminProjects from "@/views/pace-admin/main/AdminProjects";
 
 // layout
-import Layout from "@/layouts/full-layout/Layout";
+import Adminlayout from "@/layouts/full-layout/Adminlayout";
 import Blanklayout from "@/layouts/blank-layout/Blanklayout";
 import Searchlayout from "@/layouts/blank-layout/Searchlayout";
 import Greetinglayout from "@/layouts/blank-layout/Greetinglayout";
@@ -85,6 +86,19 @@ export const routes = [
                 name: "AdminLogin",
                 path: "login",
                 component: AdminLogin
+            }
+        ]
+    },
+
+    {
+        path: "/admin",
+        redirect: "admin/projects",
+        component: Adminlayout,
+        children: [
+            {
+                name: "AdminProjects",
+                path: "projects",
+                component: AdminProjects
             }
         ]
     },
