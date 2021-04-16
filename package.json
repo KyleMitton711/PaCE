@@ -16,6 +16,7 @@
     "babel-loader": "^7.1.5",
     "core-js": "^3.6.5",
     "date-fns": "^2.16.1",
+    "debounce": "^1.2.1",
     "devexpress-diagram": "0.1.54",
     "devexpress-gantt": "0.0.29",
     "devextreme": "^19.2.9",

@@ -1,44 +1,28 @@
 export default [
-    { header: "Personal" },
     {
-      title: "Chat",
+      title: "User Metrics",
       icon: "mdi-comment-outline",
-      to: "/theme/apps/chat",
+      to: "/admin/usermetrics",
     },
     {
       icon: "mdi-calendar",
-      title: "Calendar",
-      to: "/theme/apps/fullcalendar",
+      title: "Projects",
+      to: "/admin/projects",
     },
     {
-      title: "Ecommerce-Shop",
+      title: "Resources",
       icon: "mdi-shopping",
-      to: "/theme/apps/shop",
+      to: "/admin/resources",
     },
     {
-      title: "Contact",
+      title: "Programs",
       icon: "mdi-phone-classic",
-      to: "/theme/apps/contact",
+      to: "/admin/programs",
     },
     {
-      title: "Contact List",
+      title: "Master Tag lists",
       icon: "mdi-phone",
-      to: "/theme/apps/contact-list",
-    },
-    {
-      title: "Contact Grid",
-      icon: "mdi-phone-voip",
-      to: "/theme/apps/contact-grid",
-    },
-    {
-      title: "Email",
-      icon: "mdi-email",
-      to: "/theme/apps/email/inbox",
-    },
-    {
-      title: "Todo",
-      icon: "mdi-playlist-plus",
-      to: "/theme/apps/todo",
+      to: "/admin/mastertaglists",
     },
   ];
   

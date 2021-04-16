@@ -1,107 +1,194 @@
 <template>
   <div>
-    <v-list-item-subtitle class="text-wrap">
-      <code>v-data-table</code> with CRUD actions using a
-      <code>v-dialog</code> component for editing each row
-    </v-list-item-subtitle>
     <div class="mt-4">
-      <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="border">
-        <template v-slot:top>
-          <v-toolbar flat color="white">
-            <v-toolbar-title>My CRUD</v-toolbar-title>
-            <v-divider class="mx-4" inset vertical></v-divider>
-            <v-spacer></v-spacer>
-            <v-dialog v-model="dialog" max-width="500px">
-              <template v-slot:activator="{ on }">
-                <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
-              </template>
-              <v-card>
-                <v-card-title>
-                  <span class="headline">{{ formTitle }}</span>
-                </v-card-title>
+      <v-card>
+        <v-data-table :headers="headers" :items="projects" :search="search" sort-by="calories" class="border">
+          <template v-slot:top>
+            <v-toolbar flat color="white">
+              <v-toolbar-title>
+                <v-text-field
+                  v-model="search"
+                  append-icon="mdi-magnify"
+                  label="Search Projects"
+                  single-line
+                  hide-details
+                ></v-text-field>
+              </v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-dialog v-model="dialog" max-width="500px">
+                <template v-slot:activator="{ on }">
+                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-map-marker</v-icon>Add Project</v-btn>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">{{ formTitle }}</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field 
+                            label="Name" 
+                            v-model="form.name"
+                            :error-messages="fieldErrors('form.name')"
+                            @input="$v.form.name.$touch()"
+                            @blur="$v.form.name.$touch()"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-textarea 
+                            label="Description" 
+                            v-model="form.description"
+                            :error-messages="fieldErrors('form.description')"
+                            @input="$v.form.description.$touch()"
+                            @blur="$v.form.description.$touch()"
+                            :rows="4"
+                          ></v-textarea>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-text-field 
+                            label="Abbreviation" 
+                            v-model="form.abbreviation"
+                            :error-messages="fieldErrors('form.abbreviation')"
+                            @input="$v.form.abbreviation.$touch()"
+                            @blur="$v.form.abbreviation.$touch()"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-file-input
+                            show-size
+                            v-model="form.logo"
+                            label="Logo" 
+                            accept="image/*"
+                            truncate-length="20"
+                            :error-messages="fieldErrors('form.logo')"
+                            @input="$v.form.logo.$touch()"
+                            @blur="$v.form.logo.$touch()"
+                          ></v-file-input>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-text-field 
+                            label="Url" 
+                            v-model="form.url"
+                            :error-messages="fieldErrors('form.url')"
+                            @input="$v.form.url.$touch()"
+                            @blur="$v.form.url.$touch()"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-text-field 
+                            label="ProjectLead" 
+                            v-model="form.projectLead"
+                            :error-messages="fieldErrors('form.projectLead')"
+                            @input="$v.form.projectLead.$touch()"
+                            @blur="$v.form.projectLead.$touch()"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
 
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                  <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-          <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-        </template>
-        <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize">Reset</v-btn>
-        </template>
-      </v-data-table>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text :disabled="$v.form.$invalid" @click="save">Save</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-toolbar>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+          </template>
+          <template v-slot:no-data>
+            <v-btn color="primary" @click="initialize">Reset</v-btn>
+          </template>
+        </v-data-table>
+      </v-card>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import {
+  required,
+  requiredIf,
+  maxLength,
+  minLength,
+  email,
+  numeric
+} from "vuelidate/lib/validators";
+import validationMixin from "@/mixins/validationMixin";
+import debounce from "debounce";
+
 export default {
   name: "AdminProjects",
-
+  mixins: [validationMixin],
+  validations: {
+    form: {
+      name: { required },
+      description: { required },
+      abbreviation: { required },
+      logo: { required },
+      url: { required },
+      projectLead: { required }
+    }
+  },
+  validationMessages: {
+    form: {
+      name: {
+        required: "Name is required"
+      },
+      description: {
+        required: "Description is required"
+      },
+      abbreviation: {
+        required: "Abbreviation is required"
+      },
+      logo: { required: "Logo is required" },
+      url: { required: "Url is required" },
+      projectLead: { required: "Project lead is required" }
+    }
+  },
   data: () => ({
     dialog: false,
     headers: [
       {
-        text: "Dessert (100g serving)",
+        text: "Logo",
         align: "start",
         sortable: false,
-        value: "name"
+        value: "logo"
       },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
+      { text: "Name", value: "name" },
+      { text: "Abbreviation", value: "abbreviation" },
+      { text: "Lead", value: "projectLead" },
       { text: "Actions", value: "actions", sortable: false }
     ],
-    desserts: [],
+    projects: [],
     editedIndex: -1,
-    editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
-    },
     defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0
+      name: null,
+      description: null,
+      abbreviation: null,
+      logo: null,
+      url: null,
+      projectLead: null
+    },
+    search: null,
+    form: {
+      name: null,
+      description: null,
+      abbreviation: null,
+      logo: null,
+      url: null,
+      projectLead: null
     }
   }),
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New Project" : "Edit Project";
     }
   },
 
@@ -116,106 +203,36 @@ export default {
   },
 
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7
-        }
-      ];
+    ...mapActions("project", ["getProjects", "addProject", "getProject"]),
+    async initialize() {
+      this.projects = await this.getProjects();
     },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedIndex = this.projects.indexOf(item);
+      this.form = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      const index = this.desserts.indexOf(item);
+      const index = this.projects.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        this.desserts.splice(index, 1);
+        this.projects.splice(index, 1);
     },
 
     close() {
       this.dialog = false;
       setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        this.form = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
     },
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        Object.assign(this.projects[this.editedIndex], this.form);
       } else {
-        this.desserts.push(this.editedItem);
+        this.projects.push(this.form);
       }
       this.close();
     }

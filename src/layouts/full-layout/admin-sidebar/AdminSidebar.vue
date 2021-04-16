@@ -14,15 +14,8 @@
   >
     <!---USer Area -->
     <v-list-item two-line class="profile-bg">
-      <v-list-item-avatar>
-        <img src="https://randomuser.me/api/portraits/men/81.jpg" />
-      </v-list-item-avatar>
-
       <v-list-item-content class="white--text">
-        <v-list-item-title>Dohnathan Deo</v-list-item-title>
-        <v-list-item-subtitle class="caption white--text"
-          >Webdesigner</v-list-item-subtitle
-        >
+        <v-list-item-title>Dohnathan@Deo.com</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
     <!---USer Area -->
@@ -48,35 +41,6 @@
       </template>
       <!---Sidebar Items -->
     </v-list>
-    <v-divider></v-divider>
-    <!--- Progress -->
-    <v-list-item two-line>
-      <v-list-item-content class>
-        <v-list-item-title class="d-flex mb-3 align-center">
-          <span class="body-2 text-truncate">monthly profit</span>
-          <div class="ml-auto">
-            <h6 class="mb-0 info--text">80%</h6>
-          </div>
-        </v-list-item-title>
-        <v-progress-linear rounded value="80"></v-progress-linear>
-      </v-list-item-content>
-    </v-list-item>
-    <v-list-item two-line>
-      <v-list-item-content class>
-        <v-list-item-title class="d-flex mb-3 align-center">
-          <span class="body-2 text-truncate">Sales of the year</span>
-          <div class="ml-auto">
-            <h6 class="mb-0 success--text">54%</h6>
-          </div>
-        </v-list-item-title>
-        <v-progress-linear
-          color="success"
-          rounded
-          value="54"
-        ></v-progress-linear>
-      </v-list-item-content>
-    </v-list-item>
-    <!--- Progress -->
   </v-navigation-drawer>
 </template>
 
@@ -133,9 +97,13 @@ export default {
     }
   }
   .profile-bg {
-    background: url("../../../assets/images/user-info.jpg") no-repeat;
-    .v-avatar {
-      padding: 45px 0;
+    background: url('../../../assets/PaCE_Spider_GraphicElement.png') #8A8B89;
+    background-size: 300px 300px;
+    background-position: -100px -200px;
+    background-repeat: no-repeat;
+    min-height: 150px;
+    .v-list-item__content {
+      align-self: flex-end;
     }
   }
 }

@@ -33,7 +33,7 @@ export default class AuthService {
 
   resetPassword (payload) {
     let headers = { "Content-Type": "application/json-patch+json" };
-    return API.post("users/resetPassword", payload, headers).then(res => {
+    return API.post("users/resetPass", payload, headers).then(res => {
       return res.data;
     }).catch(err => {
       throw err;
