@@ -18,8 +18,8 @@ const actions = {
     getProjects: ({ commit }, payload = null) => {
         return ProjectService.getProjects(payload)
             .then(result => {
-                commit("GET_PROJECTS", result);
-                return result;
+                commit("GET_PROJECTS", result.data);
+                return result.data;
             })
             .catch(e => {
                 throw e;

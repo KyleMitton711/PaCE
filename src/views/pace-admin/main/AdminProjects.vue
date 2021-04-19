@@ -15,18 +15,18 @@
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="500px">
+              <v-dialog v-model="dialog" max-width="800px">
                 <template v-slot:activator="{ on }">
                   <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-map-marker</v-icon>Add Project</v-btn>
                 </template>
                 <v-card>
-                  <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
+                  <v-card-title class="bg-pace-yellow">
+                    <span class="headline white--text">{{ formTitle }}</span>
                   </v-card-title>
                   <v-card-text>
                     <v-container>
                       <v-row>
-                        <v-col cols="12">
+                        <v-col cols="12" md="8">
                           <v-text-field 
                             label="Name" 
                             v-model="form.name"
@@ -34,18 +34,6 @@
                             @input="$v.form.name.$touch()"
                             @blur="$v.form.name.$touch()"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="12">
-                          <v-textarea 
-                            label="Description" 
-                            v-model="form.description"
-                            :error-messages="fieldErrors('form.description')"
-                            @input="$v.form.description.$touch()"
-                            @blur="$v.form.description.$touch()"
-                            :rows="4"
-                          ></v-textarea>
-                        </v-col>
-                        <v-col cols="12">
                           <v-text-field 
                             label="Abbreviation" 
                             v-model="form.abbreviation"
@@ -53,8 +41,31 @@
                             @input="$v.form.abbreviation.$touch()"
                             @blur="$v.form.abbreviation.$touch()"
                           ></v-text-field>
+                          <v-text-field 
+                            label="ProjectLead" 
+                            v-model="form.projectLead"
+                            :error-messages="fieldErrors('form.projectLead')"
+                            @input="$v.form.projectLead.$touch()"
+                            @blur="$v.form.projectLead.$touch()"
+                          ></v-text-field>
+                          <v-textarea 
+                            label="Description" 
+                            v-model="form.description"
+                            :error-messages="fieldErrors('form.description')"
+                            @input="$v.form.description.$touch()"
+                            @blur="$v.form.description.$touch()"
+                            :counter="1200"
+                            :rows="4"
+                          ></v-textarea>
+                          <v-text-field 
+                            label="Url" 
+                            v-model="form.url"
+                            :error-messages="fieldErrors('form.url')"
+                            @input="$v.form.url.$touch()"
+                            @blur="$v.form.url.$touch()"
+                          ></v-text-field>
                         </v-col>
-                        <v-col cols="12">
+                        <v-col cols="12" md="4">
                           <v-file-input
                             show-size
                             v-model="form.logo"
@@ -66,32 +77,14 @@
                             @blur="$v.form.logo.$touch()"
                           ></v-file-input>
                         </v-col>
-                        <v-col cols="12">
-                          <v-text-field 
-                            label="Url" 
-                            v-model="form.url"
-                            :error-messages="fieldErrors('form.url')"
-                            @input="$v.form.url.$touch()"
-                            @blur="$v.form.url.$touch()"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12">
-                          <v-text-field 
-                            label="ProjectLead" 
-                            v-model="form.projectLead"
-                            :error-messages="fieldErrors('form.projectLead')"
-                            @input="$v.form.projectLead.$touch()"
-                            @blur="$v.form.projectLead.$touch()"
-                          ></v-text-field>
-                        </v-col>
                       </v-row>
                     </v-container>
                   </v-card-text>
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text :disabled="$v.form.$invalid" @click="save">Save</v-btn>
+                    <v-btn class="border-pace-orange pace-orange--text" @click="close">Cancel</v-btn>
+                    <v-btn class="bg-pace-orange white--text" :disabled="$v.form.$invalid" @click="save">Save</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -129,7 +122,10 @@ export default {
   validations: {
     form: {
       name: { required },
-      description: { required },
+      description: { 
+        required,
+        maxLength: maxLength(1200),
+      },
       abbreviation: { required },
       logo: { required },
       url: { required },
@@ -142,7 +138,8 @@ export default {
         required: "Name is required"
       },
       description: {
-        required: "Description is required"
+        required: "Description is required",
+        maxLength: "Description should be less than 1200 characters"
       },
       abbreviation: {
         required: "Abbreviation is required"
@@ -188,7 +185,7 @@ export default {
   }),
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Project" : "Edit Project";
+      return this.editedIndex === -1 ? "Add Project" : "Edit Project";
     }
   },
 

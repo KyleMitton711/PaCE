@@ -4,7 +4,7 @@
 }
 
 .bg-pace-orange {
-    background-color: rgb(241, 95, 53)!important;
+    background-color: #F15F35!important;
 }
 
 .bg-pace-yellow {
@@ -25,6 +25,18 @@
 
 .pace-grey--text {
     color: #939597!important;
+}
+
+.border-pace-orange {
+    border: 1px solid #F15F35;
+}
+
+.border-pace-yellow {
+    border: 1px solid #FDBB2A;
+}
+
+.border-pace-grey {
+    border: 1px solid #939597;
 }
 
 * {

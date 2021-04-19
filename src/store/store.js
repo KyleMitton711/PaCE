@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import auth from "./modules/auth";
 import project from "./modules/project";
+import resource from "./modules/resource";
 
 Vue.use(Vuex);
 
@@ -37,6 +38,7 @@ export default new Vuex.Store({
   namespace: true,
   modules: {
     auth,
-    project
+    project,
+    resource
   }
 });
