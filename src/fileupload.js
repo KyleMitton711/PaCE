@@ -19,7 +19,7 @@ async function upload(file) {
   // upload file
   await blockBlobClient.uploadBrowserData(file, options);
   
-  return blobName;
+  return 'https://pacedevstore.blob.core.windows.net/project/' + blobName;
 }
 
 export {

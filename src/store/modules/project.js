@@ -11,7 +11,12 @@ const getters = {
 const mutations = {
     GET_PROJECTS: (state, payload) => {
         state.projects = Object.assign({}, payload);
-    }
+    },
+    ADD_PROJECT: (state, payload) => {
+        let projects = Object.assign([], state.projects);
+        projects.push(payload);
+        state.projects = Object.assign([], projects);
+    },
 };
 
 const actions = {
@@ -25,6 +30,36 @@ const actions = {
                 throw e;
             });
     },
+    addProject: ({ commit }, payload) => {
+        return ProjectService.addProject(payload)
+            .then(result => {
+                commit("ADD_PROJECT", result.data);
+                return result.data;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
+    editProject: ({ commit }, payload) => {
+        return ProjectService.editProject(payload)
+            .then(result => {
+                commit("ADD_PROJECT", result.data);
+                return result.data;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
+    deleteProject: ({ commit }, payload) => {
+        return ProjectService.deleteProject(payload)
+            .then(result => {
+                return result.data;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
+
 };
 
 export default {

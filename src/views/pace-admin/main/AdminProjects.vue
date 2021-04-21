@@ -2,7 +2,14 @@
   <div>
     <div class="mt-4">
       <v-card>
-        <v-data-table :headers="headers" :items="projects" :search="search" sort-by="calories" class="border">
+        <v-data-table
+          :headers="headers"
+          :items="projects"
+          sort-by="calories"
+          class="border"
+          :loading="isLoading"
+          loading-text="Loading... Please wait"
+        >
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>
@@ -12,6 +19,7 @@
                   label="Search Projects"
                   single-line
                   hide-details
+                  @input="searchInput"
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
@@ -73,7 +81,10 @@
                             :useCustomSlot="true" 
                             v-on:vdropzone-files-added="fileAdded"
                           >
-                            <div class="dropzone-custom-content bg-pace-grey border-grey">
+                            <div class="dropzone-custom-content bg-pace-grey border-grey" v-if="form.logo">
+                              <img :src="form.logo" width="100%" height="100%" />
+                            </div>
+                            <div class="dropzone-custom-content bg-pace-grey border-grey" v-else>
                               <h3 class="dropzone-custom-title white--text">No Logo</h3>
                               <div class="subtitle">Click here or drag drop to upload</div>
                             </div>
@@ -94,12 +105,30 @@
           </template>
           <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+            <v-icon small @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
+          </template>
+          <template slot="item.logo" slot-scope="{ item }">
+            <img :src="item.logo" height="48px" class="d-block"/>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reset</v-btn>
           </template>
         </v-data-table>
+        <v-dialog v-model="deleteConfirmDialog" max-width="400px">
+          <v-card>
+            <v-card-title class="bg-pace-yellow">
+              <span class="headline white--text">Confirm Deletion</span>
+            </v-card-title>
+            <v-card-text class="pt-2">
+              <span class="title black--text">Are you sure you want to delete this item?</span>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn class="border-pace-orange pace-orange--text" @click="deleteConfirmDialog = false">Cancel</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn class="bg-pace-orange white--text" @click="deleteItem">Delete</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card>
     </div>
   </div>
@@ -198,7 +227,10 @@ export default {
       autoProcessQueue: false,
       autoQueue: false,
       acceptedFiles: "image/png, image/jpeg",
-    }
+    },
+    deleteConfirmDialog: false,
+    selectedItemId: null,
+    isLoading: false
   }),
   computed: {
     formTitle() {
@@ -217,9 +249,11 @@ export default {
   },
 
   methods: {
-    ...mapActions("project", ["getProjects", "addProject", "getProject"]),
+    ...mapActions("project", ["getProjects", "addProject", "getProject", "editProject", "deleteProject"]),
     async initialize() {
-      this.projects = await this.getProjects();
+      this.isLoading = true;
+      this.projects = await this.getProjects(this.search);
+      this.isLoading = false;
     },
 
     editItem(item) {
@@ -228,10 +262,13 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      const index = this.projects.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.projects.splice(index, 1);
+    deleteItem() {
+      this.deleteProject(this.selectedItemId);
+    },
+
+    showDeleteConfirmDialog(item) {
+      this.deleteConfirmDialog = true;
+      this.selectedItemId = item.id;
     },
 
     close() {
@@ -242,18 +279,24 @@ export default {
       }, 300);
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.projects[this.editedIndex], this.form);
+        let res = await this.editProject(this.form);
+        this.initialize();
       } else {
-        this.projects.push(this.form);
+        let res = await this.addProject(this.form);
+        this.initialize();
       }
       this.close();
     },
 
     async fileAdded(file) {
       this.form.logo = await upload(file[0]);
-    }
+    },
+
+    searchInput: debounce(async function () {
+      this.initialize();
+    }, 500)
   }
 };
 </script>

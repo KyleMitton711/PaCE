@@ -6,17 +6,6 @@
     <v-main>
       <v-container fluid class="page-wrapper">
         <router-view />
-        <v-btn
-          bottom
-          color="success"
-          dark
-          fab
-          fixed
-          right
-          @click.stop="setCustomizerDrawer(!Customizer_drawer)"
-        >
-          <v-icon>mdi-cog</v-icon>
-        </v-btn>
       </v-container>
     </v-main>
     <!-- ---------------------------------- -->
@@ -26,14 +15,14 @@
       :expand-on-hover.sync="expandOnHover"
     ></AdminSidebar>
     
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </v-app>
 </template>
 
 <script>
 import AdminHeader from "./admin-header/AdminHeader";
 import AdminSidebar from "./admin-sidebar/AdminSidebar";
-import Footer from "./footer/Footer";
+// import Footer from "./footer/Footer";
 import { mapState, mapMutations } from "vuex";
 export default {
   name: "Adminlayout",
@@ -41,7 +30,7 @@ export default {
   components: {
     AdminHeader,
     AdminSidebar,
-    Footer,
+    // Footer,
   },
 
   props: {

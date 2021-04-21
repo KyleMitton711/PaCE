@@ -26,6 +26,26 @@ export default {
     });
   },
 
+  editProject (payload) {
+    return API.put('/api/admin/projects/' + payload.id, payload)
+    .then(result => {
+      return result;
+    })
+    .catch(e => {
+      throw e;
+    });
+  },
+
+  deleteProject (id) {
+    return API.delete('/api/admin/projects/' + id)
+    .then(result => {
+      return result;
+    })
+    .catch(e => {
+      throw e;
+    });
+  },
+
   getProject (id) {
     let headers = { "Content-Type": "application/json-patch+json" };
     return API.get(`/api/admin/projects?id=${id}`, headers).then(res => {
