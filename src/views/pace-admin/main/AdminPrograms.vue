@@ -9,7 +9,7 @@
                 <v-text-field
                   v-model="search"
                   append-icon="mdi-magnify"
-                  label="Search Resources"
+                  label="Search Programs"
                   single-line
                   hide-details
                 ></v-text-field>
@@ -17,7 +17,7 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="800px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-map-marker</v-icon>Add Resource</v-btn>
+                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-map-marker</v-icon>Add Program</v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="bg-pace-yellow">
@@ -110,7 +110,7 @@
               </v-dialog>
             </v-toolbar>
           </template>
-          <template v-slot:item.actions="{ item }">
+          <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
           </template>

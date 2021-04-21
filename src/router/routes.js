@@ -12,6 +12,7 @@ import Test from "@/views/pace-main/Test";
 import AdminLogin from "@/views/pace-admin/auth/AdminLogin";
 import AdminProjects from "@/views/pace-admin/main/AdminProjects";
 import AdminResources from "@/views/pace-admin/main/AdminResources";
+import AdminPrograms from "@/views/pace-admin/main/AdminPrograms";
 
 // layout
 import Adminlayout from "@/layouts/full-layout/Adminlayout";
@@ -105,6 +106,11 @@ export const routes = [
                 name: "AdminResources",
                 path: "resources",
                 component: AdminResources
+            },
+            {
+                name: "AdminPrograms",
+                path: "programs",
+                component: AdminPrograms
             }
         ]
     },

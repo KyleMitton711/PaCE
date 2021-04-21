@@ -68,6 +68,8 @@
                             @blur="$v.form.endorsements.$touch()"
                             :counter="500"
                           ></v-textarea>
+                        </v-col>
+                        <v-col cols="12" md="6">
                           <v-text-field 
                             label="Type" 
                             v-model="form.type"
@@ -75,6 +77,8 @@
                             @input="$v.form.type.$touch()"
                             @blur="$v.form.type.$touch()"
                           ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="6">
                           <v-text-field 
                             label="Duration"
                             type="number" 
@@ -83,6 +87,8 @@
                             @input="$v.form.duration.$touch()"
                             @blur="$v.form.duration.$touch()"
                           ></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
                           <v-checkbox
                             v-model="form.isProgram"
                             label="Is program"
@@ -110,7 +116,7 @@
               </v-dialog>
             </v-toolbar>
           </template>
-          <template v-slot:item.actions="{ item }">
+          <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
           </template>

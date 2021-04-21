@@ -65,17 +65,19 @@
                             @blur="$v.form.url.$touch()"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" md="4">
-                          <v-file-input
-                            show-size
-                            v-model="form.logo"
-                            label="Logo" 
-                            accept="image/*"
-                            truncate-length="20"
-                            :error-messages="fieldErrors('form.logo')"
-                            @input="$v.form.logo.$touch()"
-                            @blur="$v.form.logo.$touch()"
-                          ></v-file-input>
+                        <v-col cols="12" md="4" class="position-relative">
+                          <vue-dropzone 
+                            ref="dropzone"
+                            id="dropzone" 
+                            :options="dropzoneOptions" 
+                            :useCustomSlot="true" 
+                            v-on:vdropzone-files-added="fileAdded"
+                          >
+                            <div class="dropzone-custom-content bg-pace-grey border-grey">
+                              <h3 class="dropzone-custom-title white--text">No Logo</h3>
+                              <div class="subtitle">Click here or drag drop to upload</div>
+                            </div>
+                          </vue-dropzone>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -90,7 +92,7 @@
               </v-dialog>
             </v-toolbar>
           </template>
-          <template v-slot:item.actions="{ item }">
+          <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
           </template>
@@ -104,6 +106,7 @@
 </template>
 
 <script>
+import vue2Dropzone from 'vue2-dropzone'
 import { mapActions } from 'vuex';
 import {
   required,
@@ -115,6 +118,7 @@ import {
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
+import { upload } from "@/fileupload";
 
 export default {
   name: "AdminProjects",
@@ -149,6 +153,9 @@ export default {
       projectLead: { required: "Project lead is required" }
     }
   },
+  components: {
+    vueDropzone: vue2Dropzone
+  },
   data: () => ({
     dialog: false,
     headers: [
@@ -181,6 +188,16 @@ export default {
       logo: null,
       url: null,
       projectLead: null
+    },
+    dropzoneOptions: {
+      url: 'https://httpbin.org/post',
+      thumbnailWidth: 150,
+      maxFilesize: 0.5,
+      headers: { "My-Awesome-Header": "header value" },
+      autoDiscover: false,
+      autoProcessQueue: false,
+      autoQueue: false,
+      acceptedFiles: "image/png, image/jpeg",
     }
   }),
   computed: {
@@ -232,7 +249,29 @@ export default {
         this.projects.push(this.form);
       }
       this.close();
+    },
+
+    async fileAdded(file) {
+      this.form.logo = await upload(file[0]);
     }
   }
 };
 </script>
+<style lang="sass" scoped>
+.dropzone-custom-content 
+  text-align: center
+
+.dropzone-custom-title 
+  margin-top: 0
+  color: #00b782
+
+.subtitle 
+  color: #314b5f
+
+.vue-dropzone.dropzone
+  background-color: #939597
+
+::v-deep .dropzone .dz-preview .dz-progress
+  display: none
+
+</style>
