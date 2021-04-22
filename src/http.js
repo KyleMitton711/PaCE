@@ -2,13 +2,17 @@ import axios from 'axios';
 import router from '@/router';
 // import Vue from 'vue'
 
-let token = localStorage.getItem("token");
 const http = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
-  headers: {
-    Authorization: "bearer " + token,
-  }
+  baseURL: process.env.VUE_APP_API_URL
 })
+
+http.interceptors.request.use(function (config) {
+  let token = localStorage.getItem("token");
+  config.headers.Authorization = "bearer " + token;
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
 
 function handleUnauthorizedRequest() {
   if (!router.history.current.meta.publicRoute) {

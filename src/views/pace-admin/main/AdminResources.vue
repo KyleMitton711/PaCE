@@ -30,7 +30,7 @@
                           <v-select
                             :items="projects"
                             item-value="id"
-                            item-text="title"
+                            item-text="name"
                             v-model="form.projectId"
                             label="Project"
                             :error-messages="fieldErrors('form.projectId')"
@@ -235,7 +235,8 @@ export default {
       duration: null,
       isProgram: false,
       overview: null,
-    }
+    },
+    filters: {}
   }),
   computed: {
     formTitle() {
@@ -255,9 +256,9 @@ export default {
 
   methods: {
     ...mapActions("project", ["getProjects"]),
-    ...mapActions("resource", ["getTotalResources", "addResource", "getResourceDetail"]),
+    ...mapActions("resource", ["filterResources", "addResource", "getResourceDetail"]),
     async initialize() {
-      this.resources = await this.getTotalResources();
+      this.resources = await this.filterResources(this.filters);
       this.projects = await this.getProjects();
     },
 
@@ -281,11 +282,12 @@ export default {
       }, 300);
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.resources[this.editedIndex], this.form);
       } else {
-        this.resources.push(this.form);
+        let res = await this.addResource(this.form);
+        this.initialize();
       }
       this.close();
     }

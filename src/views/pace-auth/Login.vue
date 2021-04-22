@@ -85,11 +85,11 @@ export default {
   }),
   computed: {},
   methods: {
-    ...mapActions("auth", ["Login"]),
+    ...mapActions("auth", ["login"]),
     submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
-        this.Login({
+        this.login({
           UserName: this.email,
           Password: this.password
         }).then(res => {

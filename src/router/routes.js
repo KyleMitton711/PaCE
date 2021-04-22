@@ -29,7 +29,10 @@ export const routes = [
             {
                 name: "Greeting",
                 path: "/",
-                component: Greeting
+                component: Greeting,
+                meta: {
+                    publicRoute: true
+                }
             },
         ]
     },
@@ -41,7 +44,10 @@ export const routes = [
             {
                 name: "Search",
                 path: "search",
-                component: Search
+                component: Search,
+                meta: {
+                    publicRoute: true
+                }
             },
             {
                 name: "Test",
@@ -59,22 +65,34 @@ export const routes = [
             {
                 name: "Login",
                 path: "login",
-                component: Login
+                component: Login,
+                meta: {
+                    publicRoute: true
+                }
             },
             {
                 name: "Register",
                 path: "register",
-                component: Register
+                component: Register,
+                meta: {
+                    publicRoute: true
+                }
             },
             {
                 name: "ResetPassword",
                 path: "resetpassword",
-                component: ResetPassword
+                component: ResetPassword,
+                meta: {
+                    publicRoute: true
+                }
             },
             {
                 name: "NewPassword",
                 path: "newpassword",
-                component: NewPassword
+                component: NewPassword,
+                meta: {
+                    publicRoute: true
+                }
             },
         ]
     },
@@ -87,7 +105,10 @@ export const routes = [
             {
                 name: "AdminLogin",
                 path: "login",
-                component: AdminLogin
+                component: AdminLogin,
+                meta: {
+                    publicRoute: true
+                }
             }
         ]
     },

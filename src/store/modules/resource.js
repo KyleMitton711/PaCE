@@ -15,10 +15,19 @@ const mutations = {
 };
 
 const actions = {
-    getTotalResources: ({ commit }, payload = null) => {
-        return ResourceService.getTotalResources(payload)
+    getResourceCount: ({ commit }, payload = null) => {
+        return ResourceService.getResourceCount(payload)
             .then(result => {
-                commit("GET_TOTAL_RESOURCES", result.data);
+                return result.data;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
+    filterResources: ({ commit }, payload = null) => {
+        return ResourceService.filterResources(payload)
+            .then(result => {
+                commit('GET_TOTAL_RESOURCES', result.data);
                 return result.data;
             })
             .catch(e => {

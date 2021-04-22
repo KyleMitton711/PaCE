@@ -2,9 +2,24 @@ import APIService from "@/http.js";
 const API = new APIService();
 
 export default {
-  getTotalResources (payload) {
+  getResourceCount (payload) {
     let url = `/api/resources/total`;
-    return API.post(url, payload)
+    let headers = {
+      accept: 'text/plain'
+    };
+    return API.post(url, payload, headers)
+    .then(result => {
+      return result.data;
+    })
+    .catch(e => {
+      throw e;
+    });
+  },
+
+  filterResources (payload) {
+    let headers = { "Content-Type": "application/json" };
+    let url = `/api/resources/filter`;
+    return API.post(url, payload, headers)
     .then(result => {
       return result.data;
     })
@@ -14,7 +29,8 @@ export default {
   },
 
   addResource (payload) {
-    return API.post('/api/admin/resources', payload)
+    let headers = { "Content-Type": "application/json-patch+json" };
+    return API.post('/api/admin/resources', payload, headers)
     .then(result => {
       return result.data;
     })

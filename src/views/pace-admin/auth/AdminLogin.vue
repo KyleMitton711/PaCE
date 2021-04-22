@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: "AdminLogin",
 
@@ -83,10 +84,21 @@ export default {
   }),
   computed: {},
   methods: {
+    ...mapActions("auth", ["adminLogin"]),
     submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
-        this.$router.push({ path: "/admin/projects" });
+        this.adminLogin({
+          userName: this.email,
+          password: this.password
+        }).then(res => {
+          console.log(res);
+          if (res.successful) {
+            this.$router.push({ path: "/admin/projects" });
+          } else {
+
+          }
+        });
       }
     }
   }
