@@ -1,28 +1,28 @@
 export default [
     {
       title: "User Metrics",
-      icon: "mdi-comment-outline",
+      icon: "mdi-view-dashboard-outline",
       to: "/admin/usermetrics",
     },
     {
-      icon: "mdi-calendar",
+      icon: "mdi-map-marker",
       title: "Projects",
       to: "/admin/projects",
     },
     {
       title: "Resources",
-      icon: "mdi-shopping",
+      icon: "mdi-dots-grid",
       to: "/admin/resources",
     },
     {
       title: "Programs",
-      icon: "mdi-phone-classic",
+      icon: "mdi-select-group",
       to: "/admin/programs",
     },
     {
       title: "Master Tag lists",
-      icon: "mdi-phone",
-      to: "/admin/mastertaglists",
+      icon: "mdi-tag",
+      to: "/admin/tags",
     },
   ];
   

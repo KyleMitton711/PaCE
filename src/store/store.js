@@ -5,6 +5,7 @@ import auth from "./modules/auth";
 import user from "./modules/user";
 import project from "./modules/project";
 import resource from "./modules/resource";
+import tag from "./modules/tag";
 
 Vue.use(Vuex);
 
@@ -41,6 +42,7 @@ export default new Vuex.Store({
     auth,
     project,
     resource,
-    user
+    user,
+    tag
   }
 });
