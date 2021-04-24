@@ -51,6 +51,7 @@
                     class="mr-4 bg-pace-yellow white--text"
                     submit
                     @click="submit"
+                    :loading="isLoading"
                   >Sign In</v-btn>
                 </v-form>
               </div>
@@ -80,7 +81,8 @@ export default {
       v => !!v || "E-mail is required",
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"
     ],
-    checkbox: false
+    checkbox: false,
+    isLoading: false
   }),
   computed: {},
   methods: {
@@ -88,11 +90,13 @@ export default {
     submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
+        this.isLoading = true;
         this.adminLogin({
           userName: this.email,
           password: this.password
         }).then(res => {
           console.log(res);
+          this.isLoading = false;
           if (res.successful) {
             this.$router.push({ path: "/admin/projects" });
           } else {

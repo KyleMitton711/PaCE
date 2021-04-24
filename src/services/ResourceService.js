@@ -46,5 +46,27 @@ export default {
     }).catch((err) => {
       throw err;
     });
+  },
+
+  updateResource (payload) {
+    let headers = { "Content-Type": "application/json-patch+json" };
+    return API.put(`/api/admin/resources/${payload.id}`, payload, headers)
+    .then(result => {
+      return result.data;
+    })
+    .catch(e => {
+      throw e;
+    });
+  },
+
+  deleteResource (id) {
+    let headers = { "Content-Type": "application/json-patch+json" };
+    return API.delete(`/api/admin/resources/${id}`, headers)
+    .then(result => {
+      return result.data;
+    })
+    .catch(e => {
+      throw e;
+    });
   }
 }

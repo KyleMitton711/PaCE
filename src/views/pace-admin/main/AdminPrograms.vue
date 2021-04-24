@@ -83,10 +83,6 @@
                             @input="$v.form.duration.$touch()"
                             @blur="$v.form.duration.$touch()"
                           ></v-text-field>
-                          <v-checkbox
-                            v-model="form.isProgram"
-                            label="Is program"
-                          ></v-checkbox>
                           <v-textarea 
                             label="Overview" 
                             v-model="form.overview"
@@ -112,12 +108,27 @@
           </template>
           <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+            <v-icon small @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reset</v-btn>
           </template>
         </v-data-table>
+        <v-dialog v-model="deleteConfirmDialog" max-width="400px">
+          <v-card>
+            <v-card-title class="bg-pace-yellow">
+              <span class="headline white--text">Confirm Deletion</span>
+            </v-card-title>
+            <v-card-text class="pt-2">
+              <span class="title black--text">Are you sure you want to delete this item?</span>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn class="border-pace-orange pace-orange--text" @click="deleteConfirmDialog = false">Cancel</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn class="bg-pace-orange white--text" @click="deleteItem">Delete</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card>
     </div>
   </div>
@@ -229,7 +240,9 @@ export default {
       duration: null,
       isProgram: true,
       overview: null,
-    }
+    },
+    selectedItemId: null,
+    deleteConfirmDialog: false
   }),
   computed: {
     formTitle() {
@@ -275,14 +288,20 @@ export default {
       }, 300);
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.resources[this.editedIndex], this.form);
+        let res = await this.updateResource(this.form);
       } else {
-        this.resources.push(this.form);
+        let res = await this.addResource(this.form);
       }
+      this.initialize();
       this.close();
-    }
+    },
+
+    showDeleteConfirmDialog(item) {
+      this.deleteConfirmDialog = true;
+      this.selectedItemId = item.id;
+    },
   }
 };
 </script>

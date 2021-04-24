@@ -18,7 +18,7 @@ const actions = {
     getResourceCount: ({ commit }, payload = null) => {
         return ResourceService.getResourceCount(payload)
             .then(result => {
-                return result.data;
+                return result;
             })
             .catch(e => {
                 throw e;
@@ -28,7 +28,7 @@ const actions = {
         return ResourceService.filterResources(payload)
             .then(result => {
                 commit('GET_TOTAL_RESOURCES', result.data);
-                return result.data;
+                return result;
             })
             .catch(e => {
                 throw e;
@@ -37,7 +37,7 @@ const actions = {
     addResource: ({ commit }, payload = null) => {
         return ResourceService.addResource(payload)
             .then(result => {
-                return result.data;
+                return result;
             })
             .catch(e => {
                 throw e;
@@ -46,7 +46,25 @@ const actions = {
     getResourceDetail: ({ commit }, payload = null) => {
         return ResourceService.getResourceDetail(payload)
             .then(result => {
-                return result.data;
+                return result;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
+    updateResource: ({ commit }, payload) => {
+        return ResourceService.updateResource(payload)
+            .then(result => {
+                return result;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
+    deleteResource: ({ commit }, id) => {
+        return ResourceService.deleteResource(id)
+            .then(result => {
+                return result;
             })
             .catch(e => {
                 throw e;

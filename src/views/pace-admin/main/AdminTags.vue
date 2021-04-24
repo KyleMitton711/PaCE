@@ -188,8 +188,10 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem() {
-      this.deleteTag(this.selectedItemId);
+    async deleteItem() {
+      await this.deleteTag(this.selectedItemId);
+      this.deleteConfirmDialog = false;
+      this.initialize();
     },
 
     showDeleteConfirmDialog(item) {

@@ -262,8 +262,10 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem() {
-      this.deleteProject(this.selectedItemId);
+    async deleteItem() {
+      await this.deleteProject(this.selectedItemId);
+      this.deleteConfirmDialog = false;
+      this.initialize();
     },
 
     showDeleteConfirmDialog(item) {

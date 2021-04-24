@@ -2,7 +2,7 @@
   <div>
     <div class="mt-4">
       <v-card>
-        <v-data-table :headers="headers" :items="resources" :search="search" sort-by="calories" class="border">
+        <v-data-table :headers="headers" :items="resources" :search="search" sort-by="calories" class="border" :loading="isLoading">
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>
@@ -76,6 +76,7 @@
                             :error-messages="fieldErrors('form.type')"
                             @input="$v.form.type.$touch()"
                             @blur="$v.form.type.$touch()"
+                            readonly
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" md="6">
@@ -87,21 +88,6 @@
                             @input="$v.form.duration.$touch()"
                             @blur="$v.form.duration.$touch()"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="12">
-                          <v-checkbox
-                            v-model="form.isProgram"
-                            label="Is program"
-                          ></v-checkbox>
-                          <v-textarea 
-                            label="Overview" 
-                            v-model="form.overview"
-                            :error-messages="fieldErrors('form.overview')"
-                            @input="$v.form.overview.$touch()"
-                            @blur="$v.form.overview.$touch()"
-                            :counter="1200"
-                            :rows="4"
-                          ></v-textarea>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -118,12 +104,30 @@
           </template>
           <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+            <v-icon small @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
+          </template>
+          <template slot="item.projectId" slot-scope="{ item }">
+            {{ getProjectName(item.projectId) }}
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reset</v-btn>
           </template>
         </v-data-table>
+        <v-dialog v-model="deleteConfirmDialog" max-width="400px">
+          <v-card>
+            <v-card-title class="bg-pace-yellow">
+              <span class="headline white--text">Confirm Deletion</span>
+            </v-card-title>
+            <v-card-text class="pt-2">
+              <span class="title black--text">Are you sure you want to delete this item?</span>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn class="border-pace-orange pace-orange--text" @click="deleteConfirmDialog = false">Cancel</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn class="bg-pace-orange white--text" @click="deleteItem">Delete</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card>
     </div>
   </div>
@@ -133,11 +137,7 @@
 import { mapActions } from 'vuex';
 import {
   required,
-  requiredIf,
   maxLength,
-  minLength,
-  email,
-  numeric
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
@@ -159,17 +159,13 @@ export default {
         maxLength: maxLength(500)
       },
       type: { required },
-      duration: { required },
-      overview: { 
-        required,
-        maxLength: maxLength(1200)
-      }
+      duration: { required }
     }
   },
   validationMessages: {
     form: {
       projectId: {
-        required: "Name is required"
+        required: "Project is required"
       },
       title: { 
         required: "Title is required"
@@ -189,10 +185,6 @@ export default {
       },
       duration: {
         required: "Duration is required"
-      },
-      overview: {
-        required: "Overview is required",
-        maxLength: "Overview should be less than 1200 characters"
       }
     }
   },
@@ -203,7 +195,7 @@ export default {
         text: "Project",
         align: "start",
         sortable: false,
-        value: "logo"
+        value: "projectId"
       },
       { text: "Title", value: "title" },
       { text: "Type", value: "type" },
@@ -219,10 +211,8 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: null,
-      duration: null,
-      isProgram: false,
-      overview: null,
+      type: "Toolkit",
+      duration: null
     },
     search: null,
     form: {
@@ -231,12 +221,13 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: null,
-      duration: null,
-      isProgram: false,
-      overview: null,
+      type: "Toolkit",
+      duration: null
     },
-    filters: {}
+    filters: {},
+    isLoading: false,
+    deleteConfirmDialog: false,
+    selectedItemId: null
   }),
   computed: {
     formTitle() {
@@ -256,10 +247,13 @@ export default {
 
   methods: {
     ...mapActions("project", ["getProjects"]),
-    ...mapActions("resource", ["filterResources", "addResource", "getResourceDetail"]),
+    ...mapActions("resource", ["filterResources", "addResource", "getResourceDetail", "deleteResource", "updateResource"]),
     async initialize() {
-      this.resources = await this.filterResources(this.filters);
+      this.isLoading = true;
       this.projects = await this.getProjects();
+      let res = await this.filterResources(this.filters);
+      this.resources = Object.assign([], res.results);
+      this.isLoading = false;
     },
 
     editItem(item) {
@@ -268,10 +262,10 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      const index = this.resources.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.resources.splice(index, 1);
+    async deleteItem() {
+      await this.deleteResource(this.selectedItemId);
+      this.deleteConfirmDialog = false;
+      this.initialize();
     },
 
     close() {
@@ -284,13 +278,23 @@ export default {
 
     async save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.resources[this.editedIndex], this.form);
+        let res = await this.updateResource(this.form);
       } else {
         let res = await this.addResource(this.form);
-        this.initialize();
       }
+      this.initialize();
       this.close();
-    }
+    },
+
+    getProjectName (id) {
+      let project = this.projects.filter(item => item.id == id);
+      return project.length > 0 ? project[0].name : "";
+    },
+
+    showDeleteConfirmDialog(item) {
+      this.deleteConfirmDialog = true;
+      this.selectedItemId = item.id;
+    },
   }
 };
 </script>
