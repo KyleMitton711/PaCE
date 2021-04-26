@@ -41,6 +41,20 @@
       </template>
       <!---Sidebar Items -->
     </v-list>
+
+    <v-list nav class="mt-15">
+      <v-list-item
+        to="/admin/users"
+      >
+        <v-list-item-icon>
+          <v-icon v-text="'mdi-account-multiple'" />
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title v-text="'Users'" />
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </v-navigation-drawer>
 </template>
 

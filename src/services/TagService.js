@@ -11,7 +11,7 @@ export default {
 
     return API.get(url, headers)
       .then(result => {
-        return result.data;
+        return result;
       })
       .catch(e => {
         throw e;
@@ -21,17 +21,17 @@ export default {
   addTag(payload) {
     return API.post('/api/admin/tags', payload, headers)
       .then(result => {
-        return result.data;
+        return result;
       })
       .catch(e => {
         throw e;
       });
   },
 
-  deleteTag(id) {
-    return API.delete(`/api/admin/tags/${id}`, headers)
+  deleteTag(payload) {
+    return API.delete(`/api/admin/tags/${payload.id}?tagType=${payload.tagType}`, headers)
       .then(result => {
-        return result.data;
+        return result;
       })
       .catch(e => {
         throw e;
@@ -41,7 +41,7 @@ export default {
   updateTag(payload) {
     return API.put(`/api/admin/tags/${payload.id}`, payload, headers)
       .then(result => {
-        return result.data;
+        return result;
       })
       .catch(e => {
         throw e;

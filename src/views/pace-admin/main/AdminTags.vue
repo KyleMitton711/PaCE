@@ -5,6 +5,7 @@
         <v-data-table
           :headers="headers"
           :items="tags"
+          item-key="index"
           sort-by="calories"
           class="border"
           :loading="isLoading"
@@ -48,6 +49,7 @@
                             v-model="form.tagType"
                             :error-messages="fieldErrors('form.tagType')"
                             @blur="$v.form.tagType.$touch()"
+                            :readonly="editedIndex !== -1"
                           ></v-select>
                         </v-col>
                       </v-row>
@@ -66,9 +68,6 @@
           <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
-          </template>
-          <template slot="item.logo" slot-scope="{ item }">
-            <img :src="item.logo" height="48px" class="d-block"/>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -155,13 +154,13 @@ export default {
       tagType: null
     },
     deleteConfirmDialog: false,
-    selectedItemId: null,
+    selectedItem: null,
     isLoading: false
   }),
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Add Tag" : "Edit Tag";
-    }
+    },
   },
 
   watch: {
@@ -178,7 +177,10 @@ export default {
     ...mapActions("tag", ["getTags", "addTag", "updateTag", "deleteTag"]),
     async initialize() {
       this.isLoading = true;
-      this.tags = await this.getTags(this.search);
+      let data = await this.getTags(this.search);
+      this.tags = data.map((item, index) => {
+        return { ...item, index }
+      });
       this.isLoading = false;
     },
 
@@ -189,14 +191,14 @@ export default {
     },
 
     async deleteItem() {
-      await this.deleteTag(this.selectedItemId);
+      await this.deleteTag(this.selectedItem);
       this.deleteConfirmDialog = false;
       this.initialize();
     },
 
     showDeleteConfirmDialog(item) {
       this.deleteConfirmDialog = true;
-      this.selectedItemId = item.id;
+      this.selectedItem = Object.assign({}, item);
     },
 
     close() {

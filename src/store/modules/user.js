@@ -32,6 +32,43 @@ const actions = {
                 throw e;
             });
     },
+    getUsers: ({ commit }) => {
+        return User.getUsers()
+            .then(result => {
+                return result;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
+    addUser: ({ commit }, payload) => {
+        return User.addUser(payload)
+            .then(result => {
+                commit("ADD_TAG", result.data);
+                return result.data;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
+    updateUser: ({ commit }, payload) => {
+        return User.updateUser(payload)
+            .then(result => {
+                return result.data;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
+    deleteUser: ({ commit }, payload) => {
+        return User.deleteUser(payload)
+            .then(result => {
+                return result.data;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
 };
 
 export default {
