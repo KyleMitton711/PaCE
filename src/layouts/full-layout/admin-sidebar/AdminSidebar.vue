@@ -15,7 +15,7 @@
     <!---USer Area -->
     <v-list-item two-line class="profile-bg">
       <v-list-item-content class="white--text">
-        <v-list-item-title>Dohnathan@Deo.com</v-list-item-title>
+        <v-list-item-title>{{ user.email }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
     <!---USer Area -->
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import AdminSidebarItems from "./AdminSidebarItems";
 export default {
   name: "Admin-Sidebar",
@@ -74,6 +74,7 @@ export default {
   }),
   computed: {
     ...mapState(["SidebarColor", "SidebarBg"]),
+    ...mapGetters('auth', ['user']),
     Sidebar_drawer: {
       get() {
         return this.$store.state.Sidebar_drawer;

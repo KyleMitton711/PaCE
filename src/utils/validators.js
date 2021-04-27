@@ -1,9 +1,9 @@
 export const uniqueUser = async value =>
   value ? value.match(/^[\w.-]+$/i) : true;
-export const validPassword = async value =>
+export const validPassword = async (value, param) =>
   value
-    ? value.match(/^(?=.*[\d])(?=.*[A-Z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{0,32}$/)
-    : true;
+    ? value.match(/^(?=.*[\d])(?=.*[A-Z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{0,32}$/) && param
+    : true && param;
 export const validSubdomain = async value =>
   value ? value.match(/^[a-zA-Z0-9-]+$/i) : true;
 export const validEmail = async value =>

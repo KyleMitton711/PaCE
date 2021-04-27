@@ -122,6 +122,9 @@
           <template slot="item.name" slot-scope="{ item }">
             {{ item.firstName + ' ' + item.lastName }}
           </template>
+          <template slot="item.archived" slot-scope="{ item }">
+            {{ item.archived != null ? moment(item.archived).format('YYYY-MM-DD hh:mm') : '' }}
+          </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reset</v-btn>
           </template>
@@ -149,17 +152,25 @@
 <script>
 import vue2Dropzone from 'vue2-dropzone'
 import { mapActions } from 'vuex';
+import moment from 'moment';
 import {
   required,
   requiredIf,
   maxLength,
   minLength,
   email,
-  numeric
+  numeric,
+  helpers 
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
 import { upload } from "@/fileupload";
+import { validPassword } from "@/utils/validators"
+
+const validateIf = (prop, validator) =>
+  helpers.withParams({ type: 'validatedIf', prop }, function(value, parentVm) {
+    return helpers.ref(prop, this, parentVm) ? validator(value) : true
+  })
 
 export default {
   name: "AdminUsers",
@@ -175,7 +186,12 @@ export default {
         required: requiredIf(function (nestedModel) {
           return this.editedIndex === -1;
         }),
-        minLength: minLength(6)
+        validPassword: validateIf(function (nestedModel) {
+          return this.editedIndex === -1;
+        }, validPassword),
+        minLength: validateIf(function (nestedModel) {
+          return this.editedIndex === -1;
+        }, minLength(6))
       }
     }
   },
@@ -198,7 +214,8 @@ export default {
       userType: { required: "User type is required" },
       password: { 
         required: "Password is required",
-        minLength: "Password must be more than 6 characters"
+        minLength: "Password must be more than 6 characters",
+        validPassword: "Password must contain uppercase, lowercase, number and symbol"
       }
     }
   },
@@ -254,6 +271,9 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Add User" : "Edit User";
+    },
+    moment() {
+      return moment;
     }
   },
 
@@ -333,6 +353,14 @@ export default {
 
 .vue-dropzone.dropzone
   background-color: #939597
+  width: 200px
+  height: 200px
+  border-radius: 50%
+  margin: 0 auto
+  overflow: hidden
+
+::v-deep .dropzone .dz-preview
+    margin: 0
 
 ::v-deep .dropzone .dz-preview .dz-progress
   display: none

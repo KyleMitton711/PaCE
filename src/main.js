@@ -9,7 +9,9 @@ import VueSkycons from "vue-skycons";
 import InstantSearch from "vue-instantsearch";
 import filter from "./utils/filters";
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import Notifications from 'vue-notification'
 
+Vue.use(Notifications);
 Vue.use(VueSkycons, {
   color: "#1e88e5",
 });

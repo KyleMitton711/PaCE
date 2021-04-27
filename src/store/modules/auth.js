@@ -9,7 +9,8 @@ const state = {
 };
 
 const getters = {
-    unreadMessages: state => state.user.unreadReceivedMessages
+    unreadMessages: state => state.user.unreadReceivedMessages,
+    user: state => state.user
 };
 
 const mutations = {

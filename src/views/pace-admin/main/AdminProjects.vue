@@ -136,6 +136,7 @@
 
 <script>
 import vue2Dropzone from 'vue2-dropzone'
+import Vue from 'vue';
 import { mapActions } from 'vuex';
 import {
   required,
@@ -246,6 +247,7 @@ export default {
 
   created() {
     this.initialize();
+    
   },
 
   methods: {
@@ -254,6 +256,10 @@ export default {
       this.isLoading = true;
       this.projects = await this.getProjects(this.search);
       this.isLoading = false;
+      this.$notify({
+        text: 'Project deleted successfully',
+        type: 'success'
+      });
     },
 
     editItem(item) {
@@ -264,6 +270,10 @@ export default {
 
     async deleteItem() {
       await this.deleteProject(this.selectedItemId);
+      this.$notify({
+        text: 'Project deleted successfully',
+        type: 'success'
+      });
       this.deleteConfirmDialog = false;
       this.initialize();
     },
@@ -284,11 +294,18 @@ export default {
     async save() {
       if (this.editedIndex > -1) {
         let res = await this.editProject(this.form);
-        this.initialize();
+        this.$notify({
+          text: 'Project updated successfully',
+          type: 'success'
+        });
       } else {
         let res = await this.addProject(this.form);
-        this.initialize();
+        this.$notify({
+          text: 'Project added successfully',
+          type: 'success'
+        });
       }
+      this.initialize();
       this.close();
     },
 
