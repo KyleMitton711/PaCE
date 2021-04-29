@@ -102,6 +102,12 @@ export default {
           } else {
 
           }
+        }).catch(err => {
+          this.isLoading = false;
+          this.$notify({
+            text: 'Email or password incorrect',
+            type: 'error'
+          });
         });
       }
     }

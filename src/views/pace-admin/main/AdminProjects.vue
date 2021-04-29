@@ -256,10 +256,6 @@ export default {
       this.isLoading = true;
       this.projects = await this.getProjects(this.search);
       this.isLoading = false;
-      this.$notify({
-        text: 'Project deleted successfully',
-        type: 'success'
-      });
     },
 
     editItem(item) {

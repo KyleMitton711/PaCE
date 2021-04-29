@@ -89,6 +89,20 @@
                             @blur="$v.form.duration.$touch()"
                           ></v-text-field>
                         </v-col>
+                        <v-col cols="12">
+                          <v-autocomplete
+                            v-model="selectedTags"
+                            :items="tags"
+                            item-text="name"
+                            chips
+                            label="Tags"
+                            multiple
+                            deletable-chips
+                            clearable
+                            return-object
+                            @change="selectTags"
+                          ></v-autocomplete>
+                        </v-col>
                       </v-row>
                     </v-container>
                   </v-card-text>
@@ -212,7 +226,17 @@ export default {
       outcome: null,
       endorsements: null,
       type: "Toolkit",
-      duration: null
+      duration: null,
+      capabilityCodes: [],
+      tagFilterAudienceIds: [],
+      tagFilterTypeIds: [],
+      tagFilterModeIds: [],
+      tagContentPadegogyIds: [],
+      tagContentTopicIds: [],
+      tagContentSymptomIds: [],
+      tagContentIllnessIds: [],
+      tagContentContextIds: [],
+      tagContentRoleIds: []
     },
     search: null,
     form: {
@@ -222,12 +246,24 @@ export default {
       outcome: null,
       endorsements: null,
       type: "Toolkit",
-      duration: null
+      duration: null,
+      capabilityCodes: [],
+      tagFilterAudienceIds: [],
+      tagFilterTypeIds: [],
+      tagFilterModeIds: [],
+      tagContentPadegogyIds: [],
+      tagContentTopicIds: [],
+      tagContentSymptomIds: [],
+      tagContentIllnessIds: [],
+      tagContentContextIds: [],
+      tagContentRoleIds: []
     },
     filters: {},
     isLoading: false,
     deleteConfirmDialog: false,
-    selectedItemId: null
+    selectedItemId: null,
+    tags: [],
+    selectedTags: []
   }),
   computed: {
     formTitle() {
@@ -248,9 +284,11 @@ export default {
   methods: {
     ...mapActions("project", ["getProjects"]),
     ...mapActions("resource", ["filterResources", "addResource", "getResourceDetail", "deleteResource", "updateResource"]),
+    ...mapActions("tag", ["getTags"]),
     async initialize() {
       this.isLoading = true;
       this.projects = await this.getProjects();
+      this.tags = await this.getTags();
       let res = await this.filterResources(this.filters);
       this.resources = Object.assign([], res.results);
       this.isLoading = false;
@@ -295,6 +333,28 @@ export default {
       this.deleteConfirmDialog = true;
       this.selectedItemId = item.id;
     },
+
+    refreshTags () {
+      this.form.tagFilterAudienceIds = [];
+      this.form.tagFilterTypeIds = [];
+      this.form.tagFilterModeIds = [];
+      this.form.tagContentPadegogyIds = [];
+      this.form.tagContentTopicIds = [];
+      this.form.tagContentSymptomIds = [];
+      this.form.tagContentIllnessIds = [];
+      this.form.tagContentContextIds = [];
+      this.form.tagContentRoleIds = [];
+    },
+
+    selectTags() {
+      this.refreshTags();
+      for (let i = 0; i < this.selectedTags.length ; i ++) {
+        let tag = this.selectedTags[i];
+        if (this.form['tag' + tag.tagType + 'Ids'].indexOf(tag.id) == -1) {
+          this.form['tag' + tag.tagType + 'Ids'].push(tag.id);
+        }
+      }
+    }
   }
 };
 </script>

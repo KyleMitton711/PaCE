@@ -15,11 +15,11 @@ import AdminResources from "@/views/pace-admin/main/AdminResources";
 import AdminPrograms from "@/views/pace-admin/main/AdminPrograms";
 import AdminTags from "@/views/pace-admin/main/AdminTags";
 import AdminUsers from "@/views/pace-admin/main/AdminUsers";
+import AdminUserMetrics from "@/views/pace-admin/main/AdminUserMetrics";
 
 // layout
 import Adminlayout from "@/layouts/full-layout/Adminlayout";
 import Blanklayout from "@/layouts/blank-layout/Blanklayout";
-import Searchlayout from "@/layouts/blank-layout/Searchlayout";
 import Greetinglayout from "@/layouts/blank-layout/Greetinglayout";
 
 export const routes = [
@@ -144,6 +144,11 @@ export const routes = [
                 name: "AdminUsers",
                 path: "users",
                 component: AdminUsers
+            },
+            {
+                name: "AdminUserMetrics",
+                path: "usermetrics",
+                component: AdminUserMetrics
             }
         ]
     },
