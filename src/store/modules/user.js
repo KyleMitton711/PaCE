@@ -69,6 +69,15 @@ const actions = {
                 throw e;
             });
     },
+    getUserMetrics: ({ commit }, payload) => {
+        return User.getUserMetrics(payload)
+            .then(result => {
+                return result;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
 };
 
 export default {

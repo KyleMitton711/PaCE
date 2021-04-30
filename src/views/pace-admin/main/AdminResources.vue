@@ -90,6 +90,20 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12">
+                          <v-textarea 
+                            label="Overview" 
+                            v-model="form.overview"
+                            :counter="1200"
+                          ></v-textarea>
+                          <v-select
+                            v-model="form.capabilityCodes"
+                            :items="capabilityCodeItems"
+                            chips
+                            label="Capability Codes"
+                            multiple
+                            :error-messages="fieldErrors('form.capabilityCodes')"
+                            @blur="$v.form.capabilityCodes.$touch()"
+                          ></v-select>
                           <v-autocomplete
                             v-model="selectedTags"
                             :items="tags"
@@ -173,7 +187,8 @@ export default {
         maxLength: maxLength(500)
       },
       type: { required },
-      duration: { required }
+      duration: { required },
+      capabilityCodes: { required }
     }
   },
   validationMessages: {
@@ -199,6 +214,9 @@ export default {
       },
       duration: {
         required: "Duration is required"
+      },
+      capabilityCodes: {
+        required: "Capability Codes is required"
       }
     }
   },
@@ -227,6 +245,7 @@ export default {
       endorsements: null,
       type: "Toolkit",
       duration: null,
+      overview: null,
       capabilityCodes: [],
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
@@ -247,6 +266,7 @@ export default {
       endorsements: null,
       type: "Toolkit",
       duration: null,
+      overview: null,
       capabilityCodes: [],
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
@@ -263,7 +283,8 @@ export default {
     deleteConfirmDialog: false,
     selectedItemId: null,
     tags: [],
-    selectedTags: []
+    selectedTags: [],
+    capabilityCodeItems: ['S1', 'S2', 'S3', 'HP1', 'HP2', 'HP3']
   }),
   computed: {
     formTitle() {

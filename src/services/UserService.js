@@ -64,4 +64,13 @@ export default class UserService {
       throw err;
     });
   }
+
+  getUserMetrics (payload) {
+    let headers = {};
+    return API.get(`/api/metric?DayNumber=${payload}`, headers).then(res => {
+      return res.data;
+    }).catch(err => {
+      throw err;
+    });
+  }
 }
