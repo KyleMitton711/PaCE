@@ -26,6 +26,21 @@ export default {
     });
   },
 
+  getResources (payload) {
+    let headers = { "Content-Type": "application/json" };
+    let url = `/api/resources`;
+    if (payload && payload.isProgram != null) {
+      url += `?IsProgram=${payload.isProgram}`;
+    }
+    return API.get(url, headers)
+    .then(result => {
+      return result.data;
+    })
+    .catch(e => {
+      throw e;
+    });
+  },
+
   addResource (payload) {
     let headers = { "Content-Type": "application/json-patch+json" };
     return API.post('/api/admin/resources', payload, headers)

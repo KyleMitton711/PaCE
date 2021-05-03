@@ -2,7 +2,7 @@
   <div>
     <div class="mt-4">
       <v-card>
-        <v-data-table :headers="headers" :items="resources" :search="search" sort-by="calories" class="border">
+        <v-data-table :headers="headers" :items="resources" :search="search" sort-by="calories" class="border" :loading="isLoading">
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>
@@ -30,7 +30,7 @@
                           <v-select
                             :items="projects"
                             item-value="id"
-                            item-text="title"
+                            item-text="name"
                             v-model="form.projectId"
                             label="Project"
                             :error-messages="fieldErrors('form.projectId')"
@@ -68,13 +68,18 @@
                             @blur="$v.form.endorsements.$touch()"
                             :counter="500"
                           ></v-textarea>
+                        </v-col>
+                        <v-col cols="12" md="6">
                           <v-text-field 
                             label="Type" 
                             v-model="form.type"
                             :error-messages="fieldErrors('form.type')"
                             @input="$v.form.type.$touch()"
                             @blur="$v.form.type.$touch()"
+                            readonly
                           ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" md="6">
                           <v-text-field 
                             label="Duration"
                             type="number" 
@@ -83,15 +88,34 @@
                             @input="$v.form.duration.$touch()"
                             @blur="$v.form.duration.$touch()"
                           ></v-text-field>
+                        </v-col>
+                        <v-col cols="12">
                           <v-textarea 
                             label="Overview" 
                             v-model="form.overview"
-                            :error-messages="fieldErrors('form.overview')"
-                            @input="$v.form.overview.$touch()"
-                            @blur="$v.form.overview.$touch()"
                             :counter="1200"
-                            :rows="4"
                           ></v-textarea>
+                          <v-select
+                            v-model="form.capabilityCodes"
+                            :items="capabilityCodeItems"
+                            chips
+                            label="Capability Codes"
+                            multiple
+                            :error-messages="fieldErrors('form.capabilityCodes')"
+                            @blur="$v.form.capabilityCodes.$touch()"
+                          ></v-select>
+                          <v-autocomplete
+                            v-model="selectedTags"
+                            :items="tags"
+                            item-text="name"
+                            chips
+                            label="Tags"
+                            multiple
+                            deletable-chips
+                            clearable
+                            return-object
+                            @change="selectTags"
+                          ></v-autocomplete>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -109,6 +133,9 @@
           <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
+          </template>
+          <template slot="item.projectId" slot-scope="{ item }">
+            {{ getProjectName(item.projectId) }}
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -138,14 +165,11 @@
 import { mapActions } from 'vuex';
 import {
   required,
-  requiredIf,
   maxLength,
-  minLength,
-  email,
-  numeric
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
+import { capabilityCodes } from "@/data/capabilitycodes";
 
 export default {
   name: "AdminPrograms",
@@ -165,16 +189,13 @@ export default {
       },
       type: { required },
       duration: { required },
-      overview: { 
-        required,
-        maxLength: maxLength(1200)
-      }
+      capabilityCodes: { required }
     }
   },
   validationMessages: {
     form: {
       projectId: {
-        required: "Name is required"
+        required: "Project is required"
       },
       title: { 
         required: "Title is required"
@@ -195,9 +216,8 @@ export default {
       duration: {
         required: "Duration is required"
       },
-      overview: {
-        required: "Overview is required",
-        maxLength: "Overview should be less than 1200 characters"
+      capabilityCodes: {
+        required: "Capability Codes is required"
       }
     }
   },
@@ -208,7 +228,7 @@ export default {
         text: "Project",
         align: "start",
         sortable: false,
-        value: "logo"
+        value: "projectId"
       },
       { text: "Title", value: "title" },
       { text: "Type", value: "type" },
@@ -224,10 +244,20 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: null,
+      type: "Toolkit",
       duration: null,
-      isProgram: true,
       overview: null,
+      isProgram: true,
+      capabilityCodes: [],
+      tagFilterAudienceIds: [],
+      tagFilterTypeIds: [],
+      tagFilterModeIds: [],
+      tagContentPadegogyIds: [],
+      tagContentTopicIds: [],
+      tagContentSymptomIds: [],
+      tagContentIllnessIds: [],
+      tagContentContextIds: [],
+      tagContentRoleIds: []
     },
     search: null,
     form: {
@@ -236,14 +266,33 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: null,
+      type: "Toolkit",
       duration: null,
-      isProgram: true,
       overview: null,
+      isProgram: true,
+      capabilityCodes: [],
+      tagFilterAudienceIds: [],
+      tagFilterTypeIds: [],
+      tagFilterModeIds: [],
+      tagContentPadegogyIds: [],
+      tagContentTopicIds: [],
+      tagContentSymptomIds: [],
+      tagContentIllnessIds: [],
+      tagContentContextIds: [],
+      tagContentRoleIds: []
     },
+    filters: {
+      isProgram: true
+    },
+    isLoading: false,
+    deleteConfirmDialog: false,
     selectedItemId: null,
-    deleteConfirmDialog: false
+    tags: [],
+    selectedTags: [],
+    capabilityCodes: capabilityCodes,
+    capabilityCodeItems: []
   }),
+
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Add Program" : "Edit Program";
@@ -260,12 +309,28 @@ export default {
     this.initialize();
   },
 
+  mounted() {
+    for (let i = 0; i < capabilityCodes.length; i ++) {
+      let code = capabilityCodes[i];
+      let items = code.items.map((item, index) => {
+        return code.short + (index + 1)
+      });
+      this.capabilityCodeItems = [...this.capabilityCodeItems, ...items]
+    }
+  },
+
   methods: {
     ...mapActions("project", ["getProjects"]),
-    ...mapActions("resource", ["getTotalResources", "addResource", "getResourceDetail"]),
+    ...mapActions("resource", ["getResources", "filterResources", "addResource", "getResourceDetail", "deleteResource", "updateResource"]),
+    ...mapActions("tag", ["getTags"]),
+    
     async initialize() {
-      this.resources = await this.getTotalResources();
+      this.isLoading = true;
       this.projects = await this.getProjects();
+      this.tags = await this.getTags();
+      let res = await this.getResources(this.filters);
+      this.resources = Object.assign([], res.results);
+      this.isLoading = false;
     },
 
     editItem(item) {
@@ -274,10 +339,10 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      const index = this.resources.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.resources.splice(index, 1);
+    async deleteItem() {
+      await this.deleteResource(this.selectedItemId);
+      this.deleteConfirmDialog = false;
+      this.initialize();
     },
 
     close() {
@@ -298,10 +363,37 @@ export default {
       this.close();
     },
 
+    getProjectName (id) {
+      let project = this.projects.filter(item => item.id == id);
+      return project.length > 0 ? project[0].name : "";
+    },
+
     showDeleteConfirmDialog(item) {
       this.deleteConfirmDialog = true;
       this.selectedItemId = item.id;
     },
+
+    refreshTags () {
+      this.form.tagFilterAudienceIds = [];
+      this.form.tagFilterTypeIds = [];
+      this.form.tagFilterModeIds = [];
+      this.form.tagContentPadegogyIds = [];
+      this.form.tagContentTopicIds = [];
+      this.form.tagContentSymptomIds = [];
+      this.form.tagContentIllnessIds = [];
+      this.form.tagContentContextIds = [];
+      this.form.tagContentRoleIds = [];
+    },
+
+    selectTags() {
+      this.refreshTags();
+      for (let i = 0; i < this.selectedTags.length ; i ++) {
+        let tag = this.selectedTags[i];
+        if (this.form['tag' + tag.tagType + 'Ids'].indexOf(tag.id) == -1) {
+          this.form['tag' + tag.tagType + 'Ids'].push(tag.id);
+        }
+      }
+    }
   }
 };
 </script>

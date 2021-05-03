@@ -169,6 +169,7 @@ import {
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
+import { capabilityCodes } from "@/data/capabilitycodes";
 
 export default {
   name: "AdminResources",
@@ -284,8 +285,10 @@ export default {
     selectedItemId: null,
     tags: [],
     selectedTags: [],
-    capabilityCodeItems: ['S1', 'S2', 'S3', 'HP1', 'HP2', 'HP3']
+    capabilityCodes: capabilityCodes,
+    capabilityCodeItems: []
   }),
+
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Add Resource" : "Edit Resource";
@@ -302,10 +305,21 @@ export default {
     this.initialize();
   },
 
+  mounted() {
+    for (let i = 0; i < capabilityCodes.length; i ++) {
+      let code = capabilityCodes[i];
+      let items = code.items.map((item, index) => {
+        return code.short + (index + 1)
+      });
+      this.capabilityCodeItems = [...this.capabilityCodeItems, ...items]
+    }
+  },
+
   methods: {
     ...mapActions("project", ["getProjects"]),
     ...mapActions("resource", ["filterResources", "addResource", "getResourceDetail", "deleteResource", "updateResource"]),
     ...mapActions("tag", ["getTags"]),
+    
     async initialize() {
       this.isLoading = true;
       this.projects = await this.getProjects();

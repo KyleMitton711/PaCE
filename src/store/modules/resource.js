@@ -34,6 +34,16 @@ const actions = {
                 throw e;
             });
     },
+    getResources: ({ commit }, payload = null) => {
+        return ResourceService.getResources(payload)
+            .then(result => {
+                commit('GET_TOTAL_RESOURCES', result.data);
+                return result;
+            })
+            .catch(e => {
+                throw e;
+            });
+    },
     addResource: ({ commit }, payload = null) => {
         return ResourceService.addResource(payload)
             .then(result => {
