@@ -4,9 +4,7 @@ const API = new APIService();
 export default {
   getResourceCount (payload) {
     let url = `/api/resources/total`;
-    let headers = {
-      accept: 'text/plain'
-    };
+    let headers = { "Content-Type": "application/json" };
     return API.post(url, payload, headers)
     .then(result => {
       return result.data;

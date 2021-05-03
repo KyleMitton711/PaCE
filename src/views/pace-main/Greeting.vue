@@ -20,17 +20,16 @@
                   <v-list>
                     <v-list-item-group v-model="selectedResource" color="pace_grey">
                       <v-list-item
-                        v-for="(item, i) in items"
+                        v-for="(item, i) in resourcesForItems"
                         :key="i"
                         @click="selectResource(i)"
                       >
                         <v-list-item-avatar size="65">
-                          <span class="white--text headline">CJ</span>
-                          <!-- <v-icon class="white--text" v-text="item.icon"></v-icon> -->
+                          <span class="white--text headline">{{ item.short }}</span>
                         </v-list-item-avatar>
 
                         <v-list-item-content>
-                          <p class="text">{{item.text}}</p>
+                          <p class="text">{{item.name}}</p>
                           <span class="subtext">{{item.subtext}}</span>
                         </v-list-item-content>
                       </v-list-item>
@@ -49,15 +48,15 @@
                   <v-list>
                     <v-list-item-group v-model="selectedCapabilities" multiple mandatory color="pace_grey">
                       <v-list-item
-                        v-for="(item, i) in items[selectedResource].subItems"
+                        v-for="(item, i) in capabilityCodes[selectedResource].items"
                         :key="i"
                       >
                         <v-list-item-avatar size="65">
-                          <span class="white--text headline">CJ{{i + 1}}</span>
+                          <span class="white--text headline">{{ capabilityCodes[selectedResource].short }}{{i + 1}}</span>
                         </v-list-item-avatar>
 
                         <v-list-item-content>
-                          <p class="subtext">{{item.text}}</p>
+                          <p class="subtext">{{item.description}}</p>
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
@@ -68,7 +67,7 @@
                     <span @click="tab = 1">&lt;- back</span>
                   </div>
                   <div class="text-right">
-                    <span class="selected-count mr-2">View {{selectedCapabilities && selectedCapabilities.length}} of {{items[selectedResource].subItems.length}} selected</span>
+                    <span class="selected-count mr-2">View {{selectedCapabilities && selectedCapabilities.length}} of {{capabilityCodes[selectedResource].items.length}} selected</span>
                     <v-btn color="bg-pace-yellow" fab small @click="goToSearch">
                       <v-icon color="white">mdi-chevron-right</v-icon>
                     </v-btn>
@@ -84,6 +83,8 @@
 </template>
 
 <script>
+import { capabilityCodes } from "@/data/capabilitycodes";
+
 export default {
   name: "Greeting",
 
@@ -91,54 +92,34 @@ export default {
     tab: 1,
     selectedResource: null,
     selectedCapabilities: null,
-    items: [
-      {
-        text: 'Health practitioner / professional',
-        subtext: 'Graduate capabilities in palliative care',
-        subItems: [{
-          id: 1,
-          text: 'Person-centred comunication in the context of an individual\'s responses to loss and grief, existential challenges, uncertainty & changing goals of care'
-        }, {
-          id: 2,
-          text: 'Appreciation of and demonstrated respect for the diverse human and clinical responses of each individual throughout their illness trajectory'
-        }, {
-          id: 3,
-          text: 'Understanding of principles for assessment and management of clinical and supportive care needs'
-        }]
-      },
-      {
-        text: 'Health care worker',
-        subtext: 'Graduate capabilities in palliative care',
-        subItems: [{
-          id: 1,
-          text: 'Person-centred comunication in the context of an individual\'s responses to loss and grief, existential challenges, uncertainty & changing goals of care'
-        }, {
-          id: 2,
-          text: 'Appreciation of and demonstrated respect for the diverse human and clinical responses of each individual throughout their illness trajectory'
-        }, {
-          id: 3,
-          text: 'Understanding of principles for assessment and management of clinical and supportive care needs'
-        }]
-      },
-      {
-        text: 'Specialist',
-        subtext: 'Specialist capabilities in palliative care',
-        subItems: [{
-          id: 1,
-          text: 'Person-centred comunication in the context of an individual\'s responses to loss and grief, existential challenges, uncertainty & changing goals of care'
-        }, {
-          id: 2,
-          text: 'Appreciation of and demonstrated respect for the diverse human and clinical responses of each individual throughout their illness trajectory'
-        }, {
-          id: 3,
-          text: 'Understanding of principles for assessment and management of clinical and supportive care needs'
-        }]
-      },
-    ],
+    capabilityCodes: capabilityCodes,
   }),
+
+  computed: {
+    resourcesForItems() {
+      return capabilityCodes.map((item, index) => {
+        return {
+          name: item.name,
+          short: item.short,
+          id: item.id
+        }
+      });
+    }
+  },
+
+  watch: {
+    selectedCapabilities: {
+      handler: function (val) {
+        localStorage.setItem('selectedCapabilities', JSON.stringify(val));
+      }, 
+      deep: true
+    }
+  },
 
   methods: {
     selectResource(index) {
+      localStorage.setItem('selectedResource', index);
+      this.selectedCapabilities = null;
       this.tab = 2;
     },
 
@@ -148,6 +129,9 @@ export default {
   },
 
   mounted() {
+    if (localStorage.getItem('selectedResource')) {
+      this.selectedResource = parseInt(localStorage.getItem('selectedResource'));
+    }
     if (this.$route.query.tab) {
       this.tab = this.$route.query.tab;
       this.selectedResource = 0; // need to update

@@ -17,7 +17,7 @@
                   solo
                   class="search-input"
                 ></v-text-field>
-                <p class="text-right"><a class="white--text v-underline" @click="viewResourceList" >Browse 816 results ></a></p>
+                <p class="text-right"><a class="white--text v-underline" @click="viewResourceList" >Browse {{ resourceCount }} results ></a></p>
               </div>
               <div class="search-info px-sm-10 px-1 pt-2">
                 <v-tabs
@@ -34,13 +34,24 @@
 
                 <v-tabs-items v-model="tab" class="ma-1 mt-2">
                   <v-tab-item>
-                    <v-card class="elevation-1 pa-5 tab-content" v-if="loggedIn">
+                    <v-card class="elevation-1 pa-5 tab-content" v-if="user">
                       <p class="mb-1">Too many results?</p>
                       <p>Take a minute to review your filters</p>
                       <p>Current filters</p>
 
                       <p class="mb-0"><router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> Graduate (HP1, HP2) <span class="text-right">X Clear</span></p>
-                      <p><b>Audiences:</b> Student; Academic <span class="text-right">X Clear</span></p>
+                      <p class="mb-0">
+                        <b>Audiences:</b> {{ selectedAudienceItems }}
+                        <span class="float-right" v-if="audience.length > 0"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>
+                      </p>
+                      <p class="mb-0">
+                        <b>Types:</b> {{ selectedTypeItems }}
+                        <span class="float-right" v-if="type.length > 0"><v-icon @click="type = [], changeFilters()">mdi-close</v-icon></span>
+                      </p>
+                      <p>
+                        <b>Modes:</b> {{ selectedModeItems }}
+                        <span class="float-right" v-if="mode.length > 0"><v-icon @click="mode = [], changeFilters()">mdi-close</v-icon></span>
+                      </p>
                       <div class="mt-10">
                         <div class="text-right">
                           <span class="more-filters mr-5">More filters</span>
@@ -75,7 +86,8 @@
                       >
                         <v-checkbox
                           v-model="audience"
-                          :label="item.text"
+                          @change="changeFilters('Audience')"
+                          :label="item.name"
                           :value="item.id"
                           hide-details
                         ></v-checkbox>
@@ -97,7 +109,7 @@
                       >
                         <v-checkbox
                           v-model="type"
-                          :label="item.text"
+                          :label="item.name"
                           :value="item.id"
                           hide-details
                         ></v-checkbox>
@@ -119,7 +131,7 @@
                       >
                         <v-checkbox
                           v-model="mode"
-                          :label="item.text"
+                          :label="item.name"
                           :value="item.id"
                           hide-details
                         ></v-checkbox>
@@ -190,8 +202,11 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import Resource from '@/components/Pace-resource/Resource'
 import Resources from '@/components/Pace-resource/Resources'
+import debounce from 'debounce'
+
 export default {
   name: "Search",
 
@@ -210,32 +225,11 @@ export default {
       { tab: 'Mode', content: 'Tab 2 Content' },
     ],
     audience: [],
-    audienceItems: [
-      { text: 'Student', id: 1 },
-      { text: 'Academic', id: 2 },
-      { text: 'Clinician - Accute care', id: 3 },
-      { text: 'Clinician - Aged care', id: 4 },
-      { text: 'Clinician - Community', id: 5 },
-      { text: 'Clinician - Palliative care specialist', id: 6 },
-    ],
+    audienceItems: [],
     type: [],
-    typeItems: [
-      { text: 'Student', id: 7 },
-      { text: 'Academic', id: 8 },
-      { text: 'Clinician - Accute care', id: 9 },
-      { text: 'Clinician - Aged care', id: 10 },
-      { text: 'Clinician - Community', id: 11 },
-      { text: 'Clinician - Palliative care specialist', id: 12 },
-    ],
+    typeItems: [],
     mode: [],
-    modeItems: [
-      { text: 'Student', id: 13 },
-      { text: 'Academic', id: 14 },
-      { text: 'Clinician - Accute care', id: 15 },
-      { text: 'Clinician - Aged care', id: 16 },
-      { text: 'Clinician - Community', id: 17 },
-      { text: 'Clinician - Palliative care specialist', id: 18 },
-    ],
+    modeItems: [],
     resources: [
       { id: 22, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Photos', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
       { id: 25, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Recipes', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
@@ -243,10 +237,55 @@ export default {
     ],
     selectedResource: null,
     showResource: false,
-    showResourceList: false
+    showResourceList: false,
+    tags: [],
+    resourceCount: 0
   }),
 
+  computed: {
+    ...mapGetters("auth", ["user"]),
+
+    selectedAudienceItems() {
+      let nameArray = this.audience.map(id => {
+        for (let i = 0; i < this.audienceItems.length ; i ++) {
+          if (this.audienceItems[i].id == id) {
+            return this.audienceItems[i].name;
+          }
+        }
+      });
+
+      return nameArray.join(', ');
+    },
+
+    selectedTypeItems() {
+      let nameArray = this.type.map(id => {
+        for (let i = 0; i < this.typeItems.length ; i ++) {
+          if (this.typeItems[i].id == id) {
+            return this.typeItems[i].name;
+          }
+        }
+      });
+
+      return nameArray.join(', ');
+    },
+
+    selectedModeItems() {
+      let nameArray = this.mode.map(id => {
+        for (let i = 0; i < this.modeItems.length ; i ++) {
+          if (this.modeItems[i].id == id) {
+            return this.modeItems[i].name;
+          }
+        }
+      });
+
+      return nameArray.join(', ');
+    },
+  },
+
   methods: {
+    ...mapActions("tag", ["getTags"]),
+    ...mapActions("resource", ["getResourceCount", "filterResources"]),
+
     goToSearch() {
       this.$router.push({ name: 'Greeting' })
     },
@@ -276,9 +315,27 @@ export default {
       this.showResourceList = false;
     },
 
+    changeFilters: debounce(async function (filterType) {
+      let payload = {
+        tagFilterAudienceIds: this.audience,
+        tagFilterTypeIds: this.type,
+        tagFilterModeIds: this.mode
+      };
+      console.log(payload)
+      this.resourceCount = await this.getResourceCount(payload);
+      let res = await this.filterResources(payload);
+      this.resources = res.results;
+    }, 500),
+
     nextPage() {
 
     }
+  },
+
+  async mounted() {
+    this.audienceItems = await this.getTags('FilterAudience');
+    this.typeItems = await this.getTags('FilterType');
+    this.modeItems = await this.getTags('FilterMode');
   }
 };
 </script>
