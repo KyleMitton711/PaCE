@@ -86,7 +86,7 @@
                       >
                         <v-checkbox
                           v-model="audience"
-                          @change="changeFilters('Audience')"
+                          @change="changeFilters()"
                           :label="item.name"
                           :value="item.id"
                           hide-details
@@ -109,6 +109,7 @@
                       >
                         <v-checkbox
                           v-model="type"
+                          @change="changeFilters()"
                           :label="item.name"
                           :value="item.id"
                           hide-details
@@ -131,6 +132,7 @@
                       >
                         <v-checkbox
                           v-model="mode"
+                          @change="changeFilters()"
                           :label="item.name"
                           :value="item.id"
                           hide-details
@@ -192,9 +194,6 @@
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
             <Resource @close-modal="closeResource"/>
           </v-dialog>
-          <v-dialog v-model="showResourceList" content-class="resource-dialog ma-0">
-            <Resources @close-modal="closeResourceList"/>
-          </v-dialog>
         </v-card>
       </v-col>
     </v-row>
@@ -204,15 +203,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Resource from '@/components/Pace-resource/Resource'
-import Resources from '@/components/Pace-resource/Resources'
 import debounce from 'debounce'
 
 export default {
   name: "Search",
 
   components: {
-    Resource,
-    Resources
+    Resource
   },
 
   data: () => ({
@@ -307,24 +304,32 @@ export default {
       this.selectedResource = null;
     },
 
-    viewResourceList() {
-      this.showResourceList = true;
+    async viewResourceList() {
+      let payload = {
+        tagFilterAudienceIds: this.audience,
+        tagFilterTypeIds: this.type,
+        tagFilterModeIds: this.mode
+      };
+      localStorage.setItem('filters', JSON.stringify(payload));
+      if (window.innerWidth < 600) {
+        this.$router.push('/resources');
+      } else {
+        let res = await this.filterResources(payload);
+        this.resources = res.results;
+      }
     },
 
     closeResourceList() {
       this.showResourceList = false;
     },
 
-    changeFilters: debounce(async function (filterType) {
+    changeFilters: debounce(async function () {
       let payload = {
         tagFilterAudienceIds: this.audience,
         tagFilterTypeIds: this.type,
         tagFilterModeIds: this.mode
       };
-      console.log(payload)
       this.resourceCount = await this.getResourceCount(payload);
-      let res = await this.filterResources(payload);
-      this.resources = res.results;
     }, 500),
 
     nextPage() {
@@ -460,10 +465,6 @@ export default {
 }
 
 @media (max-width: 600px) {
-  .search-info {
-    // flex: unset;
-  }
-
   .v-dialog {
     margin: 0;
     height: 100vh;

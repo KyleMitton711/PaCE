@@ -13,32 +13,32 @@
                   Keep your data by recording your email address and setting a password
                 </h6>
 
-                <v-form ref="form" v-model="valid" lazy-validation action="/pages/boxedlogin">
-                  <v-text-field
-                    v-model="email"
-                    :rules="emailRules"
-                    label="E-mail"
-                    required
-                    outlined
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="password"
-                    :counter="10"
-                    :rules="passwordRules"
-                    label="Password"
-                    required
-                    outlined
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show1 ? 'text' : 'password'"
-                  ></v-text-field>
-                  <v-btn
-                    :disabled="!valid"
-                    block
-                    class="mr-4 white--text bg-pace-yellow"
-                    submit
-                    @click="submit"
-                  >Submit</v-btn>
-                </v-form>
+                <v-text-field
+                  v-model="form.email"
+                  type="email"
+                  :error-messages="fieldErrors('form.email')"
+                  @input="$v.form.email.$touch()"
+                  @blur="$v.form.email.$touch()"
+                  label="E-mail"
+                  outlined
+                ></v-text-field>
+                <v-text-field
+                  v-model="form.password"
+                  :error-messages="fieldErrors('form.password')"
+                  @input="$v.form.password.$touch()"
+                  @blur="$v.form.password.$touch()"
+                  label="Password"
+                  outlined
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                ></v-text-field>
+                <v-btn
+                  :disabled="$v.form.$invalid"
+                  block
+                  class="mr-4 white--text bg-pace-yellow"
+                  submit
+                  @click="submit"
+                >Submit</v-btn>
               </div>
             </v-col>
           </v-row>
@@ -49,26 +49,53 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import {
+  required,
+  minLength,
+  email
+} from "vuelidate/lib/validators";
+import validationMixin from "@/mixins/validationMixin";
+import { validPassword } from "@/utils/validators";
+
 export default {
   name: "Register",
+  mixins: [validationMixin],
+  validations: {
+    form: {
+      email: { required, email },
+      password: {
+        required,
+        validPassword,
+        minLength: minLength(6)
+      }
+    }
+  },
+  validationMessages: {
+    form: {
+      email: {
+        required: "Email is required",
+        email: "Email must be valid"
+      },
+      password: { 
+        required: "Password is required",
+        minLength: "Password must be more than 6 characters",
+        validPassword: "Password must contain uppercase, lowercase, number and symbol"
+      }
+    }
+  },
   data: () => ({
-    valid: true,
-    password: "",
+    form: {
+      email: null,
+      password: null
+    },
     show1: false,
-    passwordRules: [
-      v => !!v || "Password is required",
-      v => (v && v.length <= 10) || "Password must be less than 10 characters"
-    ],
-    email: "",
-    emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-    ]
   }),
   methods: {
-    submit() {
-      this.$refs.form.validate();
-      if (this.$refs.form.validate(true)) {
+    ...mapActions("account", ["register"]),
+    async submit() {
+      let res = await this.register(this.form);
+      if (res) {
         this.$router.push({ path: "/auth/login" });
       }
     }

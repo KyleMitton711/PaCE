@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: "ResetPassword",
   data: () => ({
@@ -50,10 +51,22 @@ export default {
     ]
   }),
   methods: {
-    submit() {
+    ...mapActions("account", ["resetPass"]),
+    async submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
-        this.$router.push({ path: "/auth/newpassword" });
+        let payload = {
+          email: this.email
+        };
+        let res = await this.resetPass(payload);
+        if (res) {
+          this.$notify({
+            text: 'Check your inbox for the reset link and next steps',
+            type: 'success'
+          });
+        }
+        console.log(res);
+        // this.$router.push({ path: "/auth/newpassword" });
       }
     }
   }

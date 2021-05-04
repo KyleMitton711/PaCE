@@ -6,6 +6,7 @@ import NewPassword from "@/views/pace-auth/NewPassword";
 // User Main
 import Greeting from "@/views/pace-main/Greeting";
 import Search from "@/views/pace-main/Search";
+import Resources from "@/views/pace-main/Resources";
 import Test from "@/views/pace-main/Test";
 
 // Admin Auth
@@ -47,6 +48,14 @@ export const routes = [
                 name: "Search",
                 path: "search",
                 component: Search,
+                meta: {
+                    publicRoute: true
+                }
+            },
+            {
+                name: "Resources",
+                path: "resources",
+                component: Resources,
                 meta: {
                     publicRoute: true
                 }

@@ -1,16 +1,17 @@
 import APIService from "@/http.js";
 const API = new APIService();
 
-export default class AccountService {
+export default {
   register (payload) {
-    return API.post('/api/users/register', payload)
+    let headers = { "Content-Type": "application/json-patch+json" };
+    return API.post('/api/accounts/signup', payload, headers)
     .then(result => {
       return result;
     })
     .catch(e => {
       throw e;
     });
-  }
+  },
 
   forgotPassword (payload) {
     let headers = { "Content-Type": "application/json-patch+json" };
@@ -19,7 +20,7 @@ export default class AccountService {
     }).catch((err) => {
       throw err;
     });
-  }
+  },
 
   resetPass (payload) {
     let headers = { "Content-Type": "application/json-patch+json" };
@@ -28,7 +29,7 @@ export default class AccountService {
     }).catch(err => {
       throw err;
     });
-  }
+  },
 
   resetPassword (payload) {
     let headers = { "Content-Type": "application/json-patch+json" };
@@ -37,7 +38,7 @@ export default class AccountService {
     }).catch(err => {
       throw err;
     });
-  }
+  },
 
   changePassword (payload) {
     let headers = { "Content-Type": "application/json-patch+json" };
