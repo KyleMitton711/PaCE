@@ -57,7 +57,7 @@ export default {
       series: [
         {
           name: "",
-          data: [4, 5, 2, 10, 9, 12, 4, 9, 4, 5, 3, 10, 9, 12, 10, 9, 12, 4, 9]
+          data: []
         }
       ],
       chartOptions: {
@@ -92,6 +92,18 @@ export default {
       }
     },
   }),
+  watch: {
+    periodDays: {
+      handler: function(val) {
+        this.elementVisible = false;
+        let data = Object.assign({}, this.DownloadChart);
+        data.series[0].data = this.periodDays;
+        this.DownloadChart = JSON.parse(JSON.stringify(data));
+        this.elementVisible = true;
+      },
+      deep: true
+    }
+  },
   created() {
     setTimeout(() => (this.elementVisible = true), 10);
   },

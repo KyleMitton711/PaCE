@@ -28,7 +28,8 @@ export default {
 
   getResources (payload) {
     let headers = { "Content-Type": "application/json" };
-    let url = `/api/resources`;
+    let url = `/api/admin/resources`;
+    console.log(payload)
     if (payload && payload.isProgram != null) {
       url += `?IsProgram=${payload.isProgram}`;
     }

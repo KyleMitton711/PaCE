@@ -2,7 +2,7 @@
   <div>
     <div class="mt-4">
       <v-card>
-        <v-data-table :headers="headers" :items="resources" :search="search" sort-by="calories" class="border" :loading="isLoading">
+        <v-data-table :headers="headers" :items="resources" :search="search" class="border" :loading="isLoading">
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>
@@ -266,7 +266,7 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: "Toolkit",
+      type: 1,
       duration: null,
       overview: null,
       isProgram: true,
@@ -290,7 +290,11 @@ export default {
     tags: [],
     selectedTags: [],
     capabilityCodes: capabilityCodes,
-    capabilityCodeItems: []
+    capabilityCodeItems: [],
+    typeItems: [{
+      id: 0,
+      name: "Toolkit"
+    }]
   }),
 
   computed: {
@@ -327,10 +331,9 @@ export default {
     async initialize() {
       this.isLoading = true;
       this.projects = await this.getProjects();
-      this.tags = await this.getTags();
-      let res = await this.getResources(this.filters);
-      this.resources = Object.assign([], res.results);
+      this.resources = await this.getResources(this.filters);
       this.isLoading = false;
+      this.tags = await this.getTags();
     },
 
     editItem(item) {

@@ -95,7 +95,9 @@
                           ></v-text-field>
                           <v-select
                             label="User type"
-                            :items="['User', 'Admin']"
+                            :items="userTypeItems"
+                            item-value="id"
+                            item-text="name"
                             v-model="form.userType"
                             :error-messages="fieldErrors('form.userType')"
                             @input="$v.form.userType.$touch()"
@@ -121,6 +123,9 @@
           </template>
           <template slot="item.name" slot-scope="{ item }">
             {{ item.firstName + ' ' + item.lastName }}
+          </template>
+          <template slot="item.userType" slot-scope="{ item }">
+            {{ item.userTypeLabel }}
           </template>
           <template slot="item.archived" slot-scope="{ item }">
             {{ item.archived != null ? moment(item.archived).format('YYYY-MM-DD hh:mm') : '' }}
@@ -266,6 +271,13 @@ export default {
       autoQueue: false,
       acceptedFiles: "image/png, image/jpeg",
     },
+    userTypeItems: [{
+        id: 0,
+        name: 'User'
+      }, {
+        id: 1,
+        name: 'Admin'
+      }]
   }),
 
   computed: {
@@ -292,6 +304,15 @@ export default {
     async initialize() {
       this.isLoading = true;
       this.users = await this.getUsers();
+      this.users = this.users.map(item => {
+        let label = "";
+        for (let i = 0; i < this.userTypeItems.length; i ++) {
+          if (this.userTypeItems[i].id == item.userType) {
+            label = this.userTypeItems[i].name;
+          }
+        }
+        return { ...item, userTypeLabel: label }
+      })
       this.isLoading = false;
     },
 
