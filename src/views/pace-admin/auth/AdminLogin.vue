@@ -87,14 +87,15 @@ export default {
   computed: {},
   methods: {
     ...mapActions("auth", ["adminLogin"]),
-    submit() {
+    async submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
         this.isLoading = true;
-        this.adminLogin({
-          userName: this.email,
-          password: this.password
-        }).then(res => {
+        try {
+          let res = await this.adminLogin({
+            userName: this.email,
+            password: this.password
+          });
           console.log(res);
           this.isLoading = false;
           if (res.successful) {
@@ -102,13 +103,15 @@ export default {
           } else {
 
           }
-        }).catch(err => {
+        }
+        catch (err) {
+          console.log(err);
           this.isLoading = false;
           this.$notify({
             text: 'Email or password incorrect',
             type: 'error'
           });
-        });
+        }
       }
     }
   }

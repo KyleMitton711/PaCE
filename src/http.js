@@ -14,126 +14,162 @@ http.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 
-function handleUnauthorizedRequest() {
-  if (!router.history.current.meta.publicRoute) {
-    // Vue.toasted.error("Your request is not authorized. Please sign in!");
-    document.location.href = "/auth";
-  }
-}
-
 export default class APIService {
-  get(url, headers = {}, responseType = 'json') {
-    return http.get(url, {
-      headers: {
-        ...headers,
-      },
-      responseType: responseType,
-      data: {},
-    })
-      .then(response => {
-        return response.data;
-      })
-      .catch(e => {
-        if (e.response.status == 401) {
-          handleUnauthorizedRequest();
-          throw e.response;
-        }
-        throw e.response;
-      });
-  }
+  isRefreshing = false;
 
-  post(url, content, headers = {}, responseType = 'json') {
-    return http.post(url, content, {
-      headers: {
-        ...headers
-      },
-      responseType: responseType
-    })
-      .then(response => {
-        return response.data;
-      })
-      .catch(e => {
-        if (e.response.status == 401) {
-          handleUnauthorizedRequest();
-        }
-        throw e.response;
+  async get(url, headers = {}, responseType = 'json') {
+    try {
+      return await http.get(url, {
+        headers: {
+          ...headers,
+        },
+        responseType: responseType,
+        data: {},
       });
-  }
-
-  put(url, content, headers = {}) {
-    return http.put(url, content, {
-      headers: {
-        ...headers
+    } 
+    catch (e) {
+      if (e.response.status == 401) {
+        var isRefreshToken = await this.handleUnauthorizedRequest();
+        if(isRefreshToken) {
+          return await this.get(url, headers, responseType);
+        }
       }
-    })
-      .then(response => {
-        return response.data;
-      })
-      .catch(e => {
-        if (e.response.status == 401) {
-          handleUnauthorizedRequest();
-        }
-        throw e.response;
-      });
-  }
-
-  patch(url, content, headers = {}) {
-    return http.patch(url, content, {
-      headers: {
-        ...headers
-      }
-    })
-      .then(response => {
-        return response.data;
-      })
-      .catch(e => {
-        if (e.response.status == 401) {
-          handleUnauthorizedRequest();
-        }
-        throw e;
-      });
-  }
-
-  delete(url, content = {}, headers = {}) {
-    return http.delete(url, {
-      headers: {
-        ...headers
-      },
-      data: content
-    })
-      .then(response => {
-        return response.data;
-      })
-      .catch(e => {
-        if (e.response.status == 401) {
-          handleUnauthorizedRequest();
-        }
-        throw e.response;
-      });
-  }
-
-  download(requestMethod, url, responseType, headers, payload) {
-    headers = {
-      ...headers,
+      throw e.response;
     }
+  }
 
-    http({
-      method: requestMethod,
-      url: url,
-      headers: headers,
-      responseType: responseType,
-      data: payload
-    })
-      .then(function (response) {
-        let blob = new Blob([response.data], { type: 'application/pdf' }),
-          url = window.URL.createObjectURL(blob)
-        window.open(url)
+  async post(url, content, headers = {}, responseType = 'json') {
+    try {
+      return await http.post(url, content, {
+        headers: {
+          ...headers
+        },
+        responseType: responseType
+      });
+    }
+    catch (e) {
+      if (e.response.status == 401) {
+        var isRefreshToken = await this.handleUnauthorizedRequest();
+        if(isRefreshToken) {
+          return await this.post(url, content, headers, responseType);
+        }
+      }
+      throw e.response;
+    }
+  }
+
+  async put(url, content, headers = {}) {
+    try {
+      return await http.put(url, content, {
+        headers: {
+          ...headers
+        }
+      });
+    }
+    catch (e) {
+      if (e.response.status == 401) {
+        var isRefreshToken = await this.handleUnauthorizedRequest();
+        if(isRefreshToken) {
+          return await this.put(url, content, headers);
+        }
+      }
+      throw e.response;
+    }
+  }
+
+  async patch(url, content, headers = {}) {
+    try {
+      return await http.patch(url, content, {
+        headers: {
+          ...headers
+        }
       })
-      .catch(e => {
-        if (e.response.status == 401) {
-          handleUnauthorizedRequest();
+    }
+    catch (e) {
+      if (e.response.status == 401) {
+        var isRefreshToken = await this.handleUnauthorizedRequest();
+        if(isRefreshToken) {
+          return await this.patch(url, content, headers);
+        }
+      }
+      throw e.response;
+    }
+  }
+
+  async delete(url, content = {}, headers = {}) {
+    try {
+      return http.delete(url, {
+        headers: {
+          ...headers
+        },
+        data: content
+      })
+    } 
+    catch (e) {
+      if (e.response.status == 401) {
+        var isRefreshToken = await this.handleUnauthorizedRequest();
+        if(isRefreshToken) {
+          return await this.delete(url, content, headers);
+        }
+      }
+      throw e.response;
+    }
+  }
+
+  async download(requestMethod, url, responseType, headers, payload) {
+    try {
+      let response = await http({
+        method: requestMethod,
+        url: url,
+        headers: headers,
+        responseType: responseType,
+        data: payload
+      })
+      let blob = new Blob([response.data], { type: 'application/pdf' });
+      let blobUrl = window.URL.createObjectURL(blob);
+      window.open(blobUrl);
+    }
+    catch (e) {
+      if (e.response.status == 401) {
+        var isRefreshToken = await this.handleUnauthorizedRequest();
+        if(isRefreshToken) {
+          await this.download(requestMethod, url, responseType, headers, payload);
+          return;
+        }
+      }
+      throw e.response;
+    }
+  }
+
+  async handleUnauthorizedRequest() {
+    var refreshToken = localStorage.getItem("refreshToken");
+    if(refreshToken) {
+      return await this.doRefreshToken(refreshToken);
+    }
+  
+    else if (!router.history.current.meta.publicRoute
+      && !router.currentRoute.fullPath.includes("/auth")) {
+      document.location.href = "/auth";
+    }
+    return false;
+  }
+
+  async doRefreshToken(refreshToken){
+    try {
+      let response = await this.post('api/refresh-token', { token: refreshToken });
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('refreshToken', response.data.refresh_token);
+      return true;
+    } 
+    catch (e) {
+        //invalid refreshToken
+        if (e.response.status == 400) {
+          localStorage.setItem('refreshToken', null);
+          await this.handleUnauthorizedRequest();
         }
         throw e.response;
-      });
+    }
   }
+
+
 }

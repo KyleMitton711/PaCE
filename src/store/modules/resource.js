@@ -15,70 +15,35 @@ const mutations = {
 };
 
 const actions = {
-    getResourceCount: ({ commit }, payload = null) => {
-        return ResourceService.getResourceCount(payload)
-            .then(result => {
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async getResourceCount ({ commit }, payload = null) {
+        let result = await ResourceService.getResourceCount(payload);
+        return result;
     },
-    filterResources: ({ commit }, payload = null) => {
-        return ResourceService.filterResources(payload)
-            .then(result => {
-                commit('GET_TOTAL_RESOURCES', result.data);
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async filterResources ({ commit }, payload = null) {
+        let result = await ResourceService.filterResources(payload);
+        commit('GET_TOTAL_RESOURCES', result.data);
+        return result;
     },
-    getResources: ({ commit }, payload = null) => {
-        return ResourceService.getResources(payload)
-            .then(result => {
-                commit('GET_TOTAL_RESOURCES', result.data);
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async getResources ({ commit }, payload = null) {
+        let result = await ResourceService.getResources(payload);
+        commit('GET_TOTAL_RESOURCES', result.data);
+        return result;
     },
-    addResource: ({ commit }, payload = null) => {
-        return ResourceService.addResource(payload)
-            .then(result => {
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async addResource ({ commit }, payload = null) {
+        let result = await ResourceService.addResource(payload);
+        return result;
     },
-    getResourceDetail: ({ commit }, payload = null) => {
-        return ResourceService.getResourceDetail(payload)
-            .then(result => {
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async getResourceDetail ({ commit }, payload = null) {
+        let result = await ResourceService.getResourceDetail(payload)
+        return result;
     },
-    updateResource: ({ commit }, payload) => {
-        return ResourceService.updateResource(payload)
-            .then(result => {
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async updateResource ({ commit }, payload) {
+        let result = await ResourceService.updateResource(payload);
+        return result;
     },
-    deleteResource: ({ commit }, id) => {
-        return ResourceService.deleteResource(id)
-            .then(result => {
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async deleteResource ({ commit }, id) {
+        let result = await ResourceService.deleteResource(id)
+        return result;
     },
 };
 

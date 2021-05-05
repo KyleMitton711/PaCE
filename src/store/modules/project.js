@@ -20,44 +20,24 @@ const mutations = {
 };
 
 const actions = {
-    getProjects: ({ commit }, payload = null) => {
-        return ProjectService.getProjects(payload)
-            .then(result => {
-                commit("GET_PROJECTS", result.data);
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async getProjects ({ commit }, payload = null) {
+        let result = await ProjectService.getProjects(payload);
+        commit("GET_PROJECTS", result.data);
+        return result.data;
     },
-    addProject: ({ commit }, payload) => {
-        return ProjectService.addProject(payload)
-            .then(result => {
-                commit("ADD_PROJECT", result.data);
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async addProject ({ commit }, payload) {
+        let result = ProjectService.addProject(payload);
+        commit("ADD_PROJECT", result.data);
+        return result.data;
     },
-    editProject: ({ commit }, payload) => {
-        return ProjectService.editProject(payload)
-            .then(result => {
-                commit("ADD_PROJECT", result.data);
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async editProject ({ commit }, payload) {
+        let result = await ProjectService.editProject(payload);
+        commit("ADD_PROJECT", result.data);
+        return result.data;
     },
-    deleteProject: ({ commit }, payload) => {
-        return ProjectService.deleteProject(payload)
-            .then(result => {
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async deleteProject ({ commit }, payload) {
+        let result = await ProjectService.deleteProject(payload);
+        return result.data;
     },
 
 };

@@ -2,23 +2,13 @@ import APIService from "@/http.js";
 const API = new APIService();
 
 export default class AuthService {
-  signIn (payload) {
-    return API.post('/api/token', payload)
-    .then(result => {
-      return result;
-    })
-    .catch(e => {
-      throw e;
-    });
+  async signIn (payload) {
+    let res = await API.post('/api/token', payload);
+    return res.data;
   }
 
-  adminSignIn (payload) {
-    return API.post('/api/admin/token', payload)
-    .then(result => {
-      return result;
-    })
-    .catch(e => {
-      throw e;
-    });
+  async adminSignIn (payload) {
+    let res = await API.post('/api/admin/token', payload);
+    return res.data;
   }
 }
