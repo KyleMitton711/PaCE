@@ -19,4 +19,9 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+<<<<<<< HEAD
 .vs/slnx.sqlite
+=======
+package-lock.json
+.vs/*
+>>>>>>> 1b294c6 (- refactor service and vuex store functions to use async/await)
