@@ -7,7 +7,8 @@
             <v-col lg="5" md="5" class="pa-0 full-height-md d-flex flex-column pt-0">
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
-                  <router-link to="/auth" class="v-underline white--text ml-auto mr-3 mt-3 white--text signin-link">Sign in ></router-link>
+                  <a class="white--text ml-auto mr-3 mt-3 white--text signin-link" v-if="user">Hi {{ user.firstName + ' ' + user.lastName }} <span class="v-underline" @click="logout"> Sign out ></span></a>
+                  <router-link to="/auth" class="v-underline white--text ml-auto mr-3 mt-3 white--text signin-link" v-else>Sign in ></router-link>
                 </div>
                 <h3 class="white--text page-title mt-4">Search</h3>
                 <v-text-field
@@ -39,7 +40,7 @@
                       <p>Take a minute to review your filters</p>
                       <p>Current filters</p>
 
-                      <p class="mb-0"><router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> Graduate (HP1, HP2) <span class="text-right">X Clear</span></p>
+                      <p class="mb-0"><router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> {{capabilityString }} <span class="float-right" v-if="selectedCapabilities.length > 0"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span></p>
                       <p class="mb-0">
                         <b>Audiences:</b> {{ selectedAudienceItems }}
                         <span class="float-right" v-if="audience.length > 0"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>
@@ -162,10 +163,11 @@
                   :class="item['status'] ? 'opened' : 'closed'"
                 >
                   <v-list-item-avatar tile size="64">
-                    <v-icon
+                    <img :src="item.projectLogo">
+                    <!-- <v-icon
                       :class="[item.iconClass]"
                       v-text="item.icon"
-                    ></v-icon>
+                    ></v-icon> -->
                   </v-list-item-avatar>
 
                   <v-list-item-content>
@@ -201,6 +203,7 @@
 </template>
 
 <script>
+import { capabilityCodes } from "@/data/capabilitycodes";
 import { mapGetters, mapActions } from 'vuex'
 import Resource from '@/components/Pace-resource/Resource'
 import debounce from 'debounce'
@@ -213,7 +216,6 @@ export default {
   },
 
   data: () => ({
-    loggedIn: true,
     tab: null,
     items: [
       { tab: 'Filters:', content: 'Tab 1 Content' },
@@ -227,16 +229,16 @@ export default {
     typeItems: [],
     mode: [],
     modeItems: [],
-    resources: [
-      { id: 22, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Photos', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
-      { id: 25, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Recipes', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
-      { id: 26, icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Work', content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
-    ],
+    resources: [],
     selectedResource: null,
     showResource: false,
     showResourceList: false,
     tags: [],
-    resourceCount: 0
+    resourceCount: 0,
+    selectedCapabilities: [],
+    capabilityString: null,
+    capabilityCodes: capabilityCodes,
+    selectedResourceFilter: null
   }),
 
   computed: {
@@ -334,10 +336,37 @@ export default {
 
     nextPage() {
 
+    },
+
+    logout() {
+      localStorage.deleteItem('token');
+      localStorage.deleteItem('refreshToken');
+      window.location.href = "/auth";
+    },
+
+    clearCapabilities() {
+      this.selectedCapabilities = [];
     }
   },
 
   async mounted() {
+    this.selectedCapabilities = JSON.parse(localStorage.getItem('selectedCapabilities'));
+    this.selectedResourceFilter = parseInt(localStorage.getItem('selectedResource'));
+    console.log(this.selectedCapabilities, this.selectedResourceFilter)
+    if (this.selectedCapabilities && this.selectedResourceFilter > -1) {
+      let resultString = "";
+      resultString += this.capabilityCodes[this.selectedResourceFilter].name;
+      resultString += " (";
+      for (let i = 0; i < this.selectedCapabilities.length; i ++) {
+        resultString += this.capabilityCodes[this.selectedResourceFilter].short + (this.selectedCapabilities[i] + 1) + ", ";
+      }
+      resultString = resultString.substring(0, resultString.length - 2);
+      resultString += ")";
+      this.capabilityString = resultString;
+    } else {
+      this.selectedCapabilities = [];
+      this.selectedResourceFilter = null;
+    }
     this.audienceItems = await this.getTags('FilterAudience');
     this.typeItems = await this.getTags('FilterType');
     this.modeItems = await this.getTags('FilterMode');

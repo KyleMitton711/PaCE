@@ -10,7 +10,7 @@ export default {
     }
 
     let res = await API.get(url, headers);
-    return res;
+    return res.data;
   },
 
   async addTag(payload) {

@@ -17,12 +17,12 @@ const mutations = {
 const actions = {
     async getResourceCount ({ commit }, payload = null) {
         let result = await ResourceService.getResourceCount(payload);
-        return result;
+        return result.data;
     },
     async filterResources ({ commit }, payload = null) {
         let result = await ResourceService.filterResources(payload);
         commit('GET_TOTAL_RESOURCES', result.data);
-        return result;
+        return result.data;
     },
     async getResources ({ commit }, payload = null) {
         let result = await ResourceService.getResources(payload);

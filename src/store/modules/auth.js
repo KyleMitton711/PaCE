@@ -2,10 +2,7 @@ import AuthService from "@/services/AuthService.js";
 const Auth = new AuthService();
 
 const state = {
-    user: {
-        firstName: '',
-        lastName: ''
-    }
+    user: null
 };
 
 const getters = {

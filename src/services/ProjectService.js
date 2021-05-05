@@ -8,7 +8,7 @@ export default {
       url += `?SearchText=${SearchText}`;
     }
     let res = await API.get(url);
-    return res;
+    return res.data;
   },
 
   async addProject (payload) {

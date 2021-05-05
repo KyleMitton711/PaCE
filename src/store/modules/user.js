@@ -24,8 +24,8 @@ const mutations = {
 const actions = {
     async getCurrent ({ commit }) {
         let result = await User.getCurrent();
-        commit('auth/SET_USER', result, {root:true});
-        return result;
+        commit('auth/SET_USER', result.data, {root:true});
+        return result.data;
     },
     async getUsers ({ commit }) {
         let result = await  User.getUsers();

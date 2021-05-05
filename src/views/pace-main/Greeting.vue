@@ -38,7 +38,7 @@
                 </div>
                 <div class="d-block d-sm-flex align-center mb-4 ml-4">
                   <div>
-                    <span class="mr-3">None of above?</span><a href="/search" class="link">Skip to search</a>
+                    <span class="mr-3">None of above?</span><a @click="goToSearch" class="link">Skip to search</a>
                   </div>
                 </div>
               </div>
