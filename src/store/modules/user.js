@@ -22,61 +22,31 @@ const mutations = {
 };
 
 const actions = {
-    getCurrent: ({ commit }) => {
-        return User.getCurrent()
-            .then(result => {
-                commit('auth/SET_USER', result, {root:true});
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async getCurrent ({ commit }) {
+        let result = await User.getCurrent();
+        commit('auth/SET_USER', result.data, {root:true});
+        return result.data;
     },
-    getUsers: ({ commit }) => {
-        return User.getUsers()
-            .then(result => {
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async getUsers ({ commit }) {
+        let result = await  User.getUsers();
+        return result;
     },
-    addUser: ({ commit }, payload) => {
-        return User.addUser(payload)
-            .then(result => {
-                commit("ADD_TAG", result.data);
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async addUser ({ commit }, payload) {
+        let result = await  User.addUser(payload);
+        commit("ADD_TAG", result.data); // is ADD_TAG correct mutation name for this function?
+        return result.data;
     },
-    updateUser: ({ commit }, payload) => {
-        return User.updateUser(payload)
-            .then(result => {
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async updateUser ({ commit }, payload) {
+        let result = await  User.updateUser(payload);
+        return result.data;
     },
-    deleteUser: ({ commit }, payload) => {
-        return User.deleteUser(payload)
-            .then(result => {
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async deleteUser ({ commit }, payload) {
+        let result = await  User.deleteUser(payload);
+        return result.data;
     },
-    getUserMetrics: ({ commit }, payload) => {
-        return User.getUserMetrics(payload)
-            .then(result => {
-                return result;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async getUserMetrics ({ commit }, payload) {
+        let result = await  User.getUserMetrics(payload);
+        return result;
     },
 };
 

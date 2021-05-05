@@ -2,56 +2,33 @@ import APIService from "@/http.js";
 const API = new APIService();
 
 export default {
-  getProjects (SearchText) {
+  async getProjects (SearchText) {
     let url = `/api/admin/projects`;
     if (SearchText) {
       url += `?SearchText=${SearchText}`;
     }
-    return API.get(url)
-    .then(result => {
-      return result;
-    })
-    .catch(e => {
-      throw e;
-    });
+    let res = await API.get(url);
+    return res.data;
   },
 
-  addProject (payload) {
-    return API.post('/api/admin/projects', payload)
-    .then(result => {
-      return result;
-    })
-    .catch(e => {
-      throw e;
-    });
+  async addProject (payload) {
+    let res = API.post('/api/admin/projects', payload);
+    return res;
   },
 
-  editProject (payload) {
-    return API.put('/api/admin/projects/' + payload.id, payload)
-    .then(result => {
-      return result;
-    })
-    .catch(e => {
-      throw e;
-    });
+  async editProject (payload) {
+    let res = await API.put('/api/admin/projects/' + payload.id, payload);
+    return res;
   },
 
-  deleteProject (id) {
-    return API.delete('/api/admin/projects/' + id)
-    .then(result => {
-      return result;
-    })
-    .catch(e => {
-      throw e;
-    });
+  async deleteProject (id) {
+    let res = await API.delete('/api/admin/projects/' + id);
+    return res;
   },
 
-  getProject (id) {
+  async getProject (id) {
     let headers = { "Content-Type": "application/json-patch+json" };
-    return API.get(`/api/admin/projects?id=${id}`, headers).then(res => {
-      return res.data;
-    }).catch((err) => {
-      throw err;
-    });
+    let res = await API.get(`/api/admin/projects?id=${id}`, headers);
+    return res;
   }
 }

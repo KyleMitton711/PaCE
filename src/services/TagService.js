@@ -3,56 +3,33 @@ const API = new APIService();
 
 let headers = { "Content-Type": "application/json" };
 export default {
-  getTags(TagType) {
+  async getTags(TagType) {
     let url = `/api/tags`;
     if (TagType) {
       url += `?TagType=${TagType}`;
     }
 
-    return API.get(url, headers)
-      .then(result => {
-        return result;
-      })
-      .catch(e => {
-        throw e;
-      });
+    let res = await API.get(url, headers);
+    return res.data;
   },
 
-  addTag(payload) {
-    return API.post('/api/admin/tags', payload, headers)
-      .then(result => {
-        return result;
-      })
-      .catch(e => {
-        throw e;
-      });
+  async addTag(payload) {
+    let res = await API.post('/api/admin/tags', payload, headers);
+    return res;
   },
 
-  deleteTag(payload) {
-    return API.delete(`/api/admin/tags/${payload.id}?tagType=${payload.tagType}`, headers)
-      .then(result => {
-        return result;
-      })
-      .catch(e => {
-        throw e;
-      });
+  async deleteTag(payload) {
+    let res = await API.delete(`/api/admin/tags/${payload.id}?tagType=${payload.tagType}`, headers);
+    return res;
   },
 
-  updateTag(payload) {
-    return API.put(`/api/admin/tags/${payload.id}`, payload, headers)
-      .then(result => {
-        return result;
-      })
-      .catch(e => {
-        throw e;
-      });
+  async updateTag(payload) {
+    let res = await API.put(`/api/admin/tags/${payload.id}`, payload, headers)
+    return res;
   },
 
-  getTagDetail(id) {
-    return API.get(`/api/tags/${id}`, headers).then(res => {
-      return res.data;
-    }).catch((err) => {
-      throw err;
-    });
+  async getTagDetail(id) {
+    let res = await API.get(`/api/tags/${id}`, headers);
+    return res;
   }
 }

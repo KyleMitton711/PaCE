@@ -2,75 +2,51 @@ import APIService from "@/http.js";
 const API = new APIService();
 
 export default class UserService {
-  getCurrent () {
+  async getCurrent () {
     let headers = {};
-    return API.get('/api/users/current', headers).then(res => {
-      return res.data;
-    }).catch(err => {
-      throw err;
-    });
+    let res = await API.get('/api/users/current', headers);
+    return res.data;
   }
 
-  updateCurrent (payload) {
+  async updateCurrent (payload) {
     let headers = {};
-    return API.put('/api/users/current', payload, headers).then(res => {
-      return res.data;
-    }).catch(err => {
-      throw err;
-    });
+    let res = await API.put('/api/users/current', payload, headers);
+    return res.data;
   }
 
-  updateOneSignalForCurrentUser (payload) {
+  async updateOneSignalForCurrentUser (payload) {
     let headers = {};
-    return API.put('/api/users/current/onesignal', payload, headers).then(res => {
-      return res.data;
-    }).catch(err => {
-      throw err;
-    });
+    let res = await API.put('/api/users/current/onesignal', payload, headers);
+    return res.data;
   }
 
-  addUser (payload) {
+  async addUser (payload) {
     let headers = {};
-    return API.post('/api/admin/users', payload, headers).then(res => {
-      return res.data;
-    }).catch(err => {
-      throw err;
-    });
+    let res = await API.post('/api/admin/users', payload, headers);
+    return res.data;
   }
 
-  updateUser (payload) {
+  async updateUser (payload) {
     let headers = {};
-    return API.put(`/api/admin/users/${payload.id}`, payload, headers).then(res => {
-      return res.data;
-    }).catch(err => {
-      throw err;
-    });
+    let res = await API.put(`/api/admin/users/${payload.id}`, payload, headers);
+    return res.data;
   }
 
-  deleteUser (id) {
+  async deleteUser (id) {
     let headers = {};
-    return API.delete(`/api/admin/users/${id}`, headers).then(res => {
-      return res;
-    }).catch(err => {
-      throw err;
-    });
+    let res = await API.delete(`/api/admin/users/${id}`, headers);
+    return res.data;
   }
 
-  getUsers () {
+  async getUsers () {
     let headers = {};
-    return API.get(`/api/admin/users`, headers).then(res => {
-      return res.data;
-    }).catch(err => {
-      throw err;
-    });
+    let res = await API.get(`/api/admin/users`, headers);
+    return res.data;
   }
 
-  getUserMetrics (payload) {
+  async getUserMetrics (payload) {
     let headers = {};
-    return API.get(`/api/metric?DayNumber=${payload}`, headers).then(res => {
-      return res.data;
-    }).catch(err => {
-      throw err;
-    });
+    let res = await API.get(`/api/metric?DayNumber=${payload}`, headers);
+    return res.data;
   }
 }

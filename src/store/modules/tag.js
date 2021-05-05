@@ -20,43 +20,23 @@ const mutations = {
 };
 
 const actions = {
-    getTags: ({ commit }, payload = null) => {
-        return TagService.getTags(payload)
-            .then(result => {
-                commit("GET_TAGS", result.data);
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async getTags ({ commit }, payload = null) {
+        let result = await TagService.getTags(payload);
+        commit("GET_TAGS", result.data);
+        return result.data;
     },
-    addTag: ({ commit }, payload) => {
-        return TagService.addTag(payload)
-            .then(result => {
-                commit("ADD_TAG", result.data);
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async addTag ({ commit }, payload) {
+        let result = await TagService.addTag(payload);
+        commit("ADD_TAG", result.data);
+        return result.data;
     },
-    updateTag: ({ commit }, payload) => {
-        return TagService.updateTag(payload)
-            .then(result => {
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async updateTag ({ commit }, payload) {
+        let result = await TagService.updateTag(payload)
+        return result.data;
     },
-    deleteTag: ({ commit }, payload) => {
-        return TagService.deleteTag(payload)
-            .then(result => {
-                return result.data;
-            })
-            .catch(e => {
-                throw e;
-            });
+    async deleteTag ({ commit }, payload) {
+        let result = await TagService.deleteTag(payload);
+        return result.data;
     },
 
 };
