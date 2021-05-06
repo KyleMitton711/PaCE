@@ -27,7 +27,7 @@ const actions = {
     async getResources ({ commit }, payload = null) {
         let result = await ResourceService.getResources(payload);
         commit('GET_TOTAL_RESOURCES', result.data);
-        return result;
+        return result.data;
     },
     async addResource ({ commit }, payload = null) {
         let result = await ResourceService.addResource(payload);

@@ -163,9 +163,9 @@ export default class APIService {
     } 
     catch (e) {
         //invalid refreshToken
-        if (e.response.status == 400) {
+        if (e.status == 400) {
           localStorage.setItem('refreshToken', null);
-          await this.handleUnauthorizedRequest();
+          return false;
         }
         throw e.response;
     }

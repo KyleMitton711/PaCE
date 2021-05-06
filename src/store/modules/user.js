@@ -46,7 +46,7 @@ const actions = {
     },
     async getUserMetrics ({ commit }, payload) {
         let result = await  User.getUserMetrics(payload);
-        return result;
+        return result.data;
     },
 };
 

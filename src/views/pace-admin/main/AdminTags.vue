@@ -6,7 +6,6 @@
           :headers="headers"
           :items="tags"
           item-key="index"
-          sort-by="calories"
           class="border"
           :loading="isLoading"
           loading-text="Loading... Please wait"
@@ -46,6 +45,8 @@
                           <v-select
                             label="Tag type"
                             :items="tagTypeItems"
+                            item-text="name"
+                            item-value="key"
                             v-model="form.tagType"
                             :error-messages="fieldErrors('form.tagType')"
                             @blur="$v.form.tagType.$touch()"
@@ -100,6 +101,8 @@ import {
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
+import { tagTypeEnumItems } from "@/data/staticItems";
+import { findIndex } from "lodash";
 
 export default {
   name: "AdminTags",
@@ -128,21 +131,11 @@ export default {
         align: "start",
         value: "name"
       },
-      { text: "Tag type", value: "tagType" },
+      { text: "Tag type", value: "tagLabel" },
       { text: "Actions", value: "actions", sortable: false }
     ],
     tags: [],
-    tagTypeItems: [
-      "FilterAudience", 
-      "FilterType", 
-      "FilterMode", 
-      "ContentPadegogy", 
-      "ContentTopic", 
-      "ContentSymptom", 
-      "ContentIllness", 
-      "ContentContext", 
-      "ContentRole"
-    ],
+    tagTypeItems: tagTypeEnumItems,
     editedIndex: -1,
     defaultItem: {
       name: null,
@@ -179,7 +172,8 @@ export default {
       this.isLoading = true;
       let data = await this.getTags(this.search);
       this.tags = data.map((item, index) => {
-        return { ...item, index }
+        let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
+        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
       });
       this.isLoading = false;
     },

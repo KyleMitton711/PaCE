@@ -70,14 +70,15 @@
                           ></v-textarea>
                         </v-col>
                         <v-col cols="12" md="6">
-                          <v-text-field 
+                          <v-select 
                             label="Type" 
                             v-model="form.type"
                             :error-messages="fieldErrors('form.type')"
-                            @input="$v.form.type.$touch()"
                             @blur="$v.form.type.$touch()"
-                            readonly
-                          ></v-text-field>
+                            :items="resourceTypeItems"
+                            item-value="key"
+                            item-text="name"
+                          ></v-select>
                         </v-col>
                         <v-col cols="12" md="6">
                           <v-text-field 
@@ -170,6 +171,7 @@ import {
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
 import { capabilityCodes } from "@/data/capabilitycodes";
+import { resourceTypeEnumItems } from "@/data/staticItems";
 
 export default {
   name: "AdminResources",
@@ -279,6 +281,7 @@ export default {
       tagContentContextIds: [],
       tagContentRoleIds: []
     },
+    resourceTypeItems: resourceTypeEnumItems,
     filters: {},
     isLoading: false,
     deleteConfirmDialog: false,
