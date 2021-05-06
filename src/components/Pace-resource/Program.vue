@@ -71,8 +71,16 @@
 </template>
 
 <script>
+import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
+import { findIndex } from "lodash";
+import { mapActions } from 'vuex'
+
 export default {
   name: "Program",
+
+  props: {
+    resource: Object
+  },
 
   data: () => ({
     tab: null,

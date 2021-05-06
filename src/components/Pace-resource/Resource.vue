@@ -34,7 +34,7 @@
           </v-avatar>
           <h3 class="ml-4">ToolKit</h3>
         </div>
-        <h3 class="mt-4">{{ resource.title }}</h3>
+        <h3 class="mt-4"><a :href="resource.url">{{ resource.title }}</a></h3>
         <p v-html="resource.overview" class="mt-6"></p>
         <p class="mt-4">{{ resourceType }}</p>
         <p class="mt-4"><b>Duration</b> {{ resource.duration }}</p>
@@ -58,7 +58,7 @@
 <script>
 import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: "Resource",
@@ -74,11 +74,6 @@ export default {
     resourceTypeItems: resourceTypeEnumItems,
     tagTypeItems: tagTypeEnumItems,
     info: {
-      projectLink: "",
-      title: "The Advance Project Toolkit",
-      overview: "The toolkit is a reference guide which is designed to complement the online training, so you have all the information in one place to refer to as needed after completing the online learning modules. It contains the resources that GPs, practice nurses and practice managers will need to get started, practise their skills and incorporate the Advance ProjectTM assessment tools into everyday clinical practice.",
-      url: "https://pcc4u.org.au/wp-content/uploads/2019/08/Principles.pdf",
-      learningOutcomes: "This document includes core values, desirable learning outcomes, principles for learning and teaching, and benchmarks for curricula.",
       endorsements: "",
       graduateCapabilities: ['E1', 'E2'],
       audience: ["Allied Health Professional", "Medical Practitioner", "Nursing"],
