@@ -70,14 +70,15 @@
                           ></v-textarea>
                         </v-col>
                         <v-col cols="12" md="6">
-                          <v-text-field 
+                          <v-select 
                             label="Type" 
                             v-model="form.type"
                             :error-messages="fieldErrors('form.type')"
-                            @input="$v.form.type.$touch()"
                             @blur="$v.form.type.$touch()"
-                            readonly
-                          ></v-text-field>
+                            :items="resourceTypeItems"
+                            item-value="key"
+                            item-text="name"
+                          ></v-select>
                         </v-col>
                         <v-col cols="12" md="6">
                           <v-text-field 
@@ -170,6 +171,8 @@ import {
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
 import { capabilityCodes } from "@/data/capabilitycodes";
+import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
+import { findIndex } from "lodash";
 
 export default {
   name: "AdminPrograms",
@@ -231,7 +234,7 @@ export default {
         value: "projectId"
       },
       { text: "Title", value: "title" },
-      { text: "Type", value: "type" },
+      { text: "Type", value: "resourceTypeLabel" },
       { text: "Duration", value: "duration" },
       { text: "Actions", value: "actions", sortable: false }
     ],
@@ -244,7 +247,7 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: "Toolkit",
+      type: null,
       duration: null,
       overview: null,
       isProgram: true,
@@ -266,7 +269,7 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: 1,
+      type: null,
       duration: null,
       overview: null,
       isProgram: true,
@@ -290,6 +293,8 @@ export default {
     tags: [],
     selectedTags: [],
     capabilityCodes: capabilityCodes,
+    resourceTypeItems: resourceTypeEnumItems,
+    tagTypeItems: tagTypeEnumItems,
     capabilityCodeItems: [],
     typeItems: [{
       id: 0,
@@ -331,9 +336,18 @@ export default {
     async initialize() {
       this.isLoading = true;
       this.projects = await this.getProjects();
-      this.resources = await this.getResources(this.filters);
+      let tagdata = await this.getTags(this.search);
+      this.tags = tagdata.map((item, index) => {
+        let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
+        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
+      });
+      let res = await this.getResources(this.filters);
+      let data = Object.assign([], res);
+      this.resources = data.map((item, index) => {
+        let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
+        return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
+      });
       this.isLoading = false;
-      this.tags = await this.getTags();
     },
 
     editItem(item) {
@@ -392,8 +406,8 @@ export default {
       this.refreshTags();
       for (let i = 0; i < this.selectedTags.length ; i ++) {
         let tag = this.selectedTags[i];
-        if (this.form['tag' + tag.tagType + 'Ids'].indexOf(tag.id) == -1) {
-          this.form['tag' + tag.tagType + 'Ids'].push(tag.id);
+        if (this.form['tag' + tag.tagLabel + 'Ids'].indexOf(tag.id) == -1) {
+          this.form['tag' + tag.tagLabel + 'Ids'].push(tag.id);
         }
       }
     }

@@ -15,7 +15,7 @@
     <!---USer Area -->
     <v-list-item two-line class="profile-bg">
       <v-list-item-content class="white--text">
-        <v-list-item-title>{{ user.email }}</v-list-item-title>
+        <v-list-item-title>{{ user && user.email }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
     <!---USer Area -->

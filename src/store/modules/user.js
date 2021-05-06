@@ -29,7 +29,7 @@ const actions = {
     },
     async getUsers ({ commit }) {
         let result = await  User.getUsers();
-        return result;
+        return result.data;
     },
     async addUser ({ commit }, payload) {
         let result = await  User.addUser(payload);

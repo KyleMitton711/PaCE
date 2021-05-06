@@ -171,7 +171,8 @@ import {
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
 import { capabilityCodes } from "@/data/capabilitycodes";
-import { resourceTypeEnumItems } from "@/data/staticItems";
+import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
+import { findIndex } from "lodash";
 
 export default {
   name: "AdminResources",
@@ -233,7 +234,7 @@ export default {
         value: "projectId"
       },
       { text: "Title", value: "title" },
-      { text: "Type", value: "type" },
+      { text: "Type", value: "resourceTypeLabel" },
       { text: "Duration", value: "duration" },
       { text: "Actions", value: "actions", sortable: false }
     ],
@@ -246,7 +247,7 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: "Toolkit",
+      type: null,
       duration: null,
       overview: null,
       capabilityCodes: [],
@@ -267,7 +268,7 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: "Toolkit",
+      type: null,
       duration: null,
       overview: null,
       capabilityCodes: [],
@@ -282,6 +283,7 @@ export default {
       tagContentRoleIds: []
     },
     resourceTypeItems: resourceTypeEnumItems,
+    tagTypeItems: tagTypeEnumItems,
     filters: {},
     isLoading: false,
     deleteConfirmDialog: false,
@@ -326,9 +328,17 @@ export default {
     async initialize() {
       this.isLoading = true;
       this.projects = await this.getProjects();
-      this.tags = await this.getTags();
+      let tagdata = await this.getTags(this.search);
+      this.tags = tagdata.map((item, index) => {
+        let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
+        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
+      });
       let res = await this.filterResources(this.filters);
-      this.resources = Object.assign([], res.results);
+      let data = Object.assign([], res.results);
+      this.resources = data.map((item, index) => {
+        let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
+        return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
+      });
       this.isLoading = false;
     },
 
@@ -388,8 +398,8 @@ export default {
       this.refreshTags();
       for (let i = 0; i < this.selectedTags.length ; i ++) {
         let tag = this.selectedTags[i];
-        if (this.form['tag' + tag.tagType + 'Ids'].indexOf(tag.id) == -1) {
-          this.form['tag' + tag.tagType + 'Ids'].push(tag.id);
+        if (this.form['tag' + tag.tagLabel + 'Ids'].indexOf(tag.id) == -1) {
+          this.form['tag' + tag.tagLabel + 'Ids'].push(tag.id);
         }
       }
     }
