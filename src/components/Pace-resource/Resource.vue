@@ -10,7 +10,7 @@
             aria-controls
             @click="closeDialog"
           >mdi-arrow-left</v-icon>
-          <span class="white--text page-header-title mr-3">{{ info.title }}</span>
+          <span class="white--text page-header-title mr-3">{{ resource.title }}</span>
           <v-icon
             class="pace-yellow--text bookmark-icon ml-auto"
             size="30"
@@ -30,25 +30,14 @@
       <div class="pa-4">
         <div class="d-flex align-center">
           <v-avatar size="64">
-            <v-icon
-              class="grey"
-              v-text="''"
-            ></v-icon>
+            <img :src="resource.projectLogo" />
           </v-avatar>
           <h3 class="ml-4">ToolKit</h3>
         </div>
-        <h3 class="mt-4">{{ info.title }}</h3>
-        <p class="mt-6">{{ info.overview }}</p>
-
-        <h4 class="mt-4">Learning theroy / approach</h4>
-        <ul>
-          <li>Experiental learning</li>
-          <li>Reflection</li>
-          <li>Story Telling</li>
-          <li>Information sharing</li>
-        </ul>
-
-        <p class="mt-4"><b>Duration</b> {{ info.duration }}</p>
+        <h3 class="mt-4">{{ resource.title }}</h3>
+        <p v-html="resource.overview" class="mt-6"></p>
+        <p class="mt-4">{{ resourceType }}</p>
+        <p class="mt-4"><b>Duration</b> {{ resource.duration }}</p>
 
         <p class="mt-4 mb-0"><b>Audience:</b></p>
         <p>Palliative care workforce</p>
@@ -67,13 +56,23 @@
 </template>
 
 <script>
+import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
+import { findIndex } from "lodash";
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: "Resource",
+
+  props: {
+    resource: Object
+  },
 
   data: () => ({
     tab: null,
     isModule: true,
     isBookmarked: true,
+    resourceTypeItems: resourceTypeEnumItems,
+    tagTypeItems: tagTypeEnumItems,
     info: {
       projectLink: "",
       title: "The Advance Project Toolkit",
@@ -90,7 +89,25 @@ export default {
     }
   }),
 
+  computed: {
+    resourceType() {
+      if (this.resource) {
+        let resourceTypeIndex = findIndex(this.resourceTypeItems, (o) => { return o.key == this.resource.type; });
+        return this.resourceTypeItems[resourceTypeIndex].name;
+      } else return null;
+    },
+
+    tagType() {
+      let tags = this.resource.tags.map((item, index) => {
+        let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
+        return this.tagTypeItems[tagIndex].name;
+      });
+      return tags;
+    }
+  },
+
   methods: {
+    ...mapActions("resource", ["bookmarkResource", "unbookmarkResource"]),
     toggleBookmark() {
       this.isBookmarked = !this.isBookmarked;
     },

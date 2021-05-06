@@ -49,5 +49,17 @@ export default {
     let headers = { "Content-Type": "application/json-patch+json" };
     let res = await API.delete(`/api/admin/resources/${id}`, headers);
     return res.data;
+  },
+
+  async bookmarkResource (payload) {
+    let headers = { "Content-Type": "application/json-patch+json" };
+    let res = await API.post(`/api/bookmarks`, payload, headers);
+    return res.data;
+  },
+
+  async unbookmarkResource (payload) {
+    let headers = { "Content-Type": "application/json-patch+json" };
+    let res = await API.delete(`/api/bookmarks`, payload, headers);
+    return res.data;
   }
 }

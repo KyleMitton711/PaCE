@@ -164,15 +164,12 @@
                 >
                   <v-list-item-avatar tile size="64">
                     <img :src="item.projectLogo">
-                    <!-- <v-icon
-                      :class="[item.iconClass]"
-                      v-text="item.icon"
-                    ></v-icon> -->
                   </v-list-item-avatar>
 
                   <v-list-item-content>
                     <span class="black--text " @click="viewResource(i)">{{item.title}}</span>
-                    <p v-html="item.content"></p>
+                    <p v-html="item.overview"></p>
+                    <p class="mt-3">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
                   </v-list-item-content>
 
                   <v-list-item-action>
@@ -194,7 +191,7 @@
             </v-col>
           </v-row>
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
-            <Resource @close-modal="closeResource"/>
+            <Resource @close-modal="closeResource" :resource="selectedResource"/>
           </v-dialog>
         </v-card>
       </v-col>

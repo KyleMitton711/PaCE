@@ -45,6 +45,14 @@ const actions = {
         let result = await ResourceService.deleteResource(id)
         return result;
     },
+    async bookmarkResource ({ commit }, payload) {
+        let result = await ResourceService.bookmarkResource(payload)
+        return result;
+    },
+    async unbookmarkResource ({ commit }, payload) {
+        let result = await ResourceService.unbookmarkResource(payload)
+        return result;
+    },
 };
 
 export default {
