@@ -79,7 +79,7 @@
           v-for="(item, i) in userprofile"
           :key="i"
           :to="item.to"
-          @click="href"
+          @click="item.click"
         >
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
@@ -102,80 +102,85 @@ export default {
       default: false,
     },
   },
-  data: () => ({
-    showLogo: true,
-    showSearch: false,
-    notifications: [
-      {
-        title: "Launch Admin",
-        iconbg: "error",
-        icon: "mdi-link-variant",
-        desc: "Just see the my new admin!",
-        time: "9:30AM",
+  data() {
+    return {
+      showLogo: true,
+      showSearch: false,
+      notifications: [
+        {
+          title: "Launch Admin",
+          iconbg: "error",
+          icon: "mdi-link-variant",
+          desc: "Just see the my new admin!",
+          time: "9:30AM",
+        },
+        {
+          title: "Event today",
+          iconbg: "success",
+          icon: "mdi-calendar-check",
+          desc: "Just a reminder that you have event",
+          time: "10:30AM",
+        },
+        {
+          title: "Settings",
+          iconbg: "info",
+          icon: "mdi-cog",
+          desc: "You can customize this template as you want",
+          time: "11:30AM",
+        },
+        {
+          title: "Pavan Kumar",
+          iconbg: "indigo",
+          icon: "mdi-account",
+          desc: "Sent you an notification",
+          time: "12:30AM",
+        },
+      ],
+      messages: [
+        {
+          title: "Sonu Nigam",
+          avatar: "1",
+          avatarstatus: "success",
+          desc: "Singing Show tonigh at 9pm!",
+          time: "9:30AM",
+        },
+        {
+          title: "Sonu Nigam",
+          avatar: "2",
+          avatarstatus: "error",
+          desc: "The greate malody songs ever sung",
+          time: "10:30AM",
+        },
+        {
+          title: "Arijit singh",
+          avatar: "3",
+          avatarstatus: "warning",
+          desc: "You can customize this template as you want",
+          time: "11:30AM",
+        },
+        {
+          title: "Pavan Kumar",
+          avatar: "4",
+          avatarstatus: "success",
+          desc: "Sent you an notification",
+          time: "12:30AM",
+        },
+      ],
+      userprofile: [
+        { title: "My Contacts", to: "/theme/apps/contact" },
+        { title: "My Balance", to: "/theme/apps/contact-grid" },
+        { title: "Inbox", to: "/theme/apps/email/inbox" },
+        { title: "Account Setting", to: "/theme/form-layouts/flformbasic" },
+        { 
+          title: "Logout", 
+          click: this.logout
+        },
+      ],
+      href() {
+        return undefined;
       },
-      {
-        title: "Event today",
-        iconbg: "success",
-        icon: "mdi-calendar-check",
-        desc: "Just a reminder that you have event",
-        time: "10:30AM",
-      },
-      {
-        title: "Settings",
-        iconbg: "info",
-        icon: "mdi-cog",
-        desc: "You can customize this template as you want",
-        time: "11:30AM",
-      },
-      {
-        title: "Pavan Kumar",
-        iconbg: "indigo",
-        icon: "mdi-account",
-        desc: "Sent you an notification",
-        time: "12:30AM",
-      },
-    ],
-    messages: [
-      {
-        title: "Sonu Nigam",
-        avatar: "1",
-        avatarstatus: "success",
-        desc: "Singing Show tonigh at 9pm!",
-        time: "9:30AM",
-      },
-      {
-        title: "Sonu Nigam",
-        avatar: "2",
-        avatarstatus: "error",
-        desc: "The greate malody songs ever sung",
-        time: "10:30AM",
-      },
-      {
-        title: "Arijit singh",
-        avatar: "3",
-        avatarstatus: "warning",
-        desc: "You can customize this template as you want",
-        time: "11:30AM",
-      },
-      {
-        title: "Pavan Kumar",
-        avatar: "4",
-        avatarstatus: "success",
-        desc: "Sent you an notification",
-        time: "12:30AM",
-      },
-    ],
-    userprofile: [
-      { title: "My Contacts", to: "/theme/apps/contact" },
-      { title: "My Balance", to: "/theme/apps/contact-grid" },
-      { title: "Inbox", to: "/theme/apps/email/inbox" },
-      { title: "Account Setting", to: "/theme/form-layouts/flformbasic" },
-      { title: "Logout", to: "/theme/authentication/boxedlogin" },
-    ],
-    href() {
-      return undefined;
-    },
-  }),
+    }
+  },
 
   computed: {
     ...mapState(["navbarColor", "Sidebar_drawer"]),
@@ -191,6 +196,11 @@ export default {
     searchbox: function () {
       this.showSearch = !this.showSearch;
     },
+    logout: function () {
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      window.location.href = "/admin/auth";
+    }
   },
 };
 </script>

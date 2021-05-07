@@ -10,6 +10,14 @@ import InstantSearch from "vue-instantsearch";
 import filter from "./utils/filters";
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import Notifications from 'vue-notification'
+// rich editor for vuetify
+import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
+import 'tiptap-vuetify/dist/main.css'
+
+Vue.use(TiptapVuetifyPlugin, {
+  vuetify,
+  iconsGroup: 'mdi'
+})
 
 Vue.use(Notifications);
 Vue.use(VueSkycons, {

@@ -336,8 +336,8 @@ export default {
     },
 
     logout() {
-      localStorage.deleteItem('token');
-      localStorage.deleteItem('refreshToken');
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
       window.location.href = "/auth";
     },
 

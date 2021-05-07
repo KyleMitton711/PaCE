@@ -48,20 +48,43 @@
             >
               <v-data-table
                 :headers="headers"
-                :items="projects"
+                :items="visitedResources"
                 class="border"
                 :loading="isLoading"
                 loading-text="Loading... Please wait"
               >
-                <template v-slot:no-data>
-                  <v-btn color="primary" @click="initialize">Reset</v-btn>
-                </template>
               </v-data-table>
             </v-card>
           </v-tab-item>
           <v-tab-item>
+            <v-card
+              color="primary"
+              flat
+            >
+              <v-data-table
+                :headers="headers"
+                :items="bookmarkedResources"
+                class="border"
+                :loading="isLoading"
+                loading-text="Loading... Please wait"
+              >
+              </v-data-table>
+            </v-card>
           </v-tab-item>
           <v-tab-item>
+            <v-card
+              color="primary"
+              flat
+            >
+              <v-data-table
+                :headers="filterHeaders"
+                :items="frequentlyUsedFilters"
+                class="border"
+                :loading="isLoading"
+                loading-text="Loading... Please wait"
+              >
+              </v-data-table>
+            </v-card>
           </v-tab-item>
         </v-tabs-items>
       </v-col>
@@ -101,6 +124,10 @@ export default {
       },
       { text: "Name", value: "name" },
     ],
+    filterHeaders: [
+      { text: "Name", align: "start", value: "name" },
+      { text: "Count", value: "count" }
+    ],
     projects: [],
     metrics: {},
     isLoading: false,
@@ -119,6 +146,48 @@ export default {
 
     lastSearchKeywords () {
       return Object.keys(this.metrics).indexOf('listOverPeriod') > -1 ? this.metrics.listOverPeriod.lastSearchKeywords : [];
+    },
+
+    bookmarkedResources() {
+      if (Object.keys(this.metrics).indexOf('listOverPeriod') > -1) {
+        let keys = Object.keys(this.metrics.listOverPeriod.bookmarkedResources);
+        let res = [];
+        for (let i = 0; i < keys.length; i ++) {
+          res.push({
+            name: keys[i],
+            count: this.metrics.listOverPeriod.bookmarkedResources[keys[i]]
+          })
+        }
+        return res;
+      } else return [];
+    },
+
+    visitedResources() {
+      if (Object.keys(this.metrics).indexOf('listOverPeriod') > -1) {
+        let keys = Object.keys(this.metrics.listOverPeriod.visitedResources);
+        let res = [];
+        for (let i = 0; i < keys.length; i ++) {
+          res.push({
+            name: keys[i],
+            count: this.metrics.listOverPeriod.visitedResources[keys[i]]
+          })
+        }
+        return res;
+      } else return [];
+    },
+
+    frequentlyUsedFilters() {
+      if (Object.keys(this.metrics).indexOf('listOverPeriod') > -1) {
+        let keys = Object.keys(this.metrics.listOverPeriod.frequentlyUsedFilters);
+        let res = [];
+        for (let i = 0; i < keys.length; i ++) {
+          res.push({
+            name: keys[i],
+            count: this.metrics.listOverPeriod.frequentlyUsedFilters[keys[i]]
+          })
+        }
+        return res;
+      } else return [];
     }
   },
 
