@@ -22,8 +22,17 @@
             
             <div class="pa-3 content-filter mb-3" v-if="isShowFilter">
               <p>Your filters:</p>
-              <span><b>2 Audiences:</b> Student, Acadiemic 
-                <span class="float-right pace-yellow--text"><v-icon @click="isShowFilter = false">mdi-close</v-icon></span>
+              <span v-if="this.filters && this.filters.tagFilterAudienceIds.length > 0">
+                <b>{{ this.filters.tagFilterAudienceIds.length }} Audiences:</b> {{ selectedAudienceItems }} 
+                <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterAudienceIds = [], viewResourceList()">mdi-close</v-icon></span>
+              </span>
+              <span v-if="this.filters && this.filters.tagFilterTypeIds.length > 0">
+                <b>{{ this.filters.tagFilterTypeIds.length }} Types:</b> {{ selectedTypeItems }} 
+                <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterTypeIds = [], viewResourceList()">mdi-close</v-icon></span>
+              </span>
+              <span v-if="this.filters && this.filters.tagFilterModeIds.length > 0">
+                <b>{{ this.filters.tagFilterModeIds.length }} Modes:</b> {{ selectedModeItems }} 
+                <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterModeIds = [], viewResourceList()">mdi-close</v-icon></span>
               </span>
             </div>
             
@@ -34,15 +43,13 @@
                 :class="item['status'] ? 'opened' : 'closed'"
               >
                 <v-list-item-avatar tile size="64">
-                  <v-icon
-                    :class="[item.iconClass]"
-                    v-text="item.icon"
-                  ></v-icon>
+                  <img :src="item.projectLogo" />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
                   <span class="black--text " @click="viewResource(i)">{{item.title}}</span>
-                  <p v-html="item.content"></p>
+                  <p v-html="item.overview" class="mt-6"></p>
+                  <p class="mt-4"><b>Duration</b> {{ item.duration }}</p>
                 </v-list-item-content>
 
                 <v-list-item-action>
@@ -59,6 +66,9 @@
               <v-icon color="white">mdi-chevron-right</v-icon>
             </v-btn>
           </div>
+          <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
+            <Resource @close-modal="closeResource" :resourceId="selectedResource"/>
+          </v-dialog>
         </v-card>
       </v-col>
     </v-row>
@@ -66,19 +76,65 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex';
+import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
+import { findIndex } from "lodash";
+import Resource from '@/components/Pace-resource/Resource'
+
 export default {
   name: "Resources",
-
+  components: {
+    Resource
+  },
   data: () => ({
     resources: [],
     isShowFilter: false,
     selectedResource: null,
     showResource: false,
-    filters: null
+    filters: null,
+    audienceItems: [],
+    typeItems: [],
+    modeItems: []
   }),
-  computed: {},
+  computed: {
+    selectedAudienceItems() {
+      let nameArray = this.filters.tagFilterAudienceIds.map(id => {
+        for (let i = 0; i < this.audienceItems.length ; i ++) {
+          if (this.audienceItems[i].id == id) {
+            return this.audienceItems[i].name;
+          }
+        }
+      });
+
+      return nameArray.join(', ');
+    },
+
+    selectedTypeItems() {
+      let nameArray = this.filters.tagFilterTypeIds.map(id => {
+        for (let i = 0; i < this.typeItems.length ; i ++) {
+          if (this.typeItems[i].id == id) {
+            return this.typeItems[i].name;
+          }
+        }
+      });
+
+      return nameArray.join(', ');
+    },
+
+    selectedModeItems() {
+      let nameArray = this.filters.tagFilterModeIds.map(id => {
+        for (let i = 0; i < this.modeItems.length ; i ++) {
+          if (this.modeItems[i].id == id) {
+            return this.modeItems[i].name;
+          }
+        }
+      });
+
+      return nameArray.join(', ');
+    },
+  },
   methods: {
+    ...mapActions("tag", ["getTags"]),
     ...mapActions("resource", ["getResourceCount", "filterResources"]),
     onFilter() {
       this.isShowFilter = !this.isShowFilter;
@@ -91,28 +147,35 @@ export default {
     },
 
     viewResource(i) {
-      this.selectedResource = Object.assign({}, this.resources[i]);
-      this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
+      this.selectedResource = this.resources[i].id;
       this.showResource = true;
     },
 
     async viewResourceList() {
       let res = await this.filterResources(this.filters);
-      this.resources = res.results;
+      this.resources = Object.assign([], res.results);
     },
 
     close() {
       this.$router.push('/search');
     },
 
+    closeResource() {
+      this.showResource = false;
+      this.selectedResource = null;
+    },
+
     nextPage() {}
   },
-  mounted() {
+  async mounted() {
     if (localStorage.getItem('filters')) {
       this.filters = JSON.parse(localStorage.getItem('filters'));
     }
     console.log(this.filters);
     this.viewResourceList();
+    this.audienceItems = await this.getTags('FilterAudience');
+    this.typeItems = await this.getTags('FilterType');
+    this.modeItems = await this.getTags('FilterMode');
   }
 };
 </script>

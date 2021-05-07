@@ -1,7 +1,7 @@
 <template>
 <v-container class="py-0">
   <v-row class="white resource">
-    <v-col cols="12" class="pa-0 full-height-md d-flex flex-column pt-0">
+    <v-col cols="12" class="pa-0 full-height-md d-flex flex-column pt-0" v-if="resource">
       <div class="bg-pace-orange py-3 px-4 page-header d-flex justify-space-between">
         <div class="page-header-title-block d-flex align-center">
           <v-icon
@@ -10,13 +10,13 @@
             aria-controls
             @click="closeDialog"
           >mdi-arrow-left</v-icon>
-          <span class="white--text page-header-title mr-3">{{ resource.title }}</span>
+          <span class="white--text page-header-title mr-3">{{ resource && resource.title }}</span>
           <v-icon
             class="pace-yellow--text bookmark-icon ml-auto"
             size="30"
             aria-controls
             @click="toggleBookmark"
-          >{{ isBookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline' }}</v-icon>
+          >{{ resource.isBookmark ? 'mdi-bookmark' : 'mdi-bookmark-outline' }}</v-icon>
         </div>
         <div class="d-none d-sm-block">
           <v-icon
@@ -64,7 +64,7 @@ export default {
   name: "Resource",
 
   props: {
-    resource: Object
+    resourceId: String
   },
 
   data: () => ({
@@ -73,15 +73,7 @@ export default {
     isBookmarked: true,
     resourceTypeItems: resourceTypeEnumItems,
     tagTypeItems: tagTypeEnumItems,
-    info: {
-      endorsements: "",
-      graduateCapabilities: ['E1', 'E2'],
-      audience: ["Allied Health Professional", "Medical Practitioner", "Nursing"],
-      type: ["Curriculum"], 
-      mode: [],
-      content: [],
-      duration: "2-3 Hrs. APNA Endrorsed 3 hrs CPD."
-    }
+    resource: null
   }),
 
   computed: {
@@ -102,9 +94,17 @@ export default {
   },
 
   methods: {
-    ...mapActions("resource", ["bookmarkResource", "unbookmarkResource"]),
-    toggleBookmark() {
-      this.isBookmarked = !this.isBookmarked;
+    ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
+    async toggleBookmark() {
+      let payload = {
+        resourceId: this.resourceId
+      }
+      if (this.resource.isBookmark) {
+        await this.unbookmarkResource(payload)
+      } else {
+        await this.bookmarkResource(payload)
+      }
+      this.resource.isBookmark = !this.resource.isBookmark;
     },
 
     closeDialog() {
@@ -114,6 +114,11 @@ export default {
     shareResource() {
       
     }
+  },
+
+  async mounted() {
+    this.resource = await this.getResourceDetail(this.resourceId);
+
   }
 };
 </script>

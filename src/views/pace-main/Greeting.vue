@@ -9,7 +9,8 @@
             <v-col lg="7" md="7" class="pl-md-10">
               <div class="d-none d-md-flex mt-10 mb-16">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
-                <router-link to="/auth" class="v-underline ml-auto mr-3 black--text signin-link">Sign in ></router-link>
+                <a class="black--text ml-auto mr-3 mt-3 signin-link" v-if="user">Hi {{ user.firstName + ' ' + user.lastName }} <span class="v-underline" @click="logout"> Sign out ></span></a>
+                <router-link to="/auth" class="v-underline ml-auto mr-3 black--text signin-link" v-else>Sign in ></router-link>
               </div>
               <div v-if="tab == 1">
                 <p class="statement text-wrap">
@@ -84,6 +85,7 @@
 
 <script>
 import { capabilityCodes } from "@/data/capabilitycodes";
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: "Greeting",
@@ -96,6 +98,7 @@ export default {
   }),
 
   computed: {
+    ...mapGetters("auth", ["user"]),
     resourcesForItems() {
       return capabilityCodes.map((item, index) => {
         return {
@@ -125,7 +128,13 @@ export default {
 
     goToSearch() {
       this.$router.push({ name: 'Search' })
-    }
+    },
+
+    logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      window.location.href = "/auth";
+    },
   },
 
   mounted() {

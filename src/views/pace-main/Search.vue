@@ -191,7 +191,7 @@
             </v-col>
           </v-row>
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
-            <Resource @close-modal="closeResource" :resource="selectedResource"/>
+            <Resource @close-modal="closeResource" :resourceId="selectedResource"/>
           </v-dialog>
         </v-card>
       </v-col>
@@ -293,8 +293,7 @@ export default {
     },
 
     viewResource(i) {
-      this.selectedResource = Object.assign({}, this.resources[i]);
-      this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
+      this.selectedResource = this.resources[i].id;
       this.showResource = true;
     },
 
@@ -349,7 +348,12 @@ export default {
   async mounted() {
     this.selectedCapabilities = JSON.parse(localStorage.getItem('selectedCapabilities'));
     this.selectedResourceFilter = parseInt(localStorage.getItem('selectedResource'));
-    console.log(this.selectedCapabilities, this.selectedResourceFilter)
+    let filters = JSON.parse(localStorage.getItem('filters'));
+    if (filters) {
+      this.audience = filters.tagFilterAudienceIds;
+      this.type = filters.tagFilterTypeIds;
+      this.mode = filters.tagFilterModeIds;
+    }
     if (this.selectedCapabilities && this.selectedResourceFilter > -1) {
       let resultString = "";
       resultString += this.capabilityCodes[this.selectedResourceFilter].name;
@@ -367,6 +371,7 @@ export default {
     this.audienceItems = await this.getTags('FilterAudience');
     this.typeItems = await this.getTags('FilterType');
     this.modeItems = await this.getTags('FilterMode');
+    this.changeFilters();
   }
 };
 </script>

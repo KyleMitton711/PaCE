@@ -35,7 +35,7 @@ const actions = {
     },
     async getResourceDetail ({ commit }, payload = null) {
         let result = await ResourceService.getResourceDetail(payload)
-        return result;
+        return result.data;
     },
     async updateResource ({ commit }, payload) {
         let result = await ResourceService.updateResource(payload);
