@@ -1,7 +1,7 @@
 <template>
 <v-container class="py-0">
   <v-row class="white resource">
-    <v-col cols="12" class="pa-0 full-height-md d-flex flex-column pt-0">
+    <v-col cols="12" class="pa-0 full-height-md d-flex flex-column pt-0" v-if="resource">
       <div class="bg-pace-orange py-3 px-4 page-header d-flex justify-space-between">
         <div class="page-header-title-block d-flex align-center">
           <v-icon
@@ -10,13 +10,13 @@
             aria-controls
             @click="closeDialog"
           >mdi-arrow-left</v-icon>
-          <span class="white--text page-header-title mr-3">Enroled Nurse Toolkit</span>
+          <span class="white--text page-header-title mr-3">{{ resource && resource.title }}</span>
           <v-icon
             class="pace-yellow--text bookmark-icon ml-auto"
             size="30"
             aria-controls
             @click="toggleBookmark"
-          >{{ isBookmarked ? 'mdi-bookmark' : 'mdi-bookmark-outline' }}</v-icon>
+          >{{ resource.isBookmark ? 'mdi-bookmark' : 'mdi-bookmark-outline' }}</v-icon>
         </div>
         <div class="d-none d-sm-block">
           <v-icon
@@ -51,8 +51,23 @@
           </v-tab-item>
           <v-tab-item>
             <div class="pa-4">
-              <h3>Enroled Nurse Toolkit</h3>
-              <p>A suite of online palliative care teaching and learning resources for integration into Enrolled Nurses courses. Curriculum aligned to HLTENN010 Apply a palliative approach in nursing practice and EN Standards of Practice.</p>
+              <div class="d-flex align-center">
+                <v-avatar size="64">
+                  <img :src="resource.projectLogo" />
+                </v-avatar>
+                <h3 class="ml-4">ToolKit</h3>
+              </div>
+              <h3 class="mt-4"><a :href="resource.url">{{ resource.title }}</a></h3>
+              <p v-html="resource.overview" class="mt-6"></p>
+              <p class="mt-4">{{ resourceType }}</p>
+              <p class="mt-4"><b>Duration</b> {{ resource.duration }}</p>
+
+              <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0"><b>Audience:</b></p>
+              <p class="mb-0">{{ selectedAudienceItems }}</p>
+              <p class="mt-2 mb-0" v-if="selectedTypeItems.length > 0"><b>Type:</b></p>
+              <p class="mb-0">{{ selectedTypeItems }}</p>
+              <p class="mt-2 mb-0" v-if="selectedModeItems.length > 0"><b>Mode:</b></p>
+              <p class="mb-0">{{ selectedModeItems }}</p>
             </div>
           </v-tab-item>
         </v-tabs-items>
@@ -74,12 +89,15 @@
 import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 import { mapActions } from 'vuex'
+import resourceDetailMixin from "@/mixins/resourceDetailMixin";
 
 export default {
   name: "Program",
 
+  mixins: [resourceDetailMixin],
+
   props: {
-    resource: Object
+    resourceId: String
   },
 
   data: () => ({
@@ -94,20 +112,79 @@ export default {
     },{
       title: 'Module item 3',
       content: 'Secondary text'
-    }]
+    }],
+    resourceTypeItems: resourceTypeEnumItems,
+    tagTypeItems: tagTypeEnumItems,
+    resource: null,
+    audienceItems: [],
+    typeItems: [],
+    modeItems: []
   }),
 
-  methods: {
-    toggleBookmark() {
-      this.isBookmarked = !this.isBookmarked;
+  computed: {
+    resourceType() {
+      if (this.resource) {
+        let resourceTypeIndex = findIndex(this.resourceTypeItems, (o) => { return o.key == this.resource.type; });
+        return this.resourceTypeItems[resourceTypeIndex].name;
+      } else return null;
     },
 
-    closeDialog() {
-      this.$emit('close-modal');
+    tagType() {
+      let tags = this.resource.tags.map((item, index) => {
+        let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
+        return this.tagTypeItems[tagIndex].name;
+      });
+      return tags;
     },
+
+    selectedAudienceItems() {
+      let nameArray = this.resource.tagFilterAudienceIds.map(id => {
+        for (let i = 0; i < this.audienceItems.length ; i ++) {
+          if (this.audienceItems[i].id == id) {
+            return this.audienceItems[i].name;
+          }
+        }
+      });
+
+      return nameArray.join(', ');
+    },
+
+    selectedTypeItems() {
+      let nameArray = this.resource.tagFilterTypeIds.map(id => {
+        for (let i = 0; i < this.typeItems.length ; i ++) {
+          if (this.typeItems[i].id == id) {
+            return this.typeItems[i].name;
+          }
+        }
+      });
+
+      return nameArray.join(', ');
+    },
+
+    selectedModeItems() {
+      let nameArray = this.resource.tagFilterModeIds.map(id => {
+        for (let i = 0; i < this.modeItems.length ; i ++) {
+          if (this.modeItems[i].id == id) {
+            return this.modeItems[i].name;
+          }
+        }
+      });
+
+      return nameArray.join(', ');
+    },
+  },
+
+  methods: {
+    ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
 
     shareResource() {
       
+    }
+  },
+
+  async mounted() {
+    if (this.resourceId) {
+      this.resource = await this.getResourceDetail(this.resourceId);
     }
   }
 };
