@@ -119,6 +119,42 @@
                           ></v-autocomplete>
                         </v-col>
                       </v-row>
+                      <v-row class="d-flex justify-center">
+                        <v-col md="6" cols="12">
+                          <v-list>
+                            <v-subheader inset>Selected modules</v-subheader>
+                            <draggable :list="selectedModules" group="resources" class="p-2 cursor-move" style="min-height: 150px;">
+                              <v-list-item v-for="listItem in selectedModules" :key="listItem.id" @click.prevent>
+                                <v-list-item-avatar>
+                                  <img :src="listItem.projectLogo" />
+                                </v-list-item-avatar>
+
+                                <v-list-item-content>
+                                  <v-list-item-title v-text="listItem.title"></v-list-item-title>
+                                  <v-list-item-subtitle v-html="listItem.overview" style="max-height: 40px;"></v-list-item-subtitle>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </draggable>
+                          </v-list>
+                        </v-col>
+                        <v-col md="6" cols="12">
+                          <v-list>
+                            <v-subheader inset>Resources</v-subheader>
+                            <draggable :list="totalResources" group="resources" class="p-2 cursor-move">
+                              <v-list-item v-for="listItem in totalResources" :key="listItem.id" @click.prevent>
+                                <v-list-item-avatar>
+                                  <img :src="listItem.projectLogo" />
+                                </v-list-item-avatar>
+
+                                <v-list-item-content>
+                                  <v-list-item-title v-text="listItem.title"></v-list-item-title>
+                                  <v-list-item-subtitle v-html="listItem.overview" style="max-height: 40px;"></v-list-item-subtitle>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </draggable>
+                          </v-list>
+                        </v-col>
+                      </v-row>
                     </v-container>
                   </v-card-text>
 
@@ -132,8 +168,8 @@
             </v-toolbar>
           </template>
           <template slot="item.actions" slot-scope="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon small @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
+            <v-icon small class="mr-2 pace-yellow--text" @click="editItem(item)">mdi-pencil</v-icon>
+            <v-icon small class="pace-orange--text" @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
           </template>
           <template slot="item.projectId" slot-scope="{ item }">
             {{ getProjectName(item.projectId) }}
@@ -173,6 +209,7 @@ import debounce from "debounce";
 import { capabilityCodes } from "@/data/capabilitycodes";
 import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
+import draggable from "vuedraggable";
 
 export default {
   name: "AdminPrograms",
@@ -224,6 +261,9 @@ export default {
       }
     }
   },
+  components: {
+    draggable
+  },
   data: () => ({
     dialog: false,
     headers: [
@@ -260,7 +300,8 @@ export default {
       tagContentSymptomIds: [],
       tagContentIllnessIds: [],
       tagContentContextIds: [],
-      tagContentRoleIds: []
+      tagContentRoleIds: [],
+      items: [] // modules
     },
     search: null,
     form: {
@@ -282,7 +323,8 @@ export default {
       tagContentSymptomIds: [],
       tagContentIllnessIds: [],
       tagContentContextIds: [],
-      tagContentRoleIds: []
+      tagContentRoleIds: [],
+      items: [] // modules
     },
     filters: {
       isProgram: true
@@ -296,10 +338,8 @@ export default {
     resourceTypeItems: resourceTypeEnumItems,
     tagTypeItems: tagTypeEnumItems,
     capabilityCodeItems: [],
-    typeItems: [{
-      id: 0,
-      name: "Toolkit"
-    }]
+    selectedModules: [],
+    totalResources: []
   }),
 
   computed: {
@@ -347,6 +387,8 @@ export default {
         let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
         return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
       });
+      res = await this.filterResources();
+      this.totalResources = Object.assign([], res.results);
       this.isLoading = false;
     },
 
@@ -371,6 +413,7 @@ export default {
     },
 
     async save() {
+      this.form.items = this.selectedModules.map(item => item.id);
       if (this.editedIndex > -1) {
         let res = await this.updateResource(this.form);
       } else {

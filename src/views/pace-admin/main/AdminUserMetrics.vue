@@ -11,10 +11,10 @@
         </v-select>
       </v-col>
       <v-col cols="12" md="3">
-        <TheDownloadCount title="Total Searches" :value="metrics.trendSearch" :periodDays="searchData" />
+        <TheDownloadCount title="Total Searches" :value="metrics.trendSearch" :periodDays="searchData" icon="mdi-magnify" />
       </v-col>
       <v-col cols="12" md="3">
-        <TheDownloadCount title="Total Clicks" :value="metrics.trendClick" :periodDays="clickData" />
+        <TheDownloadCount title="Total Clicks" :value="metrics.trendClick" :periodDays="clickData" icon="mdi-cursor-default-click-outline" />
       </v-col>
       <v-col cols="12" md="6">
         <v-card class="bg-white">

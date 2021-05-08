@@ -4,7 +4,7 @@
       <div class="d-flex align-center">
         <div class="align-self-center">
           <h1 class="white--text display-1">
-            <i class="icon-cloud-download"></i>
+            <v-icon class="white--text">{{ icon }}</v-icon>
           </h1>
         </div>
         <div class="mx-4">
@@ -49,7 +49,9 @@ export default {
     value: {
       type: [String, Number]
     },
-    periodDays: Array
+    periodDays: Array,
+    icon: String,
+    color: String
   },
   data: () => ({
     elementVisible: false,

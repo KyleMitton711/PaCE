@@ -167,8 +167,6 @@ export default {
         },
       ],
       userprofile: [
-        { title: "My Contacts", to: "/theme/apps/contact" },
-        { title: "My Balance", to: "/theme/apps/contact-grid" },
         { title: "Inbox", to: "/theme/apps/email/inbox" },
         { title: "Account Setting", to: "/theme/form-layouts/flformbasic" },
         { 
