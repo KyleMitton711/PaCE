@@ -91,11 +91,10 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12">
-                          <v-textarea 
-                            label="Overview" 
+                          <tiptap-vuetify
                             v-model="form.overview"
-                            :counter="1200"
-                          ></v-textarea>
+                            :extensions="extensions"
+                          />
                           <v-select
                             v-model="form.capabilityCodes"
                             :items="capabilityCodeItems"
@@ -210,6 +209,7 @@ import { capabilityCodes } from "@/data/capabilitycodes";
 import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 import draggable from "vuedraggable";
+import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
 
 export default {
   name: "AdminPrograms",
@@ -262,7 +262,8 @@ export default {
     }
   },
   components: {
-    draggable
+    draggable,
+    TiptapVuetify 
   },
   data: () => ({
     dialog: false,
@@ -339,7 +340,28 @@ export default {
     tagTypeItems: tagTypeEnumItems,
     capabilityCodeItems: [],
     selectedModules: [],
-    totalResources: []
+    totalResources: [],
+    extensions: [
+      History,
+      Blockquote,
+      Link,
+      Underline,
+      Strike,
+      Italic,
+      ListItem,
+      BulletList,
+      OrderedList,
+      [Heading, {
+        options: {
+          levels: [1, 2, 3]
+        }
+      }],
+      Bold,
+      Code,
+      HorizontalRule,
+      Paragraph,
+      HardBreak
+    ],
   }),
 
   computed: {
