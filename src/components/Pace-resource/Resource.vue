@@ -39,8 +39,12 @@
         <p class="mt-4">{{ resourceType }}</p>
         <p class="mt-4"><b>Duration</b> {{ resource.duration }}</p>
 
-        <p class="mt-4 mb-0"><b>Audience:</b></p>
-        <p>Palliative care workforce</p>
+        <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0"><b>Audience:</b></p>
+        <p class="mb-0">{{ selectedAudienceItems }}</p>
+        <p class="mt-2 mb-0" v-if="selectedTypeItems.length > 0"><b>Type:</b></p>
+        <p class="mb-0">{{ selectedTypeItems }}</p>
+        <p class="mt-2 mb-0" v-if="selectedModeItems.length > 0"><b>Mode:</b></p>
+        <p class="mb-0">{{ selectedModeItems }}</p>
       </div>
       <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-end">
         <v-btn color="bg-pace-yellow" small fab @click="shareResource">
@@ -59,9 +63,12 @@
 import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 import { mapActions } from 'vuex'
+import resourceDetailMixin from "@/mixins/resourceDetailMixin";
 
 export default {
   name: "Resource",
+
+  mixins: [resourceDetailMixin],
 
   props: {
     resourceId: String
@@ -117,8 +124,9 @@ export default {
   },
 
   async mounted() {
-    this.resource = await this.getResourceDetail(this.resourceId);
-
+    if (this.resourceId) {
+      this.resource = await this.getResourceDetail(this.resourceId);
+    }
   }
 };
 </script>

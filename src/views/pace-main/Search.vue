@@ -191,7 +191,8 @@
             </v-col>
           </v-row>
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
-            <Resource @close-modal="closeResource" :resourceId="selectedResource"/>
+            <Program @close-modal="closeResource" :resourceId="selectedResource.id" v-if="selectedResource && selectedResource.items && selectedResource.items.length > 0" />
+            <Resource @close-modal="closeResource" :resourceId="selectedResource.id" v-else />
           </v-dialog>
         </v-card>
       </v-col>
@@ -203,13 +204,15 @@
 import { capabilityCodes } from "@/data/capabilitycodes";
 import { mapGetters, mapActions } from 'vuex'
 import Resource from '@/components/Pace-resource/Resource'
+import Program from '@/components/Pace-resource/Program'
 import debounce from 'debounce'
 
 export default {
   name: "Search",
 
   components: {
-    Resource
+    Resource,
+    Program
   },
 
   data: () => ({
@@ -227,7 +230,10 @@ export default {
     mode: [],
     modeItems: [],
     resources: [],
-    selectedResource: null,
+    selectedResource: {
+      id: null,
+      items: []
+    },
     showResource: false,
     showResourceList: false,
     tags: [],
@@ -293,13 +299,17 @@ export default {
     },
 
     viewResource(i) {
-      this.selectedResource = this.resources[i].id;
+      this.selectedResource = Object.assign({}, this.resources[i]);
+      this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
       this.showResource = true;
     },
 
     closeResource() {
       this.showResource = false;
-      this.selectedResource = null;
+      this.selectedResource = Object.assign({}, {
+        id: null,
+        items: []
+      });
     },
 
     async viewResourceList() {
@@ -342,6 +352,15 @@ export default {
 
     clearCapabilities() {
       this.selectedCapabilities = [];
+      this.capabilityString = null;
+      localStorage.removeItem('selectedCapabilities');
+      localStorage.removeItem('selectedResource');
+    }
+  },
+
+  watch: {
+    showResource(val) {
+      val || this.closeResource();
     }
   },
 
