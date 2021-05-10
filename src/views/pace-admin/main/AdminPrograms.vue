@@ -130,7 +130,6 @@
 
                                 <v-list-item-content>
                                   <v-list-item-title v-text="listItem.title"></v-list-item-title>
-                                  <v-list-item-subtitle v-html="listItem.overview" style="max-height: 40px;"></v-list-item-subtitle>
                                 </v-list-item-content>
                               </v-list-item>
                             </draggable>
@@ -147,7 +146,6 @@
 
                                 <v-list-item-content>
                                   <v-list-item-title v-text="listItem.title"></v-list-item-title>
-                                  <v-list-item-subtitle v-html="listItem.overview" style="max-height: 40px;"></v-list-item-subtitle>
                                 </v-list-item-content>
                               </v-list-item>
                             </draggable>
@@ -403,20 +401,35 @@ export default {
         let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
         return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
       });
-      let res = await this.getResources(this.filters);
-      let data = Object.assign([], res);
-      this.resources = data.map((item, index) => {
+      // let res = await this.getResources(this.filters);
+      // let data = Object.assign([], res);
+      // this.resources = data.map((item, index) => {
+      //   let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
+      //   return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
+      // });
+      let res = await this.filterResources();
+      this.resources = res.results
+        .filter(item => item.isProgram)
+        .map((item, index) => {
         let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
         return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
       });
-      res = await this.filterResources();
       this.totalResources = Object.assign([], res.results);
+      this.totalResources = this.totalResources.filter(item => {
+        if (!item.isProgram) {
+          if (item.items == null || item.items.length == 0) {
+            return item;
+          }
+        }
+      });
+      
       this.isLoading = false;
     },
 
     editItem(item) {
       this.editedIndex = this.resources.indexOf(item);
       this.form = Object.assign({}, item);
+      this.selectedModules = this.form.items != null ? Object.assign([], this.form.items) : [];
       this.dialog = true;
     },
 

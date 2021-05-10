@@ -7,7 +7,7 @@
     :dark="navbarColor !== 'white'"
   >
     <!---Logo part -->
-    <v-toolbar-title
+    <!-- <v-toolbar-title
       class="align-center d-flex logo-width"
       :class="`${showLogo ? 'logo-width' : ''}`"
       v-if="navbarColor !== 'white'"
@@ -18,9 +18,9 @@
       <span class="logo-text ml-2" :class="`${showLogo ? '' : 'hidelogo'}`">
         <img src="../../../assets/images/logo-light-text.png" class="mt-2" />
       </span>
-    </v-toolbar-title>
+    </v-toolbar-title> -->
     <!---Dark Logo part -->
-    <v-toolbar-title
+    <!-- <v-toolbar-title
       class="align-center d-flex logo-width"
       :class="`${showLogo ? 'logo-width' : ''}`"
       v-else
@@ -31,7 +31,7 @@
       <span class="logo-text ml-2" :class="`${showLogo ? '' : 'hidelogo'}`">
         <img src="../../../assets/images/logo-text.png" class="mt-2" />
       </span>
-    </v-toolbar-title>
+    </v-toolbar-title> -->
     <!---Logo part -->
     <!---/Toggle sidebar part -->
     <div @click="showhideLogo">
@@ -45,7 +45,7 @@
     </div>
     <!---/Toggle sidebar part -->
 
-    <v-card v-if="showSearch" class="searchinput">
+    <!-- <v-card v-if="showSearch" class="searchinput">
       <template>
         <v-text-field
           placeholder="Search & hit enter"
@@ -54,12 +54,12 @@
           @click:append="searchbox"
         ></v-text-field>
       </template>
-    </v-card>
+    </v-card> -->
     <!---/Search part -->
     <v-spacer />
     <!---right part -->
     <!---User -->
-    <v-menu
+    <!-- <v-menu
       bottom
       left
       offset-y
@@ -84,7 +84,7 @@
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
-    </v-menu>
+    </v-menu> -->
     <!---User -->
   </v-app-bar>
 </template>
