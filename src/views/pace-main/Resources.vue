@@ -67,7 +67,7 @@
             </v-btn>
           </div>
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
-            <Program @close-modal="closeResource" :resourceId="selectedResource.id" v-if="selectedResource && selectedResource.items && selectedResource.items.length > 0" />
+            <Program @close-modal="closeResource" :resourceId="selectedResource.id" v-if="selectedResource && selectedResource.isProgram" />
             <Resource @close-modal="closeResource" :resourceId="selectedResource.id" v-else />
           </v-dialog>
         </v-card>

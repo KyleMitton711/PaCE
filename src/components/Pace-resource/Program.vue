@@ -43,7 +43,7 @@
         <v-tabs-items v-model="tab" class="ma-1 mt-2">
           <v-tab-item>
             <div class="pa-4">
-              <div v-for="(item, index) in modules" :key="index">
+              <div v-for="(item, index) in programModules" :key="index">
                 <h3>{{item.title}}</h3>
                 <p class="pace-grey--text">{{item.content}}</p>
               </div>
@@ -172,6 +172,19 @@ export default {
 
       return nameArray.join(', ');
     },
+
+    programModules() {
+      if (this.resource && this.resource.items) {
+        let items = Object.assign([], this.resource.items);
+        items.sort(function(a, b) {
+          if (a.itemNum > b.itemNum) return 1;
+          else return -1;
+        });
+        return items;
+      } else {
+        return [];
+      }
+    }
   },
 
   methods: {

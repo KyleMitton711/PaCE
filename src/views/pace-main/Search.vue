@@ -17,6 +17,8 @@
                   single-line
                   solo
                   class="search-input"
+                  v-model="search"
+                  @input="changeFilters"
                 ></v-text-field>
                 <p class="text-right"><a class="white--text v-underline" @click="viewResourceList" >Browse {{ resourceCount }} results ></a></p>
               </div>
@@ -181,8 +183,8 @@
               </v-list>
               <div class="d-flex justify-space-between mt-auto mb-5">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
-                <div class="text-right">
-                  <span class="mr-2">1 / 22</span>
+                <div class="text-right" v-if="pagination.total">
+                  <span class="mr-2">{{ pagination.pageIndex }} / {{ Math.ceil(pagination.total / pagination.pageSize) }}</span>
                   <v-btn color="bg-pace-yellow" fab small @click="nextPage">
                     <v-icon color="white">mdi-chevron-right</v-icon>
                   </v-btn>
@@ -191,7 +193,7 @@
             </v-col>
           </v-row>
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
-            <Program @close-modal="closeResource" :resourceId="selectedResource.id" v-if="selectedResource && selectedResource.items && selectedResource.items.length > 0" />
+            <Program @close-modal="closeResource" :resourceId="selectedResource.id" v-if="selectedResource && selectedResource.isProgram" />
             <Resource @close-modal="closeResource" :resourceId="selectedResource.id" v-else />
           </v-dialog>
         </v-card>
@@ -241,7 +243,14 @@ export default {
     selectedCapabilities: [],
     capabilityString: null,
     capabilityCodes: capabilityCodes,
-    selectedResourceFilter: null
+    selectedResourceFilter: null,
+    search: null,
+    selectedCapabilityCodeStrings: [],
+    pagination: {
+      pageSize: 5,
+      pageIndex: 1,
+      total: null
+    },
   }),
 
   computed: {
@@ -316,14 +325,29 @@ export default {
       let payload = {
         tagFilterAudienceIds: this.audience,
         tagFilterTypeIds: this.type,
-        tagFilterModeIds: this.mode
+        tagFilterModeIds: this.mode,
+        searchText: this.search
       };
+
+      payload['pageIndex'] = this.pagination.pageIndex;
+      payload['pageSize'] = this.pagination.pageSize;
+      
+      if (this.selectedCapabilityCodeStrings.length > 0) {
+        payload['capabilityCodes'] = this.selectedCapabilityCodeStrings;
+      }
+      if (this.search == null || this.search.length == 0) {
+        delete payload['searchText']
+      }
       localStorage.setItem('filters', JSON.stringify(payload));
       if (window.innerWidth < 600) {
         this.$router.push('/resources');
       } else {
         let res = await this.filterResources(payload);
         this.resources = res.results;
+
+        this.pagination.pageSize = res.pageSize;
+        this.pagination.total = res.total;
+        this.pagination.pageIndex = res.currentPage;
       }
     },
 
@@ -335,13 +359,28 @@ export default {
       let payload = {
         tagFilterAudienceIds: this.audience,
         tagFilterTypeIds: this.type,
-        tagFilterModeIds: this.mode
+        tagFilterModeIds: this.mode,
+        searchText: this.search,
       };
+      if (this.selectedCapabilityCodeStrings.length > 0) {
+        payload['capabilityCodes'] = this.selectedCapabilityCodeStrings;
+      }
+      if (this.search == null || this.search.length == 0) {
+        delete payload['searchText']
+      }
       this.resourceCount = await this.getResourceCount(payload);
     }, 500),
 
     nextPage() {
+      let totalPages = Math.ceil(this.pagination.total / this.pagination.pageSize);
+      if (totalPages > this.pagination.pageIndex) this.pagination.pageIndex ++;
+      this.viewResourceList();
+    },
 
+    prevPage() {
+      let totalPages = Math.ceil(this.pagination.total / this.pagination.pageSize);
+      if (this.pagination.pageIndex > 1) this.pagination.pageIndex --;
+      this.viewResourceList();
     },
 
     logout() {
@@ -355,7 +394,7 @@ export default {
       this.capabilityString = null;
       localStorage.removeItem('selectedCapabilities');
       localStorage.removeItem('selectedResource');
-    }
+    },
   },
 
   watch: {
@@ -365,6 +404,7 @@ export default {
   },
 
   async mounted() {
+    this.pagination.pageSize = Math.floor((window.innerHeight - 100) / 120);
     this.selectedCapabilities = JSON.parse(localStorage.getItem('selectedCapabilities'));
     this.selectedResourceFilter = parseInt(localStorage.getItem('selectedResource'));
     let filters = JSON.parse(localStorage.getItem('filters'));
@@ -377,7 +417,9 @@ export default {
       let resultString = "";
       resultString += this.capabilityCodes[this.selectedResourceFilter].name;
       resultString += " (";
+      this.selectedCapabilityCodeStrings = [];
       for (let i = 0; i < this.selectedCapabilities.length; i ++) {
+        this.selectedCapabilityCodeStrings.push(this.capabilityCodes[this.selectedResourceFilter].short + (this.selectedCapabilities[i] + 1));
         resultString += this.capabilityCodes[this.selectedResourceFilter].short + (this.selectedCapabilities[i] + 1) + ", ";
       }
       resultString = resultString.substring(0, resultString.length - 2);
@@ -390,7 +432,7 @@ export default {
     this.audienceItems = await this.getTags('FilterAudience');
     this.typeItems = await this.getTags('FilterType');
     this.modeItems = await this.getTags('FilterMode');
-    this.changeFilters();
+    // this.changeFilters();
   }
 };
 </script>
