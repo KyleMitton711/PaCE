@@ -16,14 +16,9 @@ export default {
     return res.data;
   },
 
-  async getResources (payload) {
-    let headers = { "Content-Type": "application/json" };
-    let url = `/api/admin/resources`;
-    console.log(payload)
-    if (payload && payload.isProgram != null) {
-      url += `?IsProgram=${payload.isProgram}`;
-    }
-    let res = await API.get(url, headers);
+  async getCurrentResources () {
+    let headers = { "Content-Type": "application/json-patch+json" };
+    let res = await API.get(`/api/resources/current`, headers);
     return res.data;
   },
 

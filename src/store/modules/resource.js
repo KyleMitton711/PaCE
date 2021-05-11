@@ -53,6 +53,10 @@ const actions = {
         let result = await ResourceService.unbookmarkResource(payload)
         return result;
     },
+    async getCurrentResources ({commit}) {
+        let result = await ResourceService.getCurrentResources()
+        return result;
+    }
 };
 
 export default {

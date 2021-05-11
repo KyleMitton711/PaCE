@@ -4,7 +4,7 @@
       <v-col lg="11" md="11" sm="8" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4">
           <v-row>
-            <v-col lg="5" md="5" class="pa-0 full-height-md d-flex flex-column pt-0">
+            <v-col lg="5" md="5" cols="12" class="pa-0 full-height-md d-flex flex-column pt-0">
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
                   <a class="white--text ml-auto mr-3 mt-3 white--text signin-link" v-if="user">Hi {{ user.firstName + ' ' + user.lastName }} <span class="v-underline" @click="logout"> Sign out ></span></a>
@@ -157,7 +157,7 @@
               </div>
             </v-col>
             
-            <v-col lg="7" md="7" class="resource-block pa-2 white pa-md-5 d-flex flex-column">
+            <v-col lg="7" md="7" cols="12" class="resource-block pa-2 white pa-md-5 d-flex flex-column">
               <v-list two-line subheader class="pt-5 mb-10">
                 <v-list-item
                   v-for="(item, i) in resources"
@@ -295,7 +295,7 @@ export default {
 
   methods: {
     ...mapActions("tag", ["getTags"]),
-    ...mapActions("resource", ["getResourceCount", "filterResources"]),
+    ...mapActions("resource", ["getResourceCount", "filterResources", "getCurrentResources"]),
 
     goToSearch() {
       this.$router.push({ name: 'Greeting' })
@@ -432,7 +432,12 @@ export default {
     this.audienceItems = await this.getTags('FilterAudience');
     this.typeItems = await this.getTags('FilterType');
     this.modeItems = await this.getTags('FilterMode');
-    // this.changeFilters();
+    this.changeFilters();
+
+    if (window.innerWidth < 600) {
+      let res = await this.getCurrentResources();
+      this.resources = res.data;
+    }
   }
 };
 </script>

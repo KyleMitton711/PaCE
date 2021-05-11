@@ -64,11 +64,12 @@ import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 import { mapActions } from 'vuex'
 import resourceDetailMixin from "@/mixins/resourceDetailMixin";
+import shareResourceMixin from "@/mixins/shareResourceMixin";
 
 export default {
   name: "Resource",
 
-  mixins: [resourceDetailMixin],
+  mixins: [resourceDetailMixin, shareResourceMixin],
 
   props: {
     resourceId: String
@@ -119,7 +120,7 @@ export default {
     },
 
     shareResource() {
-      
+      this.copyTextToClipboard(this.resource.url);
     }
   },
 

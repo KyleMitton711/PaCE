@@ -45,7 +45,7 @@
             <div class="pa-4">
               <div v-for="(item, index) in programModules" :key="index">
                 <h3>{{item.title}}</h3>
-                <p class="pace-grey--text">{{item.content}}</p>
+                <p class="pace-grey--text" v-html="item.overview"></p>
               </div>
             </div>
           </v-tab-item>
@@ -90,11 +90,12 @@ import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 import { mapActions } from 'vuex'
 import resourceDetailMixin from "@/mixins/resourceDetailMixin";
+import shareResourceMixin from "@/mixins/shareResourceMixin";
 
 export default {
   name: "Program",
 
-  mixins: [resourceDetailMixin],
+  mixins: [resourceDetailMixin, shareResourceMixin],
 
   props: {
     resourceId: String
@@ -191,7 +192,7 @@ export default {
     ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
 
     shareResource() {
-      
+      this.copyTextToClipboard(this.resource.url);
     }
   },
 
