@@ -2,7 +2,7 @@
   <div>
     <div class="mt-4">
       <v-card>
-        <v-data-table :headers="headers" :items="resources" :search="search" class="border" :loading="isLoading">
+        <v-data-table :headers="headers" :items="resources" hide-default-footer class="border" :loading="isLoading">
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>
@@ -12,6 +12,7 @@
                   label="Search Programs"
                   single-line
                   hide-details
+                  @input="searchInput"
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
@@ -175,6 +176,9 @@
             <v-btn color="primary" @click="initialize">Reset</v-btn>
           </template>
         </v-data-table>
+        <div class="text-xs-center pt-2" v-if="pagination.total">
+          <v-pagination v-model="pagination.pageIndex" :length="Math.ceil(pagination.total / pagination.pageSize)" @input="loadPrograms"></v-pagination>
+        </div>
         <v-dialog v-model="deleteConfirmDialog" max-width="400px">
           <v-card>
             <v-card-title class="bg-pace-yellow">
@@ -360,6 +364,11 @@ export default {
       Paragraph,
       HardBreak
     ],
+    pagination: {
+      pageSize: 5,
+      pageIndex: 1,
+      total: null
+    },
   }),
 
   computed: {
@@ -396,24 +405,13 @@ export default {
     async initialize() {
       this.isLoading = true;
       this.projects = await this.getProjects();
-      let tagdata = await this.getTags(this.search);
+      let tagdata = await this.getTags();
       this.tags = tagdata.map((item, index) => {
         let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
         return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
       });
-      // let res = await this.getResources(this.filters);
-      // let data = Object.assign([], res);
-      // this.resources = data.map((item, index) => {
-      //   let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
-      //   return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
-      // });
-      let res = await this.filterResources();
-      this.resources = res.results
-        .filter(item => item.isProgram)
-        .map((item, index) => {
-        let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
-        return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
-      });
+      this.loadPrograms();
+      let res = await this.filterResources({isProgram: false});
       this.totalResources = Object.assign([], res.results);
       this.totalResources = this.totalResources.filter(item => {
         if (!item.isProgram) {
@@ -488,7 +486,31 @@ export default {
           this.form['tag' + tag.tagLabel + 'Ids'].push(tag.id);
         }
       }
-    }
+    },
+
+    async loadPrograms() {
+      if (this.search && this.search.length > 0) {
+        this.filters['searchText'] = this.search;
+      } else {
+        delete this.filters['searchText'];
+      }
+      this.filters.pageIndex = this.pagination.pageIndex;
+      this.filters.pageSize = this.pagination.pageSize;
+      let res = await this.filterResources(this.filters);
+      this.resources = res.results
+        .filter(item => item.isProgram)
+        .map((item, index) => {
+        let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
+        return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
+      });
+      this.pagination.pageSize = res.pageSize;
+      this.pagination.total = res.total;
+      this.pagination.pageIndex = res.currentPage;
+    },
+
+    searchInput: debounce(async function () {
+      this.loadPrograms();
+    }, 500)
   }
 };
 </script>

@@ -27,25 +27,25 @@ const actions = {
         commit('auth/SET_USER', result.data, {root:true});
         return result.data;
     },
-    async getUsers ({ commit }) {
-        let result = await  User.getUsers();
+    async getUsers ({ commit }, payload) {
+        let result = await User.getUsers(payload);
         return result.data;
     },
     async addUser ({ commit }, payload) {
-        let result = await  User.addUser(payload);
+        let result = await User.addUser(payload);
         commit("ADD_TAG", result.data); // is ADD_TAG correct mutation name for this function?
         return result.data;
     },
     async updateUser ({ commit }, payload) {
-        let result = await  User.updateUser(payload);
+        let result = await User.updateUser(payload);
         return result.data;
     },
     async deleteUser ({ commit }, payload) {
-        let result = await  User.deleteUser(payload);
+        let result = await User.deleteUser(payload);
         return result.data;
     },
     async getUserMetrics ({ commit }, payload) {
-        let result = await  User.getUserMetrics(payload);
+        let result = await User.getUserMetrics(payload);
         return result.data;
     },
 };

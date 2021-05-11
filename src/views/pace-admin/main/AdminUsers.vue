@@ -6,6 +6,7 @@
           :headers="headers"
           :items="users"
           class="border"
+          hide-default-footer
           :loading="isLoading"
           loading-text="Loading... Please wait"
         >
@@ -134,6 +135,9 @@
             <v-btn color="primary" @click="initialize">Reset</v-btn>
           </template>
         </v-data-table>
+        <div class="text-xs-center pt-2" v-if="pagination.total">
+          <v-pagination v-model="pagination.PageIndex" :length="Math.ceil(pagination.total / pagination.PageSize)" @input="loadUsers"></v-pagination>
+        </div>
         <v-dialog v-model="deleteConfirmDialog" max-width="400px">
           <v-card>
             <v-card-title class="bg-pace-yellow">
@@ -277,7 +281,12 @@ export default {
       }, {
         id: 1,
         name: 'Admin'
-      }]
+      }],
+    pagination: {
+      PageIndex: 1,
+      PageSize: 5,
+      total: null
+    }
   }),
 
   computed: {
@@ -303,7 +312,17 @@ export default {
     ...mapActions("user", ["getUsers", "addUser", "updateUser", "deleteUser"]),
     async initialize() {
       this.isLoading = true;
-      this.users = await this.getUsers();
+      let payload = {
+        PageIndex: this.pagination.PageIndex,
+        PageSize: this.pagination.PageSize,
+        SearchText: this.search
+      };
+      if (this.search == null || this.search.length == 0) {
+        delete payload['SearchText'];
+      }
+      let res = await this.getUsers(payload);
+      this.users = res.results;
+      this.pagination.total = res.total;
       this.users = this.users.map(item => {
         let label = "";
         for (let i = 0; i < this.userTypeItems.length; i ++) {
@@ -356,8 +375,12 @@ export default {
     },
 
     searchInput: debounce(async function () {
-      // this.initialize();
-    }, 500)
+      this.initialize();
+    }, 500),
+
+    loadUsers: debounce(async function () {
+      this.initialize();
+    }, 500),
   }
 };
 </script>

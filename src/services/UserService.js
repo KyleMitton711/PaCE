@@ -38,9 +38,13 @@ export default class UserService {
     return res.data;
   }
 
-  async getUsers () {
+  async getUsers (payload) {
     let headers = {};
-    let res = await API.get(`/api/admin/users`, headers);
+    let url = `/api/admin/users?PageIndex=${payload.PageIndex}&PageSize=${payload.PageSize}`;
+    if (payload.SearchText) {
+      url += '&SearchText=' + payload.SearchText;
+    }
+    let res = await API.get(url, headers);
     return res.data;
   }
 
