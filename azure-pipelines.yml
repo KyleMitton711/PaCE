@@ -1,0 +1,37 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  name: Azure Pipelines
+  demands:
+  - npm
+  - azureps
+
+steps:
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    verbose: false
+
+
+- task: Npm@1
+  displayName: 'npm build'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'run build-dev'
+
+
+- task: AzureFileCopy@4
+  inputs:
+    SourcePath: 'dist'
+    azureSubscription: 'CharlizeEnvisage(0785f75a-6ae1-4a0e-a3c0-b4b1031fe89a)'
+    Destination: 'AzureBlob'
+    storage: 'pacedevstore'
+    ContainerName: '$web'
