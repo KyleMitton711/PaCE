@@ -7,58 +7,31 @@ trigger:
 - master
 
 pool:
-
   name: Azure Pipelines
-
   demands:
-
   - npm
-
   - azureps
-
-
 
 steps:
 
 - task: Npm@1
-
   displayName: 'npm install'
-
   inputs:
-
     verbose: false
-
 
 
 - task: Npm@1
-
   displayName: 'npm build'
-
   inputs:
-
     command: custom
-
     verbose: false
-
     customCommand: 'run build-dev'
 
 
-
-- task: AzureFileCopy@2
-
-  displayName: 'AzureBlob File Copy'
-
+- task: AzureFileCopy@4
   inputs:
-
-    SourcePath: dist
-
+    SourcePath: 'dist'
     azureSubscription: 'CharlizeEnvisage(0785f75a-6ae1-4a0e-a3c0-b4b1031fe89a)'
-
-    Destination: AzureBlob
-
-    storage: pacedevstore
-
+    Destination: 'AzureBlob'
+    storage: 'pacedevstore'
     ContainerName: '$web'
-
-
-
