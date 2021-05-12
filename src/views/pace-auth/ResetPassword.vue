@@ -51,14 +51,14 @@ export default {
     ]
   }),
   methods: {
-    ...mapActions("account", ["resetPass"]),
+    ...mapActions("account", ["forgotPassword"]),
     async submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
         let payload = {
           email: this.email
         };
-        let res = await this.resetPass(payload);
+        let res = await this.forgotPassword(payload);
         if (res) {
           this.$notify({
             text: 'Check your inbox for the reset link and next steps',

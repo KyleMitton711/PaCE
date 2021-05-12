@@ -13,35 +13,32 @@
                   Enter a new password
                 </h6>
 
-                <v-form ref="form" v-model="valid" lazy-validation>
-                  <v-text-field
-                    v-model="password"
-                    :counter="10"
-                    :rules="passwordRules"
-                    label="Password"
-                    required
-                    outlined
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show1 ? 'text' : 'password'"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="confirmpass"
-                    :counter="10"
-                    :rules="passwordRules"
-                    label="Confirm password"
-                    required
-                    outlined
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show1 ? 'text' : 'password'"
-                  ></v-text-field>
-                  <v-btn
-                    :disabled="!valid"
-                    block
-                    class="mr-4 white--text bg-pace-yellow"
-                    submit
-                    @click="submit"
-                  >Save password</v-btn>
-                </v-form>
+                <v-text-field
+                  v-model="password"
+                  :error-messages="fieldErrors('password')"
+                  @input="$v.password.$touch()"
+                  @blur="$v.password.$touch()"
+                  label="Password"
+                  outlined
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                ></v-text-field>
+                <v-text-field
+                  v-model="confirmPass"
+                  :error-messages="fieldErrors('confirmPass')"
+                  @input="$v.confirmPass.$touch()"
+                  @blur="$v.confirmPass.$touch()"
+                  label="Confirm password"
+                  outlined
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show1 ? 'text' : 'password'"
+                ></v-text-field>
+                <v-btn
+                  :disabled="$v.$invalid"
+                  block
+                  class="mr-4 white--text bg-pace-yellow"
+                  @click="submit"
+                >Save password</v-btn>
               </div>
             </v-col>
           </v-row>
@@ -52,23 +49,61 @@
 </template>
 
 <script>
+import {
+  required,
+  minLength,
+  sameAs
+} from "vuelidate/lib/validators";
+import validationMixin from "@/mixins/validationMixin";
+import { validPassword } from "@/utils/validators"
+import { mapActions } from 'vuex';
+
 export default {
   name: "NewPassword",
+  mixins: [validationMixin],
+  validations: {
+    password: {
+      required,
+      validPassword,
+      minLength: minLength(6)
+    }, 
+    confirmPass: {
+      required,
+      minLength,
+      sameAsPassword: sameAs('password')
+    }
+  },
+  validationMessages: {
+    password: { 
+      required: "Password is required",
+      minLength: "Password must be more than 6 characters",
+      validPassword: "Password must contain uppercase, lowercase, number and symbol"
+    },
+    confirmPass: { 
+      required: "Please confirm password",
+      minLength: "Password must be more than 6 characters",
+      sameAsPassword: "Password is not matched."
+    }
+  },
   data: () => ({
     valid: true,
-    password: "",
+    password: null,
+    confirmPass: null,
     show1: false,
-    confirmpass: "",
-    passwordRules: [
-      password => !!password || "Password is required",
-      password => (password && password.length <= 10) || "Password must be less than 10 characters",
-      confirmation => confirmation === this.password || "Password doesn't match"
-    ],
   }),
   methods: {
-    submit() {
-      this.$refs.form.validate();
-      if (this.$refs.form.validate(true)) {
+    ...mapActions("account", ["resetPassword"]),
+    async submit() {
+      let payload = {
+        token: this.$route.query.token,
+        newPassword: this.password
+      }
+      let res = await this.resetPassword(payload);
+      if (res) {
+        this.$notify({
+          text: 'Password is reset successfully!',
+          type: 'success'
+        });
         this.$router.push({ path: "/auth/login" });
       }
     }

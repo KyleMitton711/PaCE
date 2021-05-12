@@ -27,12 +27,10 @@
                   v-model="tab"
                   fixed-tabs
                 >
-                  <v-tab
-                    v-for="item in items"
-                    :key="item.tab"
-                  >
-                    {{ item.tab }}
-                  </v-tab>
+                  <v-tab>Filters:</v-tab>
+                  <v-tab>Audience {{ audience.length > 0 ? `(${audience.length})` : '' }}</v-tab>
+                  <v-tab>Type {{ type.length > 0 ? `(${type.length})` : '' }}</v-tab>
+                  <v-tab>Mode {{ mode.length > 0 ? `(${mode.length})` : '' }}</v-tab>
                 </v-tabs>
 
                 <v-tabs-items v-model="tab" class="ma-1 mt-2">
@@ -42,18 +40,18 @@
                       <p>Take a minute to review your filters</p>
                       <p>Current filters</p>
 
-                      <p class="mb-0"><router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> {{capabilityString }} <span class="float-right" v-if="selectedCapabilities.length > 0"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span></p>
-                      <p class="mb-0">
+                      <p class="mb-0 d-flex"><router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> {{capabilityString }} <span class="ml-auto" v-if="selectedCapabilities.length > 0"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span></p>
+                      <p class="mb-0 d-flex">
                         <b>Audiences:</b> {{ selectedAudienceItems }}
-                        <span class="float-right" v-if="audience.length > 0"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>
+                        <span class="ml-auto" v-if="audience.length > 0"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>
                       </p>
-                      <p class="mb-0">
+                      <p class="mb-0 d-flex">
                         <b>Types:</b> {{ selectedTypeItems }}
-                        <span class="float-right" v-if="type.length > 0"><v-icon @click="type = [], changeFilters()">mdi-close</v-icon></span>
+                        <span class="ml-auto" v-if="type.length > 0"><v-icon @click="type = [], changeFilters()">mdi-close</v-icon></span>
                       </p>
-                      <p>
+                      <p class="d-flex">
                         <b>Modes:</b> {{ selectedModeItems }}
-                        <span class="float-right" v-if="mode.length > 0"><v-icon @click="mode = [], changeFilters()">mdi-close</v-icon></span>
+                        <span class="ml-auto" v-if="mode.length > 0"><v-icon @click="mode = [], changeFilters()">mdi-close</v-icon></span>
                       </p>
                       <div class="mt-10">
                         <div class="text-right">
@@ -463,6 +461,9 @@ export default {
   font-weight: normal;
   font-size: 16px;
   text-transform: capitalize;
+  letter-spacing: 0;
+  text-align: center;
+  padding: 0;
 }
 
 ::v-deep .v-tab::after {
