@@ -103,6 +103,10 @@ export default {
   .v-list {
     padding: 8px 15px;
   }
+  .v-list .v-list-item--active {
+    background: #FDBB2A;
+    color: white;
+  }
   .v-list-item {
     &__icon--text,
     &__icon:first-child {
