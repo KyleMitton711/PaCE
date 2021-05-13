@@ -25,6 +25,15 @@ export default {
 
 <style lang="scss">
 #search {
-  background: url('../../assets/PaCE_Spider_GraphicElement.png') #F15F35;
+  background: #939597;
+}
+
+@media (max-width: 600px) {
+  #search {
+    background: url('../../assets/PaCE_Spider_GraphicElement.png') #F15F35;
+    background-size: 500px 700px;
+    background-position: -200px -200px;
+    background-repeat: no-repeat;
+  }
 }
 </style>

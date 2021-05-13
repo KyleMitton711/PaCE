@@ -22,16 +22,16 @@
             
             <div class="pa-3 content-filter mb-3" v-if="isShowFilter">
               <p>Your filters:</p>
-              <span v-if="this.filters && this.filters.tagFilterAudienceIds.length > 0">
-                <b>{{ this.filters.tagFilterAudienceIds.length }} Audiences:</b> {{ selectedAudienceItems }} 
+              <span v-if="filters && filters.tagFilterAudienceIds.length > 0">
+                <b>{{ filters.tagFilterAudienceIds.length }} Audiences:</b> {{ selectedAudienceItems }} 
                 <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterAudienceIds = [], viewResourceList()">mdi-close</v-icon></span>
               </span>
-              <span v-if="this.filters && this.filters.tagFilterTypeIds.length > 0">
-                <b>{{ this.filters.tagFilterTypeIds.length }} Types:</b> {{ selectedTypeItems }} 
+              <span v-if="filters && filters.tagFilterTypeIds.length > 0">
+                <b>{{ filters.tagFilterTypeIds.length }} Types:</b> {{ selectedTypeItems }} 
                 <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterTypeIds = [], viewResourceList()">mdi-close</v-icon></span>
               </span>
-              <span v-if="this.filters && this.filters.tagFilterModeIds.length > 0">
-                <b>{{ this.filters.tagFilterModeIds.length }} Modes:</b> {{ selectedModeItems }} 
+              <span v-if="filters && filters.tagFilterModeIds.length > 0">
+                <b>{{ filters.tagFilterModeIds.length }} Modes:</b> {{ selectedModeItems }} 
                 <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterModeIds = [], viewResourceList()">mdi-close</v-icon></span>
               </span>
             </div>

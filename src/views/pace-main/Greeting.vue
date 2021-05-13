@@ -4,7 +4,7 @@
       <v-col lg="11" md="11" sm="8" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4 pl-2 pr-2">
           <v-row>
-            <v-col lg="5" md="5" class="d-none d-md-flex bg-pace-yellow full-height">
+            <v-col lg="5" md="5" class="d-none d-md-flex full-height left-panel">
             </v-col>
             <v-col lg="7" md="7" class="pl-md-10">
               <div class="d-none d-md-flex mt-10 mb-16">
@@ -217,6 +217,13 @@ export default {
 
 .v-list-item__content {
   align-self: flex-start;
+}
+
+.left-panel {
+  background: url('../../assets/PaCE_Spider_GraphicElement.png') #FDBB2A;
+  background-size: 800px 800px;
+  background-position: -400px -100px;
+  background-repeat: no-repeat;
 }
 
 @media (min-width: 960px) {

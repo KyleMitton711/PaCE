@@ -3,7 +3,7 @@ const API = new APIService();
 
 export default {
   async register (payload) {
-    let res = await API.post('/api/users/register', payload)
+    let res = await API.post('/api/accounts/signup', payload)
     return res.data;
   },
 

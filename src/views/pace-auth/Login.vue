@@ -12,7 +12,7 @@
                 <h2 class="font-weight-bold mt-4 blue-grey--text text--darken-2">Sign in</h2>
                 <h6 class="subtitle-1">
                   Don't have an account?
-                  <a href="#/pages/boxedregister" class="pace-orange--text">Sign Up</a>
+                  <a href="/auth/register" class="pace-orange--text">Sign Up</a>
                 </h6>
 
                 <v-form ref="form" v-model="valid" lazy-validation action="/dashboards/analytical">
