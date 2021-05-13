@@ -52,7 +52,13 @@
                             @input="$v.form.url.$touch()"
                             @blur="$v.form.url.$touch()"
                           ></v-text-field>
-                          <v-textarea 
+                          <tiptap-vuetify
+                            v-model="form.outcome"
+                            placeholder="Outcome"
+                            :extensions="extensions"
+                            :card-props="{ flat: true, outlined: true }"
+                          />
+                          <!-- <v-textarea 
                             label="Outcome" 
                             v-model="form.outcome"
                             :error-messages="fieldErrors('form.outcome')"
@@ -60,13 +66,10 @@
                             @blur="$v.form.outcome.$touch()"
                             :counter="1200"
                             :rows="4"
-                          ></v-textarea>
+                          ></v-textarea> -->
                           <v-textarea 
                             label="Endorsements" 
                             v-model="form.endorsements"
-                            :error-messages="fieldErrors('form.endorsements')"
-                            @input="$v.form.endorsements.$touch()"
-                            @blur="$v.form.endorsements.$touch()"
                             :counter="500"
                           ></v-textarea>
                         </v-col>
@@ -84,7 +87,6 @@
                         <v-col cols="12" md="6">
                           <v-text-field 
                             label="Duration"
-                            type="number" 
                             v-model="form.duration"
                             :error-messages="fieldErrors('form.duration')"
                             @input="$v.form.duration.$touch()"
@@ -99,6 +101,8 @@
                           ></v-textarea> -->
                           <tiptap-vuetify
                             v-model="form.overview"
+                            placeholder="Overview"
+                            :card-props="{ flat: true, outlined: true }"
                             :extensions="extensions"
                           />
                           <v-select
@@ -191,14 +195,6 @@ export default {
       projectId: { required },
       title: { required },
       url: { required },
-      outcome: { 
-        required,
-        maxLength: maxLength(1200),
-      },
-      endorsements: {
-        required,
-        maxLength: maxLength(500)
-      },
       type: { required },
       duration: { required },
       capabilityCodes: { required }
@@ -214,13 +210,6 @@ export default {
       },
       url: { 
         required: "Url is required"
-      },
-      outcome: { 
-        required: "Outcome is required",
-        maxLength: "Outcome should be less than 1200 characters"
-      },
-      endorsements: { 
-        required: "Endorsements is required"
       },
       type: {
         required: "Type is required"
