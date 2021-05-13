@@ -61,9 +61,6 @@
                           <v-textarea 
                             label="Endorsements" 
                             v-model="form.endorsements"
-                            :error-messages="fieldErrors('form.endorsements')"
-                            @input="$v.form.endorsements.$touch()"
-                            @blur="$v.form.endorsements.$touch()"
                             :counter="500"
                           ></v-textarea>
                         </v-col>
@@ -219,10 +216,6 @@ export default {
       projectId: { required },
       title: { required },
       url: { required },
-      endorsements: {
-        required,
-        maxLength: maxLength(500)
-      },
       type: { required },
       duration: { required },
       capabilityCodes: { required }
@@ -238,9 +231,6 @@ export default {
       },
       url: { 
         required: "Url is required"
-      },
-      endorsements: { 
-        required: "Endorsements is required"
       },
       type: {
         required: "Type is required"
