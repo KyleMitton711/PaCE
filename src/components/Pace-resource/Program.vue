@@ -59,6 +59,7 @@
               </div>
               <h3 class="mt-4"><a :href="resource.url">{{ resource.title }}</a></h3>
               <p v-html="resource.overview" class="mt-6"></p>
+              <p v-html="resource.outcome" class="mt-2"></p>
               <p class="mt-4">{{ resourceType }}</p>
               <p class="mt-4"><b>Duration</b> {{ resource.duration }}</p>
 
