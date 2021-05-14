@@ -364,9 +364,10 @@ export default {
       this.isLoading = false;
     },
 
-    editItem(item) {
+    async editItem(item) {
       this.editedIndex = this.resources.indexOf(item);
-      this.form = Object.assign({}, item);
+      let res = await this.getResourceDetail(item.id);
+      this.form = Object.assign({}, res);
       this.dialog = true;
     },
 

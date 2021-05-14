@@ -9,6 +9,10 @@
           class="border"
           :loading="isLoading"
           loading-text="Loading... Please wait"
+          :page.sync="page"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          @page-count="pageCount = $event"
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
@@ -114,6 +118,9 @@
             <v-btn color="primary" @click="initialize">Reset</v-btn>
           </template>
         </v-data-table>
+        <div class="text-xs-center pt-2">
+          <v-pagination v-model="page" :length="pageCount"></v-pagination>
+        </div>
         <v-dialog v-model="deleteConfirmDialog" max-width="400px">
           <v-card>
             <v-card-title class="bg-pace-yellow">
@@ -231,7 +238,10 @@ export default {
     },
     deleteConfirmDialog: false,
     selectedItemId: null,
-    isLoading: false
+    isLoading: false,
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 5,
   }),
   computed: {
     formTitle() {
