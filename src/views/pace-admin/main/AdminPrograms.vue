@@ -2,7 +2,14 @@
   <div>
     <div class="mt-4">
       <v-card>
-        <v-data-table :headers="headers" :items="resources" hide-default-footer class="border" :loading="isLoading">
+        <v-data-table 
+          :headers="headers" 
+          :items="resources" 
+          hide-default-footer 
+          class="border" 
+          :loading="isLoading"
+          loading-text="Loading... Please wait"
+        >
           <template v-slot:top>
             <v-toolbar flat color="white">
               <v-toolbar-title>
@@ -404,9 +411,10 @@ export default {
       this.isLoading = false;
     },
 
-    editItem(item) {
+    async editItem(item) {
       this.editedIndex = this.resources.indexOf(item);
-      this.form = Object.assign({}, item);
+      let res = await this.getResourceDetail(item.id);
+      this.form = Object.assign({}, res);
       this.selectedModules = this.form.items != null ? Object.assign([], this.form.items) : [];
       this.dialog = true;
     },
@@ -469,6 +477,7 @@ export default {
     },
 
     async loadPrograms() {
+      this.isLoading = true;
       if (this.search && this.search.length > 0) {
         this.filters['searchText'] = this.search;
       } else {
@@ -486,6 +495,7 @@ export default {
       this.pagination.pageSize = res.pageSize;
       this.pagination.total = res.total;
       this.pagination.pageIndex = res.currentPage;
+      this.isLoading = false;
     },
 
     searchInput: debounce(async function () {
