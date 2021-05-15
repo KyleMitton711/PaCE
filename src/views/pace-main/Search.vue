@@ -182,7 +182,10 @@
               <div class="d-flex justify-space-between mt-auto mb-5">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
                 <div class="text-right" v-if="pagination.total">
-                  <span class="mr-2">{{ pagination.pageIndex }} / {{ Math.ceil(pagination.total / pagination.pageSize) }}</span>
+                  <v-btn color="bg-pace-yellow" fab small @click="prevPage" v-if="pagination.pageIndex > 1">
+                    <v-icon color="white">mdi-chevron-left</v-icon>
+                  </v-btn>
+                  <span class="mx-2">{{ pagination.pageIndex }} / {{ Math.ceil(pagination.total / pagination.pageSize) }}</span>
                   <v-btn color="bg-pace-yellow" fab small @click="nextPage">
                     <v-icon color="white">mdi-chevron-right</v-icon>
                   </v-btn>

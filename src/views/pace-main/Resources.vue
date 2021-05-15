@@ -61,7 +61,10 @@
             </v-list>
           </div>
           <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-center">
-            <p class="pa-2 mb-0">1/20</p>
+            <v-btn color="bg-pace-yellow" fab small @click="prevPage" v-if="pagination.pageIndex > 1">
+              <v-icon color="white">mdi-chevron-left</v-icon>
+            </v-btn>
+            <p class="pa-2 mb-0">{{ pagination.pageIndex }} / {{ Math.ceil(pagination.total / pagination.pageSize) }}</p>
             <v-btn color="bg-pace-yellow" fab small @click="nextPage">
               <v-icon color="white">mdi-chevron-right</v-icon>
             </v-btn>
@@ -100,7 +103,12 @@ export default {
     filters: null,
     audienceItems: [],
     typeItems: [],
-    modeItems: []
+    modeItems: [],
+    pagination: {
+      pageSize: 5,
+      pageIndex: 1,
+      total: null
+    },
   }),
   computed: {
     selectedAudienceItems() {
@@ -159,8 +167,13 @@ export default {
     },
 
     async viewResourceList() {
+      this.filters['pageIndex'] = this.pagination.pageIndex;
+      this.filters['pageSize'] = this.pagination.pageSize;
       let res = await this.filterResources(this.filters);
       this.resources = Object.assign([], res.results);
+      this.pagination.pageSize = res.pageSize;
+      this.pagination.total = res.total;
+      this.pagination.pageIndex = res.currentPage;
     },
 
     close() {
@@ -175,7 +188,17 @@ export default {
       });
     },
 
-    nextPage() {}
+    nextPage() {
+      let totalPages = Math.ceil(this.pagination.total / this.pagination.pageSize);
+      if (totalPages > this.pagination.pageIndex) this.pagination.pageIndex ++;
+      this.viewResourceList();
+    },
+
+    prevPage() {
+      let totalPages = Math.ceil(this.pagination.total / this.pagination.pageSize);
+      if (this.pagination.pageIndex > 1) this.pagination.pageIndex --;
+      this.viewResourceList();
+    },
   },
 
   watch: {
