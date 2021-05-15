@@ -12,7 +12,7 @@
               <v-btn icon @click="close">
                 <v-icon color="white">mdi-arrow-left</v-icon>
               </v-btn>
-              <v-toolbar-title>"Best Practice" {{ resources.length }} Results</v-toolbar-title>
+              <v-toolbar-title>"Best Practice" {{ resourceCount }} Results</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn text class="pace-yellow--text" v-on:click = "onFilter()">
                   Filters
@@ -109,6 +109,7 @@ export default {
       pageIndex: 1,
       total: null
     },
+    resourceCount: null
   }),
   computed: {
     selectedAudienceItems() {
@@ -211,7 +212,7 @@ export default {
     if (localStorage.getItem('filters')) {
       this.filters = JSON.parse(localStorage.getItem('filters'));
     }
-    console.log(this.filters);
+    this.resourceCount = await this.getResourceCount(this.filters);
     this.viewResourceList();
     this.audienceItems = await this.getTags('FilterAudience');
     this.typeItems = await this.getTags('FilterType');
