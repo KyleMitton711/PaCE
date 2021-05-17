@@ -7,14 +7,23 @@
           v-model="dayCount"
           @change="initialize"
           style="max-width: 150px"
-        >
-        </v-select>
+        ></v-select>
       </v-col>
       <v-col cols="12" md="3">
-        <TheDownloadCount title="Total Searches" :value="metrics.trendSearch" :periodDays="searchData" icon="mdi-magnify" />
+        <TheDownloadCount
+          title="Total Searches"
+          :value="metrics.trendSearch"
+          :periodDays="searchData"
+          icon="mdi-magnify"
+        />
       </v-col>
       <v-col cols="12" md="3">
-        <TheDownloadCount title="Total Clicks" :value="metrics.trendClick" :periodDays="clickData" icon="mdi-cursor-default-click-outline" />
+        <TheDownloadCount
+          title="Total Clicks"
+          :value="metrics.trendClick"
+          :periodDays="clickData"
+          icon="mdi-cursor-default-click-outline"
+        />
       </v-col>
       <v-col cols="12" md="6">
         <v-card class="bg-white">
@@ -24,66 +33,44 @@
         </v-card>
       </v-col>
       <v-col cols="12">
-        <v-tabs
-          v-model="tab"
-          background-color="transparent"
-          color="primary"
-        >
-          <v-tab>
-            Visited Resources
-          </v-tab>
-          <v-tab>
-            Bookmarked
-          </v-tab>
-          <v-tab>
-            Filters
-          </v-tab>
+        <v-tabs v-model="tab" background-color="transparent" color="primary">
+          <v-tab>Visited Resources</v-tab>
+          <v-tab>Bookmarked</v-tab>
+          <v-tab>Filters</v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
           <v-tab-item>
-            <v-card
-              color="primary"
-              flat
-            >
+            <v-card color="primary" flat>
               <v-data-table
                 :headers="headers"
                 :items="visitedResources"
                 class="border"
                 :loading="isLoading"
                 loading-text="Loading... Please wait"
-              >
-              </v-data-table>
+              ></v-data-table>
             </v-card>
           </v-tab-item>
           <v-tab-item>
-            <v-card
-              color="primary"
-              flat
-            >
+            <v-card color="primary" flat>
               <v-data-table
                 :headers="headers"
                 :items="bookmarkedResources"
                 class="border"
                 :loading="isLoading"
                 loading-text="Loading... Please wait"
-              >
-              </v-data-table>
+              ></v-data-table>
             </v-card>
           </v-tab-item>
           <v-tab-item>
-            <v-card
-              color="primary"
-              flat
-            >
+            <v-card color="primary" flat>
               <v-data-table
                 :headers="filterHeaders"
                 :items="frequentlyUsedFilters"
                 class="border"
                 :loading="isLoading"
                 loading-text="Loading... Please wait"
-              >
-              </v-data-table>
+              ></v-data-table>
             </v-card>
           </v-tab-item>
         </v-tabs-items>
@@ -93,8 +80,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import debounce from "debounce";
+import { mapActions } from "vuex";
 import TheDownloadCount from "@/components/customComponents/download-count/TheDownloadCount";
 
 export default {
@@ -103,26 +89,31 @@ export default {
     TheDownloadCount
   },
   data: () => ({
-    dayCountOptions: [{
-      text: '1 Day',
-      value: 1
-    }, {
-      text: '7 Days',
-      value: 7
-    }, {
-      text: '14 Days',
-      value: 14
-    }, {
-      text: '30 Days',
-      value: 30
-    }],
+    dayCountOptions: [
+      {
+        text: "1 Day",
+        value: 1
+      },
+      {
+        text: "7 Days",
+        value: 7
+      },
+      {
+        text: "14 Days",
+        value: 14
+      },
+      {
+        text: "30 Days",
+        value: 30
+      }
+    ],
     headers: [
       {
         text: "Count",
         align: "start",
         value: "count"
       },
-      { text: "Name", value: "name" },
+      { text: "Name", value: "name" }
     ],
     filterHeaders: [
       { text: "Name", align: "start", value: "name" },
@@ -137,54 +128,62 @@ export default {
 
   computed: {
     searchData() {
-      return Object.keys(this.metrics).indexOf('periodDays') > -1 ? this.metrics.periodDays.map(item => item.searchCount) : [];
+      return Object.keys(this.metrics).indexOf("periodDays") > -1
+        ? this.metrics.periodDays.map(item => item.searchCount)
+        : [];
     },
 
     clickData() {
-      return Object.keys(this.metrics).indexOf('periodDays') > -1 ? this.metrics.periodDays.map(item => item.clickCount) : [];
+      return Object.keys(this.metrics).indexOf("periodDays") > -1
+        ? this.metrics.periodDays.map(item => item.clickCount)
+        : [];
     },
 
-    lastSearchKeywords () {
-      return Object.keys(this.metrics).indexOf('listOverPeriod') > -1 ? this.metrics.listOverPeriod.lastSearchKeywords : [];
+    lastSearchKeywords() {
+      return Object.keys(this.metrics).indexOf("listOverPeriod") > -1
+        ? this.metrics.listOverPeriod.lastSearchKeywords
+        : [];
     },
 
     bookmarkedResources() {
-      if (Object.keys(this.metrics).indexOf('listOverPeriod') > -1) {
+      if (Object.keys(this.metrics).indexOf("listOverPeriod") > -1) {
         let keys = Object.keys(this.metrics.listOverPeriod.bookmarkedResources);
         let res = [];
-        for (let i = 0; i < keys.length; i ++) {
+        for (let i = 0; i < keys.length; i++) {
           res.push({
             name: keys[i],
             count: this.metrics.listOverPeriod.bookmarkedResources[keys[i]]
-          })
+          });
         }
         return res;
       } else return [];
     },
 
     visitedResources() {
-      if (Object.keys(this.metrics).indexOf('listOverPeriod') > -1) {
+      if (Object.keys(this.metrics).indexOf("listOverPeriod") > -1) {
         let keys = Object.keys(this.metrics.listOverPeriod.visitedResources);
         let res = [];
-        for (let i = 0; i < keys.length; i ++) {
+        for (let i = 0; i < keys.length; i++) {
           res.push({
             name: keys[i],
             count: this.metrics.listOverPeriod.visitedResources[keys[i]]
-          })
+          });
         }
         return res;
       } else return [];
     },
 
     frequentlyUsedFilters() {
-      if (Object.keys(this.metrics).indexOf('listOverPeriod') > -1) {
-        let keys = Object.keys(this.metrics.listOverPeriod.frequentlyUsedFilters);
+      if (Object.keys(this.metrics).indexOf("listOverPeriod") > -1) {
+        let keys = Object.keys(
+          this.metrics.listOverPeriod.frequentlyUsedFilters
+        );
         let res = [];
-        for (let i = 0; i < keys.length; i ++) {
+        for (let i = 0; i < keys.length; i++) {
           res.push({
             name: keys[i],
             count: this.metrics.listOverPeriod.frequentlyUsedFilters[keys[i]]
-          })
+          });
         }
         return res;
       } else return [];
@@ -201,9 +200,7 @@ export default {
       this.isLoading = true;
       this.metrics = await this.getUserMetrics(this.dayCount);
       this.isLoading = false;
-    },
+    }
   }
 };
 </script>
-<style lang="sass" scoped>
-</style>
