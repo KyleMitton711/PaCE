@@ -65,15 +65,6 @@
                             :extensions="extensions"
                             :card-props="{ flat: true, outlined: true }"
                           />
-                          <!-- <v-textarea 
-                            label="Outcome" 
-                            v-model="form.outcome"
-                            :error-messages="fieldErrors('form.outcome')"
-                            @input="$v.form.outcome.$touch()"
-                            @blur="$v.form.outcome.$touch()"
-                            :counter="1200"
-                            :rows="4"
-                          ></v-textarea> -->
                           <v-textarea 
                             label="Endorsements" 
                             v-model="form.endorsements"
@@ -101,11 +92,6 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12">
-                          <!-- <v-textarea 
-                            label="Overview" 
-                            v-model="form.overview"
-                            :counter="1200"
-                          ></v-textarea> -->
                           <tiptap-vuetify
                             v-model="form.overview"
                             placeholder="Overview"

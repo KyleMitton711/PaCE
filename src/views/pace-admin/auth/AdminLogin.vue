@@ -4,13 +4,11 @@
       <v-col lg="11" md="11" sm="8" xl="7">
         <v-card class="elevation-4">
           <v-row>
-            <v-col lg="7" md="6" class="d-none d-md-flex login-image">
-            </v-col>
+            <v-col lg="7" md="6" class="d-none d-md-flex login-image"></v-col>
             <v-col lg="5" md="6">
               <div class="pa-7 pa-sm-11">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
                 <h2 class="font-weight-bold mt-4 blue-grey--text text--darken-2">Sign in</h2>
-
                 <v-form ref="form" v-model="valid" lazy-validation action="/dashboards/analytical">
                   <v-text-field
                     v-model="email"
@@ -30,13 +28,8 @@
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="show1 ? 'text' : 'password'"
                   ></v-text-field>
-
                   <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
-                    <v-checkbox
-                      v-model="checkbox"
-                      label="Remember me?"
-                      required
-                    ></v-checkbox>
+                    <v-checkbox v-model="checkbox" label="Remember me?" required></v-checkbox>
                     <div class="ml-auto">
                       <a href="/auth/resetpassword" class="link">Forgot?</a>
                     </div>
@@ -60,7 +53,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 export default {
   name: "AdminLogin",
 
@@ -80,7 +73,6 @@ export default {
     checkbox: false,
     isLoading: false
   }),
-  computed: {},
   methods: {
     ...mapActions("auth", ["adminLogin"]),
     async submit() {
@@ -92,20 +84,15 @@ export default {
             userName: this.email,
             password: this.password
           });
-          console.log(res);
           this.isLoading = false;
           if (res.successful) {
             this.$router.push({ path: "/admin/projects" });
-          } else {
-
           }
-        }
-        catch (err) {
-          console.log(err);
+        } catch (err) {
           this.isLoading = false;
           this.$notify({
-            text: 'Email or password incorrect',
-            type: 'error'
+            text: "Email or password incorrect",
+            type: "error"
           });
         }
       }
@@ -116,7 +103,7 @@ export default {
 
 <style lang="scss" scoped>
 .login-image {
-  background-image: url('../../../assets/image1.png');
+  background-image: url("../../../assets/image1.png");
   background-position-x: center;
 }
 
