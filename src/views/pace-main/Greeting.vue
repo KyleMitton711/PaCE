@@ -1,21 +1,29 @@
 <template>
-  <v-container id="login" class="justify-center mt-10 mt-sm-0 pt-3 pt-sm-0 pb-3 pb-sm-0" tag="section">
+  <v-container
+    id="login"
+    class="justify-center mt-10 mt-sm-0 pt-3 pt-sm-0 pb-3 pb-sm-0"
+    tag="section"
+  >
     <v-row justify="center">
       <v-col lg="11" md="11" sm="8" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4 pl-2 pr-2">
           <v-row>
-            <v-col lg="5" md="5" class="d-none d-md-flex full-height left-panel">
-            </v-col>
+            <v-col lg="5" md="5" class="d-none d-md-flex full-height left-panel"></v-col>
             <v-col lg="7" md="7" class="pl-md-10">
               <div class="d-none d-md-flex mt-10 mb-16">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
-                <a class="black--text ml-auto mr-3 mt-3 signin-link" v-if="user">Hi {{ user.firstName + ' ' + user.lastName }} <span class="v-underline" @click="logout"> Sign out ></span></a>
-                <router-link to="/auth" class="v-underline ml-auto mr-3 black--text signin-link" v-else>Sign in ></router-link>
+                <a class="black--text ml-auto mr-3 mt-3 signin-link" v-if="user">
+                  Hi {{ user.firstName + ' ' + user.lastName }}
+                  <span class="v-underline" @click="logout">Sign out ></span>
+                </a>
+                <router-link
+                  to="/auth"
+                  class="v-underline ml-auto mr-3 black--text signin-link"
+                  v-else
+                >Sign in ></router-link>
               </div>
               <div v-if="tab == 1">
-                <p class="statement text-wrap">
-                  What are you looking for today?
-                </p>
+                <p class="statement text-wrap">What are you looking for today?</p>
                 <h4 class="tab-title mt-4">Resources for:</h4>
                 <div class="mt-4">
                   <v-list>
@@ -39,7 +47,8 @@
                 </div>
                 <div class="d-block d-sm-flex align-center mb-4 ml-4">
                   <div>
-                    <span class="mr-3">None of above?</span><a @click="goToSearch" class="link">Skip to search</a>
+                    <span class="mr-3">None of above?</span>
+                    <a @click="goToSearch" class="link">Skip to search</a>
                   </div>
                 </div>
               </div>
@@ -47,13 +56,20 @@
                 <h4 class="tab-title mt-4">Which capabilities would you like to develop?</h4>
                 <div class="mt-4">
                   <v-list>
-                    <v-list-item-group v-model="selectedCapabilities" multiple mandatory color="pace_grey">
+                    <v-list-item-group
+                      v-model="selectedCapabilities"
+                      multiple
+                      mandatory
+                      color="pace_grey"
+                    >
                       <v-list-item
                         v-for="(item, i) in capabilityCodes[selectedResource].items"
                         :key="i"
                       >
                         <v-list-item-avatar size="65">
-                          <span class="white--text headline">{{ capabilityCodes[selectedResource].short }}{{i + 1}}</span>
+                          <span
+                            class="white--text headline"
+                          >{{ capabilityCodes[selectedResource].short }}{{i + 1}}</span>
                         </v-list-item-avatar>
 
                         <v-list-item-content>
@@ -68,7 +84,9 @@
                     <span @click="tab = 1">&lt;- back</span>
                   </div>
                   <div class="text-right">
-                    <span class="selected-count mr-2">View {{selectedCapabilities && selectedCapabilities.length}} of {{capabilityCodes[selectedResource].items.length}} selected</span>
+                    <span
+                      class="selected-count mr-2"
+                    >View {{selectedCapabilities && selectedCapabilities.length}} of {{capabilityCodes[selectedResource].items.length}} selected</span>
                     <v-btn color="bg-pace-yellow" fab small @click="goToSearch">
                       <v-icon color="white">mdi-chevron-right</v-icon>
                     </v-btn>
@@ -85,7 +103,7 @@
 
 <script>
 import { capabilityCodes } from "@/data/capabilitycodes";
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Greeting",
@@ -94,7 +112,7 @@ export default {
     tab: 1,
     selectedResource: null,
     selectedCapabilities: null,
-    capabilityCodes: capabilityCodes,
+    capabilityCodes: capabilityCodes
   }),
 
   computed: {
@@ -105,41 +123,43 @@ export default {
           name: item.name,
           short: item.short,
           id: item.id
-        }
+        };
       });
     }
   },
 
   watch: {
     selectedCapabilities: {
-      handler: function (val) {
-        localStorage.setItem('selectedCapabilities', JSON.stringify(val));
-      }, 
+      handler: function(val) {
+        localStorage.setItem("selectedCapabilities", JSON.stringify(val));
+      },
       deep: true
     }
   },
 
   methods: {
     selectResource(index) {
-      localStorage.setItem('selectedResource', index);
+      localStorage.setItem("selectedResource", index);
       this.selectedCapabilities = null;
       this.tab = 2;
     },
 
     goToSearch() {
-      this.$router.push({ name: 'Search' })
+      this.$router.push({ name: "Search" });
     },
 
     logout() {
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
       window.location.href = "/auth";
-    },
+    }
   },
 
   mounted() {
-    if (localStorage.getItem('selectedResource')) {
-      this.selectedResource = parseInt(localStorage.getItem('selectedResource'));
+    if (localStorage.getItem("selectedResource")) {
+      this.selectedResource = parseInt(
+        localStorage.getItem("selectedResource")
+      );
     }
     if (this.$route.query.tab) {
       this.tab = this.$route.query.tab;
@@ -158,7 +178,7 @@ export default {
 }
 
 .login-image {
-  background-image: url('../../assets/image1.png');
+  background-image: url("../../assets/image1.png");
   background-position-x: center;
 }
 
@@ -191,13 +211,13 @@ export default {
   max-width: 400px;
   height: 115px;
   align-items: flex-start;
-  background-color: #8A8B89;
+  background-color: #8a8b89;
   margin-bottom: 7px;
   padding-left: 12px;
   .v-list-item__avatar {
     margin-right: 12px;
     border-radius: 50%;
-    background-color: #F3B439;
+    background-color: #f3b439;
   }
 
   .v-list-item__content {
@@ -205,11 +225,11 @@ export default {
   }
 
   &--active {
-    background-color: #F3B439;
+    background-color: #f3b439;
     .v-list-item__avatar {
-      background-color: #966F23;
+      background-color: #966f23;
       span {
-        color: black!important;;
+        color: black !important;
       }
     }
   }
@@ -220,7 +240,7 @@ export default {
 }
 
 .left-panel {
-  background: url('../../assets/PaCE_Spider_GraphicElement.png') #FDBB2A;
+  background: url("../../assets/PaCE_Spider_GraphicElement.png") #fdbb2a;
   background-size: 800px 800px;
   background-position: -400px -100px;
   background-repeat: no-repeat;

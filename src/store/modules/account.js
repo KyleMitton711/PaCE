@@ -16,16 +16,16 @@ const actions = {
                 return result.data;
             })
             .catch(e => {
-                throw e;
+                return e.data;
             });
     },
     forgotPassword: ({ commit }, payload) => {
         return AccountService.forgotPassword(payload)
             .then(result => {
-                return result.data;
+                return result;
             })
             .catch(e => {
-                throw e;
+                return e.data;
             });
     },
     resetPass: ({ commit }, payload) => {

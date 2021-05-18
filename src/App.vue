@@ -10,25 +10,9 @@
 import { mapActions } from 'vuex';
 export default {
   name: 'App',
-
-  components: {
-    
-  },
-
+  
   methods: {
-    ...mapActions("user", ["getCurrent"]),
-    submit() {
-      this.$refs.form.validate();
-      if (this.$refs.form.validate(true)) {
-        this.Login({
-          UserName: this.email,
-          Password: this.password
-        }).then(res => {
-          console.log(res);
-          this.$router.push({ path: "/search" });
-        });
-      }
-    }
+    ...mapActions("user", ["getCurrent"])
   },
 
   async created() {

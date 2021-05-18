@@ -95,7 +95,12 @@ export default {
     ...mapActions("account", ["register"]),
     async submit() {
       let res = await this.register(this.form);
+      console.log(res);
       if (res) {
+        this.$notify({
+          text: 'Check your inbox for the reset link and next steps',
+          type: 'success'
+        });
         this.$router.push({ path: "/auth/login" });
       }
     }

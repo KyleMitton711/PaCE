@@ -59,14 +59,17 @@ export default {
           email: this.email
         };
         let res = await this.forgotPassword(payload);
-        if (res) {
+        if (res.data) {
           this.$notify({
             text: 'Check your inbox for the reset link and next steps',
             type: 'success'
           });
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: 'error'
+          });
         }
-        console.log(res);
-        // this.$router.push({ path: "/auth/newpassword" });
       }
     }
   }
