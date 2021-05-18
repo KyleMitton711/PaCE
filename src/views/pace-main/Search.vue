@@ -150,7 +150,7 @@
                   </v-tab-item>
                 </v-tabs-items>
               </div>
-              <div class="d-flex d-sm-none bg-pace-orange pa-2">
+              <div class="d-flex d-sm-none bg-pace-orange pa-2" v-if="user">
                 <h3 class="white--text">My resources</h3>
               </div>
             </v-col>
@@ -220,12 +220,6 @@ export default {
 
   data: () => ({
     tab: null,
-    items: [
-      { tab: 'Filters:', content: 'Tab 1 Content' },
-      { tab: 'Audience', content: 'Tab 2 Content' },
-      { tab: 'Type', content: 'Tab 2 Content' },
-      { tab: 'Mode', content: 'Tab 2 Content' },
-    ],
     audience: [],
     audienceItems: [],
     type: [],
@@ -370,6 +364,10 @@ export default {
         delete payload['searchText']
       }
       this.resourceCount = await this.getResourceCount(payload);
+      if (window.innerWidth < 600) {
+      } else {
+        this.viewResourceList();
+      }
     }, 500),
 
     nextPage() {
@@ -435,7 +433,7 @@ export default {
     this.modeItems = await this.getTags('FilterMode');
     this.changeFilters();
 
-    if (window.innerWidth < 600) {
+    if (window.innerWidth < 600 && this.user) {
       let res = await this.getCurrentResources();
       this.resources = res.data;
     }
