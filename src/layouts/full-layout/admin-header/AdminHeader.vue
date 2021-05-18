@@ -106,66 +106,6 @@ export default {
     return {
       showLogo: true,
       showSearch: false,
-      notifications: [
-        {
-          title: "Launch Admin",
-          iconbg: "error",
-          icon: "mdi-link-variant",
-          desc: "Just see the my new admin!",
-          time: "9:30AM",
-        },
-        {
-          title: "Event today",
-          iconbg: "success",
-          icon: "mdi-calendar-check",
-          desc: "Just a reminder that you have event",
-          time: "10:30AM",
-        },
-        {
-          title: "Settings",
-          iconbg: "info",
-          icon: "mdi-cog",
-          desc: "You can customize this template as you want",
-          time: "11:30AM",
-        },
-        {
-          title: "Pavan Kumar",
-          iconbg: "indigo",
-          icon: "mdi-account",
-          desc: "Sent you an notification",
-          time: "12:30AM",
-        },
-      ],
-      messages: [
-        {
-          title: "Sonu Nigam",
-          avatar: "1",
-          avatarstatus: "success",
-          desc: "Singing Show tonigh at 9pm!",
-          time: "9:30AM",
-        },
-        {
-          title: "Sonu Nigam",
-          avatar: "2",
-          avatarstatus: "error",
-          desc: "The greate malody songs ever sung",
-          time: "10:30AM",
-        },
-        {
-          title: "Arijit singh",
-          avatar: "3",
-          avatarstatus: "warning",
-          desc: "You can customize this template as you want",
-          time: "11:30AM",
-        },
-        {
-          title: "Pavan Kumar",
-          avatar: "4",
-          avatarstatus: "success",
-          desc: "Sent you an notification",
-          time: "12:30AM",
-        },
-      ],
       userprofile: [
         { title: "Inbox", to: "/theme/apps/email/inbox" },
         { title: "Account Setting", to: "/theme/form-layouts/flformbasic" },

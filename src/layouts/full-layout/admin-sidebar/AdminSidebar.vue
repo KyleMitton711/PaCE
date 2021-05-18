@@ -15,8 +15,34 @@
     <!---USer Area -->
     <v-list-item two-line class="profile-bg">
       <v-list-item-content class="white--text">
-        <v-list-item-title>{{ user && user.email }}</v-list-item-title>
+        <v-list-item-title>{{ user && user.email }} </v-list-item-title>
       </v-list-item-content>
+      <v-list-item-action>
+        <v-menu
+          bottom
+          left
+          offset-y
+          origin="top right"
+          transition="scale-transition"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn dark icon v-on="on" class="mr-1">
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item
+              v-for="(item, i) in userprofile"
+              :key="i"
+              :to="item.to"
+              @click="item.click"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-list-item-action>
     </v-list-item>
     <!---USer Area -->
 
@@ -69,9 +95,20 @@ export default {
       default: false,
     },
   },
-  data: () => ({
-    items: AdminSidebarItems,
-  }),
+  data() {
+    return {
+      items: AdminSidebarItems,
+      userprofile: [
+        { 
+          title: "Logout", 
+          click: this.logout
+        },
+      ],
+      href() {
+        return undefined;
+      },
+    }
+  },
   computed: {
     ...mapState(["SidebarColor", "SidebarBg"]),
     ...mapGetters('auth', ['user']),
@@ -90,7 +127,13 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    logout: function () {
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      window.location.href = "/admin/auth";
+    }
+  },
 };
 </script>
 <style lang="scss">
@@ -121,8 +164,9 @@ export default {
     background-position: -100px -200px;
     background-repeat: no-repeat;
     min-height: 150px;
-    .v-list-item__content {
+    .v-list-item__content, .v-list-item__action {
       align-self: flex-end;
+      margin: 0;
     }
   }
 }
