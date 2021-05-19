@@ -21,6 +21,7 @@
                   label="Password"
                   outlined
                   :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="show1 = !show1"
                   :type="show1 ? 'text' : 'password'"
                 ></v-text-field>
                 <v-text-field
@@ -31,6 +32,7 @@
                   label="Confirm password"
                   outlined
                   :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="show1 = !show1"
                   :type="show1 ? 'text' : 'password'"
                 ></v-text-field>
                 <v-btn

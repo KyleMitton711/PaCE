@@ -139,8 +139,16 @@
                           </v-list>
                         </v-col>
                         <v-col md="6" cols="12">
-                          <v-list>
-                            <v-subheader inset>Resources</v-subheader>
+                          <v-text-field
+                            v-model="resourceKeyword"
+                            append-icon="mdi-magnify"
+                            label="Resources"
+                            single-line
+                            hide-details
+                            clearable
+                            @input="searchResource"
+                          ></v-text-field>
+                          <v-list max-height="200px" style="overflow-y: scroll;">
                             <draggable :list="totalResources" group="resources" class="p-2 cursor-move">
                               <v-list-item v-for="listItem in totalResources" :key="listItem.id" @click.prevent>
                                 <v-list-item-avatar>
@@ -356,6 +364,7 @@ export default {
       pageIndex: 1,
       total: null
     },
+    resourceKeyword: null
   }),
 
   computed: {
@@ -500,7 +509,19 @@ export default {
 
     searchInput: debounce(async function () {
       this.loadPrograms();
-    }, 500)
+    }, 500),
+
+    searchResource: debounce(async function () {
+      let res = await this.filterResources({isProgram: false, searchText: this.resourceKeyword});
+      this.totalResources = Object.assign([], res.results);
+      this.totalResources = this.totalResources.filter(item => {
+        if (!item.isProgram) {
+          if (item.items == null || item.items.length == 0) {
+            return item;
+          }
+        }
+      });
+    }, 500),
   }
 };
 </script>

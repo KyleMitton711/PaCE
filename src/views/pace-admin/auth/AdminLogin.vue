@@ -26,6 +26,7 @@
                     required
                     outlined
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="show1 = !show1"
                     :type="show1 ? 'text' : 'password'"
                   ></v-text-field>
                   <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
