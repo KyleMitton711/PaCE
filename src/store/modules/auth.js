@@ -21,20 +21,24 @@ const mutations = {
 
 const actions = {
     async login ({ commit }, payload) {
-        let result = await Auth.signIn(payload);
-        var status;
-        if (result.data == null) {
-            status = { successful: false, error: result.errors[0].errorMessage };
-        }
-        else {
-            var token = result.data.access_token;
-            localStorage.setItem("token", token);
-            var refreshToken = result.data.refresh_token;
-            localStorage.setItem("refreshToken", refreshToken);
-            commit("SET_USER", result.data.user);
-            status = { successful: true, userType: result.data.user.userType }
-        }
-        return status;
+        return Auth.signIn(payload).then(result => {
+            var status;
+            console.log(result)
+            if (result.data == null) {
+                status = { successful: false, error: result.errors[0].errorMessage };
+            }
+            else {
+                var token = result.data.access_token;
+                localStorage.setItem("token", token);
+                var refreshToken = result.data.refresh_token;
+                localStorage.setItem("refreshToken", refreshToken);
+                commit("SET_USER", result.data.user);
+                status = { successful: true, userType: result.data.user.userType };
+            }
+            return result;
+        }).catch(e => {
+            return e.data;
+        })
     },
     async adminLogin ({ commit }, payload) {
         let result = await Auth.adminSignIn(payload)
