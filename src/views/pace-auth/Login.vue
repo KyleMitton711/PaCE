@@ -47,11 +47,11 @@
                     @click="submit"
                   >Sign In</v-btn>
 
-                  <div class="d-block d-sm-flex align-center mb-4 mb-sm-0 mt-4">
+                  <!-- <div class="d-block d-sm-flex align-center mb-4 mb-sm-0 mt-4">
                     <div class="ml-auto text-center">
                       <a href="/auth/register" class="link">Create your account</a>
                     </div>
-                  </div>
+                  </div> -->
                 </v-form>
               </div>
             </v-col>
@@ -93,8 +93,14 @@ export default {
           UserName: this.email,
           Password: this.password
         }).then(res => {
-          console.log(res);
-          this.$router.push({ path: "/search" });
+          if (res.data) {
+            this.$router.push({ path: "/search" });
+          } else {
+            this.$notify({
+              text: res.errors[0].errorMessage,
+              type: 'error'
+            });
+          }
         });
       }
     }
