@@ -104,18 +104,7 @@ export default {
 
   methods: {
     ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
-    async toggleBookmark() {
-      let payload = {
-        resourceId: this.resourceId
-      }
-      if (this.resource.isBookmark) {
-        await this.unbookmarkResource(payload)
-      } else {
-        await this.bookmarkResource(payload)
-      }
-      this.resource.isBookmark = !this.resource.isBookmark;
-    },
-
+    
     closeDialog() {
       this.$emit('close-modal');
     },

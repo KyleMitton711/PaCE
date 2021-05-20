@@ -40,7 +40,10 @@
                       <p>Take a minute to review your filters</p>
                       <p>Current filters</p>
 
-                      <p class="mb-0 d-flex"><router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> {{capabilityString }} <span class="ml-auto" v-if="selectedCapabilities.length > 0"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span></p>
+                      <p class="mb-0 d-flex">
+                        <router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> {{capabilityString }} 
+                        <span class="ml-auto" v-if="selectedCapabilities.length > 0"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span>
+                      </p>
                       <p class="mb-0 d-flex">
                         <b>Audiences:</b> {{ selectedAudienceItems }}
                         <span class="ml-auto" v-if="audience.length > 0"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>
@@ -191,7 +194,7 @@
                     <v-icon color="white">mdi-chevron-left</v-icon>
                   </v-btn>
                   <span class="mx-2">{{ pagination.pageIndex }} / {{ Math.ceil(pagination.total / pagination.pageSize) }}</span>
-                  <v-btn color="bg-pace-yellow" fab small @click="nextPage">
+                  <v-btn color="bg-pace-yellow" fab small @click="nextPage" v-if="pagination.pageIndex < Math.ceil(pagination.total / pagination.pageSize)">
                     <v-icon color="white">mdi-chevron-right</v-icon>
                   </v-btn>
                 </div>
@@ -372,6 +375,9 @@ export default {
       }
       if (this.search == null || this.search.length == 0) {
         delete payload['searchText']
+        localStorage.removeItem('searchText');
+      } else {
+        localStorage.setItem('searchText', this.search);
       }
       this.resourceCount = await this.getResourceCount(payload);
       if (window.innerWidth < 600) {

@@ -1,6 +1,6 @@
 import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data: () => ({
@@ -14,6 +14,7 @@ export default {
   }),
 
   computed: {
+    ...mapGetters("auth", ["user"]),
     resourceType() {
       if (this.resource) {
         let resourceTypeIndex = findIndex(this.resourceTypeItems, (o) => { return o.key == this.resource.type; });
@@ -70,6 +71,12 @@ export default {
     ...mapActions("tag", ["getTags"]),
     ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
     async toggleBookmark() {
+      if (this.user == null) {
+        this.$notify({
+          text: "Please login to bookmark.",
+          type: 'warning'
+        });
+      }
       let payload = {
         resourceId: this.resourceId
       }

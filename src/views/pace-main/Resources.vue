@@ -12,7 +12,7 @@
               <v-btn icon @click="close">
                 <v-icon color="white">mdi-arrow-left</v-icon>
               </v-btn>
-              <v-toolbar-title>"Best Practice" {{ resourceCount }} Results</v-toolbar-title>
+              <v-toolbar-title>{{ searchText ? `"${searchText}"` : "" }} {{ resourceCount }} Results</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn text class="pace-yellow--text" v-on:click = "onFilter()">
                   Filters
@@ -36,7 +36,7 @@
               </span>
             </div>
             
-            <v-list two-line subheader class="pt-5 mb-10 px-3">
+            <v-list two-line subheader class="pt-5 mb-10 px-3" v-if="resources.length > 0">
               <v-list-item
                 v-for="(item, i) in resources"
                 :key="item.title"
@@ -59,13 +59,18 @@
                 </v-list-item-action>
               </v-list-item>
             </v-list>
+            <template v-else>
+              <p v-if="!isLoadingResource && resourceLoaded" class="px-2">
+                There are no matching results. Please try clearing some filters and keywords from your search.
+              </p>
+            </template>
           </div>
-          <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-center">
+          <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-center" v-if="pagination.total">
             <v-btn color="bg-pace-yellow" fab small @click="prevPage" v-if="pagination.pageIndex > 1">
               <v-icon color="white">mdi-chevron-left</v-icon>
             </v-btn>
             <p class="pa-2 mb-0">{{ pagination.pageIndex }} / {{ Math.ceil(pagination.total / pagination.pageSize) }}</p>
-            <v-btn color="bg-pace-yellow" fab small @click="nextPage">
+            <v-btn color="bg-pace-yellow" fab small @click="nextPage" v-if="pagination.pageIndex < Math.ceil(pagination.total / pagination.pageSize)">
               <v-icon color="white">mdi-chevron-right</v-icon>
             </v-btn>
           </div>
@@ -109,7 +114,10 @@ export default {
       pageIndex: 1,
       total: null
     },
-    resourceCount: null
+    resourceCount: null,
+    searchText: null,
+    isLoadingResource: false,
+    resourceLoaded: false
   }),
   computed: {
     selectedAudienceItems() {
@@ -168,13 +176,22 @@ export default {
     },
 
     async viewResourceList() {
+      this.isLoadingResource = true;
       this.filters['pageIndex'] = this.pagination.pageIndex;
       this.filters['pageSize'] = this.pagination.pageSize;
+      localStorage.setItem('filters', JSON.stringify(this.filters));
+      this.resourceCount = await this.getResourceCount(this.filters);
       let res = await this.filterResources(this.filters);
       this.resources = Object.assign([], res.results);
+      this.resources.sort(function(a, b) {
+        if (a.title > b.title) return 1;
+        else return -1;
+      })
       this.pagination.pageSize = res.pageSize;
       this.pagination.total = res.total;
       this.pagination.pageIndex = res.currentPage;
+      this.isLoadingResource = false;
+      this.resourceLoaded = true;
     },
 
     close() {
@@ -212,6 +229,9 @@ export default {
     if (localStorage.getItem('filters')) {
       this.filters = JSON.parse(localStorage.getItem('filters'));
     }
+    if (localStorage.getItem('searchText')) {
+      this.searchText = localStorage.getItem('searchText');
+    } 
     this.resourceCount = await this.getResourceCount(this.filters);
     this.viewResourceList();
     this.audienceItems = await this.getTags('FilterAudience');
