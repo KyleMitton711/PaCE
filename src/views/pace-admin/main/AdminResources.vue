@@ -422,6 +422,7 @@ export default {
 
     async loadResources() {
       this.isLoading = true;
+      this.filters['isProgram'] = false;
       if (this.search && this.search.length > 0) {
         this.filters['searchText'] = this.search;
       } else {

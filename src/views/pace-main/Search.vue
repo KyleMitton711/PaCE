@@ -156,7 +156,7 @@
             </v-col>
             
             <v-col lg="7" md="7" cols="12" class="resource-block pa-2 white pa-md-5 d-flex flex-column">
-              <v-list two-line subheader class="pt-5 mb-10">
+              <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0">
                 <v-list-item
                   v-for="(item, i) in resources"
                   :key="item.title"
@@ -168,7 +168,7 @@
 
                   <v-list-item-content>
                     <span class="black--text " @click="viewResource(i)">{{item.title}}</span>
-                    <p v-html="item.overview"></p>
+                    <p v-html="item.overview" class="mt-6 overview"></p>
                     <p class="mt-3">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
                   </v-list-item-content>
 
@@ -179,6 +179,11 @@
                   </v-list-item-action>
                 </v-list-item>
               </v-list>
+              <template v-else>
+                <p v-if="!isLoadingResource && resourceLoaded">
+                  There are no matching results. Please try clearing some filters and keywords from your search.
+                </p>
+              </template>
               <div class="d-flex justify-space-between mt-auto mb-5">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
                 <div class="text-right" v-if="pagination.total">
@@ -246,6 +251,8 @@ export default {
       pageIndex: 1,
       total: null
     },
+    isLoadingResource: false,
+    resourceLoaded: false
   }),
 
   computed: {
@@ -317,6 +324,7 @@ export default {
     },
 
     async viewResourceList() {
+      this.isLoadingResource = true;
       let payload = {
         tagFilterAudienceIds: this.audience,
         tagFilterTypeIds: this.type,
@@ -344,6 +352,8 @@ export default {
         this.pagination.total = res.total;
         this.pagination.pageIndex = res.currentPage;
       }
+      this.isLoadingResource = false;
+      this.resourceLoaded = true;
     },
 
     closeResourceList() {
@@ -552,6 +562,7 @@ export default {
     p {
       color: #4a4a4a;
       letter-spacing: .5px;
+      line-height: inherit;
     }
   }
 }

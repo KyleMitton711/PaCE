@@ -193,7 +193,11 @@ export default {
     ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
 
     shareResource() {
-      this.copyTextToClipboard(this.resource.url);
+      this.copyTextToClipboard('https://pcc4u.org.au/learning/topics/topic1/');
+      this.$notify({
+        text: 'Link copied!',
+        type: 'success'
+      });
     }
   },
 

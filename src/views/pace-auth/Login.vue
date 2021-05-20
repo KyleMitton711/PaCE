@@ -7,6 +7,11 @@
             <v-col lg="7" md="6" class="d-none d-md-flex login-image">
             </v-col>
             <v-col lg="5" md="6">
+              <div class="pa-0 px-1 d-flex justify-end">
+                <v-btn icon text @click="$router.push('/')">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </div>
               <div class="pa-7 pa-sm-11">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
                 <h2 class="font-weight-bold mt-4 blue-grey--text text--darken-2">Sign in</h2>

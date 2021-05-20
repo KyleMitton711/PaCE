@@ -7,6 +7,11 @@
             <v-col lg="7" md="6" class="d-none d-md-flex login-image">
             </v-col>
             <v-col lg="5" md="6" class="pr-0">
+              <div class="pa-0 px-3 d-flex justify-end">
+                <v-btn icon text @click="$router.push('/')">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </div>
               <div class="pa-7 pa-sm-12">
                 <p class="font-weight-bold mt-4 text-center blue-grey--text text--darken-2">Create an account</p>
                 <h6 class="subtitle-1 mb-5 text-center">

@@ -48,7 +48,7 @@
 
                 <v-list-item-content>
                   <span class="black--text " @click="viewResource(i)">{{item.title}}</span>
-                  <p v-html="item.overview" class="mt-6"></p>
+                  <p v-html="item.overview" class="mt-6 overview"></p>
                   <p class="mt-4"><b>Duration</b> {{ item.duration }}</p>
                 </v-list-item-content>
 
@@ -267,6 +267,7 @@ export default {
     p {
       color: #4a4a4a;
       letter-spacing: .5px;
+      line-height: inherit;
     }
   }
 }
