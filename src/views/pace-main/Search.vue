@@ -60,15 +60,15 @@
                         <span class="ml-auto"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span>
                       </p>
                       <p class="mb-0 d-flex" v-if="audience.length > 0">
-                        <b class="mr-2">Audiences:</b>{{ selectedAudienceItems }}
+                        <b class="mr-2" @click="tab = 1">Audiences:</b> {{ selectedAudienceItems }}
                         <span class="ml-auto"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>
                       </p>
                       <p class="mb-0 d-flex" v-if="type.length > 0">
-                        <b class="mr-2">Types:</b>{{ selectedTypeItems }}
+                        <b class="mr-2" @click="tab = 2">Types:</b> {{ selectedTypeItems }}
                         <span class="ml-auto" ><v-icon @click="type = [], changeFilters()">mdi-close</v-icon></span>
                       </p>
                       <p class="d-flex" v-if="mode.length > 0">
-                        <b class="mr-2">Modes:</b>{{ selectedModeItems }}
+                        <b class="mr-2" @click="tab = 3">Modes:</b> {{ selectedModeItems }}
                         <span class="ml-auto" ><v-icon @click="mode = [], changeFilters()">mdi-close</v-icon></span>
                       </p>
                       <div class="mt-10">
