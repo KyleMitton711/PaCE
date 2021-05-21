@@ -35,38 +35,7 @@
 
                 <v-tabs-items v-model="tab" class="ma-1 mt-2">
                   <v-tab-item>
-                    <v-card class="elevation-1 pa-5 tab-content" v-if="user">
-                      <p class="mb-1">Too many results?</p>
-                      <p>Take a minute to review your filters</p>
-                      <p>Current filters</p>
-
-                      <p class="mb-0 d-flex">
-                        <router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> {{capabilityString }} 
-                        <span class="ml-auto" v-if="selectedCapabilities.length > 0"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span>
-                      </p>
-                      <p class="mb-0 d-flex">
-                        <b>Audiences:</b> {{ selectedAudienceItems }}
-                        <span class="ml-auto" v-if="audience.length > 0"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>
-                      </p>
-                      <p class="mb-0 d-flex">
-                        <b>Types:</b> {{ selectedTypeItems }}
-                        <span class="ml-auto" v-if="type.length > 0"><v-icon @click="type = [], changeFilters()">mdi-close</v-icon></span>
-                      </p>
-                      <p class="d-flex">
-                        <b>Modes:</b> {{ selectedModeItems }}
-                        <span class="ml-auto" v-if="mode.length > 0"><v-icon @click="mode = [], changeFilters()">mdi-close</v-icon></span>
-                      </p>
-                      <div class="mt-10">
-                        <div class="text-right">
-                          <span class="more-filters mr-5">More filters</span>
-                          <v-btn color="bg-pace-yellow" fab small @click="tab = 1">
-                            <v-icon color="white">mdi-chevron-right</v-icon>
-                          </v-btn>
-                        </div>
-                      </div>
-                      <p class="tip mt-5">Tip: Tap a filter above to edit your selection.</p>
-                    </v-card>
-                    <v-card class="elevation-1 pa-5 tab-content" v-else>
+                    <v-card class="elevation-1 pa-5 tab-content" v-if="!user && selectedCapabilities.length == 0 && audience.length == 0 && type.length == 0 && mode.length == 0">
                       <p class="mb-1">Welcome to Palliative Care Education Directory</p> <br>
                       <p>To help you find what you need, take a moment to set your search filters</p>
                       <div class="mt-10">
@@ -81,6 +50,38 @@
                         Note: You can clear your filters at any time to see all results.
                       </p>
                     </v-card>
+                    <v-card class="elevation-1 pa-5 tab-content" v-else>
+                      <p class="mb-1">Too many results?</p>
+                      <p>Take a minute to review your filters</p>
+                      <p>Current filters</p>
+
+                      <p class="mb-0 d-flex" v-if="selectedCapabilities.length > 0">
+                        <router-link to="/?tab=2" class="capability-link"><b>Capabilities:</b></router-link> {{capabilityString }} 
+                        <span class="ml-auto"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span>
+                      </p>
+                      <p class="mb-0 d-flex" v-if="audience.length > 0">
+                        <b>Audiences:</b> {{ selectedAudienceItems }}
+                        <span class="ml-auto"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>
+                      </p>
+                      <p class="mb-0 d-flex" v-if="type.length > 0">
+                        <b>Types:</b> {{ selectedTypeItems }}
+                        <span class="ml-auto" ><v-icon @click="type = [], changeFilters()">mdi-close</v-icon></span>
+                      </p>
+                      <p class="d-flex" v-if="mode.length > 0">
+                        <b>Modes:</b> {{ selectedModeItems }}
+                        <span class="ml-auto" ><v-icon @click="mode = [], changeFilters()">mdi-close</v-icon></span>
+                      </p>
+                      <div class="mt-10">
+                        <div class="text-right">
+                          <span class="more-filters mr-5">More filters</span>
+                          <v-btn color="bg-pace-yellow" fab small @click="tab = 1">
+                            <v-icon color="white">mdi-chevron-right</v-icon>
+                          </v-btn>
+                        </div>
+                      </div>
+                      <p class="tip mt-5">Tip: Tap a filter above to edit your selection.</p>
+                    </v-card>
+                    
                   </v-tab-item>
                   <v-tab-item>
                     <v-card class="elevation-1 pa-5 tab-content">
@@ -242,7 +243,7 @@ export default {
     showResource: false,
     showResourceList: false,
     tags: [],
-    resourceCount: 0,
+    resourceCount: "",
     selectedCapabilities: [],
     capabilityString: null,
     capabilityCodes: capabilityCodes,

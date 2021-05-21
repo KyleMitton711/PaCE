@@ -30,7 +30,7 @@
       item: {
         type: Object,
         default: () => ({
-           href: undefined,
+          href: undefined,
           icon: undefined,
           title: undefined,
           to: undefined,

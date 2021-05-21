@@ -2,7 +2,6 @@
   <div>
     <div class="mt-4">
       <v-card>
-        <v-card-title>{{ tagTypeLabel }}</v-card-title>
         <v-data-table
           :headers="headers"
           :items="tags"
@@ -55,7 +54,7 @@
                             v-model="form.tagType"
                             :error-messages="fieldErrors('form.tagType')"
                             @blur="$v.form.tagType.$touch()"
-                            readonly
+                            :readonly="editedIndex !== -1"
                           ></v-select>
                         </v-col>
                       </v-row>
@@ -113,7 +112,7 @@ import { tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 
 export default {
-  name: "AdminTags",
+  name: "TagCrudEditor",
   mixins: [validationMixin],
   validations: {
     form: {
@@ -139,6 +138,7 @@ export default {
         align: "start",
         value: "name"
       },
+      { text: "Tag type", value: "tagLabel" },
       { text: "Actions", value: "actions", sortable: false }
     ],
     tags: [],
@@ -159,8 +159,6 @@ export default {
     page: 1,
     pageCount: 0,
     itemsPerPage: 5,
-    tagType: null,
-    tagTypeLabel: null
   }),
   computed: {
     formTitle() {
@@ -171,36 +169,18 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
-    },
-
-    "$route.params.tagType": function(val) {
-      this.tagType = parseInt(val);
-      this.form.tagType = this.tagType;
-      this.defaultItem.tagType = this.tagType;
-      let tagIndex = findIndex(this.tagTypeItems, (o) => { return o.key == this.tagType; });
-      this.tagTypeLabel = this.tagTypeItems[tagIndex].name;
-      this.initialize();
     }
   },
 
   created() {
-    this.tagType = parseInt(this.$route.params.tagType);
-    this.form.tagType = this.tagType;
-    this.defaultItem.tagType = this.tagType;
-    let tagIndex = findIndex(this.tagTypeItems, (o) => { return o.key == this.tagType; });
-    this.tagTypeLabel = this.tagTypeItems[tagIndex].name;
     this.initialize();
-  },
-
-  mounted() {
-    
   },
 
   methods: {
     ...mapActions("tag", ["getTags", "addTag", "updateTag", "deleteTag"]),
     async initialize() {
       this.isLoading = true;
-      let data = await this.getTags(this.tagType);
+      let data = await this.getTags(this.search);
       this.tags = data.map((item, index) => {
         let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
         return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }

@@ -146,7 +146,7 @@ export const routes = [
             },
             {
                 name: "AdminTags",
-                path: "tags",
+                path: "tags/:tagType",
                 component: AdminTags
             },
             {
