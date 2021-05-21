@@ -22,18 +22,18 @@
             
             <div class="pa-3 content-filter mb-3" v-if="isShowFilter">
               <p>Your filters:</p>
-              <span v-if="filters && filters.tagFilterAudienceIds.length > 0">
+              <p v-if="filters && filters.tagFilterAudienceIds.length > 0">
                 <b>{{ filters.tagFilterAudienceIds.length }} Audiences:</b> {{ selectedAudienceItems }} 
                 <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterAudienceIds = [], viewResourceList()">mdi-close</v-icon></span>
-              </span>
-              <span v-if="filters && filters.tagFilterTypeIds.length > 0">
+              </p>
+              <p v-if="filters && filters.tagFilterTypeIds.length > 0">
                 <b>{{ filters.tagFilterTypeIds.length }} Types:</b> {{ selectedTypeItems }} 
                 <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterTypeIds = [], viewResourceList()">mdi-close</v-icon></span>
-              </span>
-              <span v-if="filters && filters.tagFilterModeIds.length > 0">
+              </p>
+              <p v-if="filters && filters.tagFilterModeIds.length > 0">
                 <b>{{ filters.tagFilterModeIds.length }} Modes:</b> {{ selectedModeItems }} 
                 <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterModeIds = [], viewResourceList()">mdi-close</v-icon></span>
-              </span>
+              </p>
             </div>
             
             <v-list two-line subheader class="pt-5 mb-10 px-3" v-if="resources.length > 0">
