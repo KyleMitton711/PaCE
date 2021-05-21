@@ -41,34 +41,37 @@
 
         <v-tabs-items v-model="tab">
           <v-tab-item>
-            <v-card color="primary" flat>
+            <v-card color="white" flat max-height="400px" height="400px">
               <v-data-table
                 :headers="headers"
                 :items="visitedResources"
                 class="border"
                 :loading="isLoading"
+                :items-per-page="5"
                 loading-text="Loading... Please wait"
               ></v-data-table>
             </v-card>
           </v-tab-item>
           <v-tab-item>
-            <v-card color="primary" flat>
+            <v-card color="white" flat max-height="400px" height="400px">
               <v-data-table
                 :headers="headers"
                 :items="bookmarkedResources"
                 class="border"
                 :loading="isLoading"
+                :items-per-page="5"
                 loading-text="Loading... Please wait"
               ></v-data-table>
             </v-card>
           </v-tab-item>
           <v-tab-item>
-            <v-card color="primary" flat>
+            <v-card color="white" flat max-height="400px" height="400px"> 
               <v-data-table
                 :headers="filterHeaders"
                 :items="frequentlyUsedFilters"
                 class="border"
                 :loading="isLoading"
+                :items-per-page="5"
                 loading-text="Loading... Please wait"
               ></v-data-table>
             </v-card>
