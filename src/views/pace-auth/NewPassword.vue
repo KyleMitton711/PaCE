@@ -31,9 +31,9 @@
                   @blur="$v.confirmPass.$touch()"
                   label="Confirm password"
                   outlined
-                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="show1 = !show1"
-                  :type="show1 ? 'text' : 'password'"
+                  :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="show2 = !show2"
+                  :type="show2 ? 'text' : 'password'"
                 ></v-text-field>
                 <v-btn
                   :disabled="$v.$invalid"
@@ -92,6 +92,7 @@ export default {
     password: null,
     confirmPass: null,
     show1: false,
+    show2: false,
   }),
   methods: {
     ...mapActions("account", ["resetPassword"]),
@@ -101,12 +102,18 @@ export default {
         newPassword: this.password
       }
       let res = await this.resetPassword(payload);
-      if (res) {
+      console.log(res)
+      if (res === true) {
         this.$notify({
           text: 'Password is reset successfully!',
           type: 'success'
         });
         this.$router.push({ path: "/auth/login" });
+      } else {
+        this.$notify({
+          text: res.errors[0].errorMessage,
+          type: 'error'
+        });
       }
     }
   }
