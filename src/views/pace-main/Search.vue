@@ -365,6 +365,7 @@ export default {
     },
 
     changeFilters: debounce(async function () {
+      this.resetPagination();
       let payload = {
         tagFilterAudienceIds: this.audience,
         tagFilterTypeIds: this.type,
@@ -411,6 +412,15 @@ export default {
       localStorage.removeItem('selectedCapabilities');
       localStorage.removeItem('selectedResource');
     },
+
+    resetPagination () {
+      this.pagination = Object.assign({}, {
+        pageSize: 5,
+        pageIndex: 1,
+        total: null
+      });
+      this.pagination.pageSize = Math.floor((window.innerHeight - 100) / 120);
+    }
   },
 
   watch: {
