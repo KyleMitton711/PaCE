@@ -81,7 +81,7 @@
                 </div>
                 <div class="d-block d-sm-flex align-center mb-4 mt-4">
                   <div class="ml-3 mr-3">
-                    <span @click="tab = 1">&lt;- back</span>
+                    <span @click="tab = 1" aria-controls>&lt;- back</span>
                   </div>
                   <div class="text-right">
                     <span
@@ -156,14 +156,14 @@ export default {
   },
 
   mounted() {
-    if (localStorage.getItem("selectedResource")) {
+    if (parseInt(localStorage.getItem("selectedResource")) > -1) {
       this.selectedResource = parseInt(
         localStorage.getItem("selectedResource")
       );
+      this.selectedCapabilities = JSON.parse(localStorage.getItem('selectedCapabilities'));
     }
     if (this.$route.query.tab) {
       this.tab = this.$route.query.tab;
-      this.selectedResource = 0; // need to update
     }
   }
 };
