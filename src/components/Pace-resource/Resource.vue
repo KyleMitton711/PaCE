@@ -56,6 +56,19 @@
         </v-btn>
       </div>
     </v-col>
+    <v-snackbar
+      v-model="snackbar"
+      :multi-line="true"
+      :timeout="-1"
+    >
+      To keep items for later in 'My Resources' and for PaCE to recall your filters you need to sign-in.
+      <br/>
+        <p class="mb-0 mt-2 text-center">
+          <router-link to="/auth/register">Create an account</router-link> | 
+          <router-link to="/auth/login">Sign in</router-link> | 
+          <a @click="snackbar = false">No thanks</a>
+        </p>
+    </v-snackbar>
   </v-row>
 </v-container>
 </template>
@@ -63,7 +76,7 @@
 <script>
 import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import resourceDetailMixin from "@/mixins/resourceDetailMixin";
 import shareResourceMixin from "@/mixins/shareResourceMixin";
 
@@ -86,6 +99,7 @@ export default {
   }),
 
   computed: {
+    ...mapGetters("auth", ["user"]),
     resourceType() {
       if (this.resource) {
         let resourceTypeIndex = findIndex(this.resourceTypeItems, (o) => { return o.key == this.resource.type; });
@@ -99,6 +113,16 @@ export default {
         return this.tagTypeItems[tagIndex].name;
       });
       return tags;
+    }
+  },
+
+  watch: {
+    user: {
+      handler: function (val) {
+        if (!val) {
+          this.snackbar = true;
+        }
+      }
     }
   },
 
@@ -119,6 +143,10 @@ export default {
   },
 
   async mounted() {
+    if (!this.user) {
+      this.snackbar = true;
+    }
+
     if (this.resourceId) {
       this.resource = await this.getResourceDetail(this.resourceId);
     }

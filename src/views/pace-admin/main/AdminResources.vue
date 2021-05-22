@@ -110,7 +110,7 @@
                           <v-autocomplete
                             v-model="selectedTags"
                             :items="tags"
-                            item-text="name"
+                            item-text="tagName"
                             chips
                             label="Tags"
                             multiple
@@ -351,7 +351,7 @@ export default {
       let tagdata = await this.getTags();
       this.tags = tagdata.map((item, index) => {
         let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
-        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
+        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name, tagName: `${item.name} [${this.tagTypeItems[tagIndex].name}]` }
       });
       this.loadResources();
       this.isLoading = false;

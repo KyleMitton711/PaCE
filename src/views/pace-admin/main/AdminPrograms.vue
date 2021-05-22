@@ -110,7 +110,7 @@
                           <v-autocomplete
                             v-model="selectedTags"
                             :items="tags"
-                            item-text="name"
+                            item-text="tagName"
                             chips
                             label="Tags"
                             multiple
@@ -118,7 +118,14 @@
                             clearable
                             return-object
                             @change="selectTags"
-                          ></v-autocomplete>
+                          >
+                            <!-- <template v-slot:item="{ item }">
+                              <v-list-item-content>
+                                <v-list-item-title v-text="item.name"></v-list-item-title>
+                                <v-list-item-subtitle v-text="item.tagLabel"></v-list-item-subtitle>
+                              </v-list-item-content>
+                            </template> -->
+                          </v-autocomplete>
                         </v-col>
                       </v-row>
                       <v-row class="d-flex justify-center">
@@ -404,7 +411,7 @@ export default {
       let tagdata = await this.getTags();
       this.tags = tagdata.map((item, index) => {
         let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
-        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
+        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name, tagName: `${item.name} [${this.tagTypeItems[tagIndex].name}]` }
       });
       this.loadPrograms();
       let res = await this.filterResources({isProgram: false});

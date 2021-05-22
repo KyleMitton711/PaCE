@@ -1,5 +1,5 @@
 <template>
-  <v-card flat class="mb-7">
+  <v-card flat>
     <v-card-text class="pa-5 success">
       <div class="d-flex align-center">
         <div class="align-self-center">

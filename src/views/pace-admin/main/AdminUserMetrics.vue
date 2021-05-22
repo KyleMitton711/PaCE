@@ -26,7 +26,7 @@
         />
       </v-col>
       <v-col cols="12" md="6">
-        <v-card class="bg-white">
+        <v-card class="bg-white lastsearchkeywords">
           <ul>
             <li v-for="(item, index) in lastSearchKeywords" :key="index">{{ item }}</li>
           </ul>
@@ -207,3 +207,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.lastsearchkeywords {
+  height: 100%;
+}
+</style>
