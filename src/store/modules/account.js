@@ -43,7 +43,7 @@ const actions = {
                 return result.data;
             })
             .catch(e => {
-                throw e;
+                return e.data;
             });
     },
     changePassword: ({ commit }, payload) => {
