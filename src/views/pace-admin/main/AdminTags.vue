@@ -14,6 +14,7 @@
           :items-per-page="itemsPerPage"
           hide-default-footer
           @page-count="pageCount = $event"
+          :search="search"
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
@@ -24,7 +25,6 @@
                   label="Search tags"
                   single-line
                   hide-details
-                  @input="searchInput"
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
@@ -242,11 +242,7 @@ export default {
         this.initialize();
       }
       this.close();
-    },
-
-    searchInput: debounce(async function () {
-      this.initialize();
-    }, 500)
+    }
   }
 };
 </script>

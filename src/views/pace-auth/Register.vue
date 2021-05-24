@@ -101,7 +101,7 @@ export default {
     ...mapActions("account", ["register"]),
     async submit() {
       let res = await this.register(this.form);
-      if (res.data) {
+      if (res === true) {
         this.$notify({
           text: 'Check your inbox for the reset link and next steps',
           type: 'success'

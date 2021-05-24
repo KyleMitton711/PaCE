@@ -229,12 +229,20 @@ export default {
     dropzoneOptions: {
       url: 'https://httpbin.org/post',
       thumbnailWidth: 150,
-      maxFilesize: 0.5,
+      maxFilesize: 50,
+      maxFiles: 1,
       headers: { "My-Awesome-Header": "header value" },
       autoDiscover: false,
       autoProcessQueue: false,
       autoQueue: false,
       acceptedFiles: "image/png, image/jpeg",
+      init: function() {
+        this.on("addedfile", function() {
+          if (this.files[1] != null) {
+            this.removeFile(this.files[0]);
+          }
+        });
+      }
     },
     deleteConfirmDialog: false,
     selectedItemId: null,
@@ -291,10 +299,12 @@ export default {
 
     close() {
       this.dialog = false;
+      this.form = Object.assign({}, this.defaultItem);
+      this.editedIndex = -1;
       setTimeout(() => {
-        this.form = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+        this.$v.$reset();
+        this.$refs.dropzone.removeAllFiles();
+      }, 100)
     },
 
     async save() {

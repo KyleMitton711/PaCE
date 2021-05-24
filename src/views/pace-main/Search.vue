@@ -59,6 +59,7 @@
                         <router-link to="/?tab=2" class="capability-link"><b class="mr-2">Capabilities:</b></router-link> {{capabilityString }} 
                         <span class="ml-auto"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span>
                       </p>
+                      <p class="mb-0" v-else><b>Choose a capability</b></p>
                       <p class="mb-0 d-flex" v-if="audience.length > 0">
                         <b class="mr-2" aria-controls @click="tab = 1">Audiences:</b> {{ selectedAudienceItems }}
                         <span class="ml-auto"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>

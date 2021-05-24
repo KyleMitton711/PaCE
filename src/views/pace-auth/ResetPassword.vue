@@ -13,7 +13,7 @@
                   Enter your email address to receive a link to reset your password
                 </h6>
 
-                <v-form ref="form" v-model="valid" lazy-validation action="/pages/boxedlogin">
+                <v-form ref="form" v-model="valid" lazy-validation>
                   <v-text-field
                     v-model="email"
                     :rules="emailRules"
@@ -22,7 +22,7 @@
                     outlined
                   ></v-text-field>
                   <v-btn
-                    :disabled="!valid"
+                    :disabled="!valid || sent"
                     block
                     class="mr-4 white--text bg-pace-yellow"
                     submit
@@ -48,7 +48,8 @@ export default {
     emailRules: [
       v => !!v || "E-mail is required",
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-    ]
+    ],
+    sent: false
   }),
   methods: {
     ...mapActions("account", ["forgotPassword"]),
@@ -64,6 +65,7 @@ export default {
             text: 'Check your inbox for the reset link and next steps',
             type: 'success'
           });
+          this.sent = true;
         } else {
           this.$notify({
             text: res.errors[0].errorMessage,

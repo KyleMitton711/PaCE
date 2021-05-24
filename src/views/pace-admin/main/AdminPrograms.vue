@@ -68,7 +68,6 @@
                           <v-textarea 
                             label="Endorsements" 
                             v-model="form.endorsements"
-                            :counter="500"
                           ></v-textarea>
                         </v-col>
                         <v-col cols="12" md="6">
@@ -443,10 +442,12 @@ export default {
 
     close() {
       this.dialog = false;
+      this.form = Object.assign({}, this.defaultItem);
+      this.editedIndex = -1;
+      this.selectedTags = [];
       setTimeout(() => {
-        this.form = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+        this.$v.$reset();
+      }, 100)
     },
 
     async save() {
