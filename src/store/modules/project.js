@@ -26,9 +26,11 @@ const actions = {
         return result.data;
     },
     async addProject ({ commit }, payload) {
-        let result = ProjectService.addProject(payload);
-        commit("ADD_PROJECT", result.data);
-        return result.data;
+        return ProjectService.addProject(payload).then(res => {
+            return res.data;
+        }).catch(error => {
+            return error.data;
+        });
     },
     async editProject ({ commit }, payload) {
         let result = await ProjectService.editProject(payload);

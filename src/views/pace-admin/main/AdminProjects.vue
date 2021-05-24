@@ -5,7 +5,7 @@
         <v-data-table
           :headers="headers"
           :items="projects"
-          sort-by="calories"
+          sort-by="name"
           class="border"
           :loading="isLoading"
           loading-text="Loading... Please wait"
@@ -272,6 +272,7 @@ export default {
     ...mapActions("project", ["getProjects", "addProject", "getProject", "editProject", "deleteProject"]),
     async initialize() {
       this.isLoading = true;
+      this.page = 1;
       this.projects = await this.getProjects(this.search);
       this.isLoading = false;
     },
@@ -316,13 +317,21 @@ export default {
         });
       } else {
         let res = await this.addProject(this.form);
-        this.$notify({
-          text: 'Project added successfully',
-          type: 'success'
-        });
+        console.log(res)
+        if (res.errors == null) {
+          this.$notify({
+            text: 'Project added successfully',
+            type: 'success'
+          });
+          this.initialize();
+          this.close();
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: 'error'
+          });
+        }
       }
-      this.initialize();
-      this.close();
     },
 
     async fileAdded(file) {

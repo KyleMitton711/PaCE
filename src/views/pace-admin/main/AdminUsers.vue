@@ -344,6 +344,7 @@ export default {
     async deleteItem() {
       await this.deleteUser(this.selectedItemId);
       this.deleteConfirmDialog = false;
+      this.pagination.PageIndex = 1;
       this.initialize();
     },
 
@@ -354,10 +355,11 @@ export default {
 
     close() {
       this.dialog = false;
+      this.form = Object.assign({}, this.defaultItem);
+      this.editedIndex = -1;
       setTimeout(() => {
-        this.form = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+        this.$v.$reset();
+      }, 100)
     },
 
     async save() {

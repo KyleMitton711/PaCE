@@ -382,6 +382,7 @@ export default {
       } else {
         localStorage.setItem('searchText', this.search);
       }
+      localStorage.setItem('filters', JSON.stringify(payload));
       this.resourceCount = await this.getResourceCount(payload);
       if (window.innerWidth < 600) {
       } else {

@@ -430,6 +430,14 @@ export default {
       this.editedIndex = this.resources.indexOf(item);
       let res = await this.getResourceDetail(item.id);
       this.form = Object.assign({}, res);
+      for (let i = 0; i < this.tagTypeItems.length; i ++) {
+        let tagType = this.tagTypeItems[i];
+        let itemTags = res[`tag${tagType.name}Ids`].map(tagId => {
+          let tag = this.tags.filter(tag => tag.id == tagId)
+          if (tag.length > 0) return tag[0]
+        })
+        this.selectedTags = this.selectedTags.concat(itemTags);
+      }
       this.selectedModules = this.form.items != null ? Object.assign([], this.form.items) : [];
       this.dialog = true;
     },
@@ -437,6 +445,7 @@ export default {
     async deleteItem() {
       await this.deleteResource(this.selectedItemId);
       this.deleteConfirmDialog = false;
+      this.pagination.pageIndex = 1;
       this.initialize();
     },
 

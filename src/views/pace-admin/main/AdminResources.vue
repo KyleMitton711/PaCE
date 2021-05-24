@@ -360,12 +360,21 @@ export default {
       this.editedIndex = this.resources.indexOf(item);
       let res = await this.getResourceDetail(item.id);
       this.form = Object.assign({}, res);
+      for (let i = 0; i < this.tagTypeItems.length; i ++) {
+        let tagType = this.tagTypeItems[i];
+        let itemTags = res[`tag${tagType.name}Ids`].map(tagId => {
+          let tag = this.tags.filter(tag => tag.id == tagId)
+          if (tag.length > 0) return tag[0]
+        })
+        this.selectedTags = this.selectedTags.concat(itemTags);
+      }
       this.dialog = true;
     },
 
     async deleteItem() {
       await this.deleteResource(this.selectedItemId);
       this.deleteConfirmDialog = false;
+      this.pagination.pageIndex = 1;
       this.initialize();
     },
 
@@ -381,6 +390,7 @@ export default {
 
     async save() {
       if (this.editedIndex > -1) {
+        this.form.items = this.form.items.map(item => item.id);
         let res = await this.updateResource(this.form);
       } else {
         let res = await this.addResource(this.form);

@@ -217,6 +217,7 @@ export default {
     async deleteItem() {
       await this.deleteTag(this.selectedItem);
       this.deleteConfirmDialog = false;
+      this.page = 1;
       this.initialize();
     },
 
