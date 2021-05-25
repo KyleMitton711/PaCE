@@ -6,7 +6,7 @@
     :prepend-icon="item.icon"
     sub-group
     append-icon="mdi-menu-down"
-    class="xyz"
+    class="ml-8 pl-2"
   />
 </template>
 

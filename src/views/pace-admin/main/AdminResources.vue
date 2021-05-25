@@ -19,6 +19,7 @@
                   label="Search Resources"
                   single-line
                   hide-details
+                  clearable
                   @input="searchInput"
                 ></v-text-field>
               </v-toolbar-title>
@@ -107,17 +108,113 @@
                             @blur="$v.form.capabilityCodes.$touch()"
                           ></v-select>
                           <v-autocomplete
-                            v-model="selectedTags"
-                            :items="tags"
-                            item-text="tagName"
+                            v-model="form.tagFilterAudienceIds"
+                            :items="filterAudienceTags"
+                            item-text="name"
+                            item-value="id"
                             chips
-                            label="Tags"
+                            label="FilterAudience"
                             multiple
                             deletable-chips
                             clearable
-                            return-object
-                            @change="selectTags"
-                          ></v-autocomplete>
+                          >
+                          </v-autocomplete>
+                          <v-autocomplete
+                            v-model="form.tagFilterTypeIds"
+                            :items="filterTypeTags"
+                            item-text="name"
+                            item-value="id"
+                            chips
+                            label="FilterType"
+                            multiple
+                            deletable-chips
+                            clearable
+                          >
+                          </v-autocomplete>
+                          <v-autocomplete
+                            v-model="form.tagFilterModeIds"
+                            :items="filterModeTags"
+                            item-text="name"
+                            item-value="id"
+                            chips
+                            label="FilterMode"
+                            multiple
+                            deletable-chips
+                            clearable
+                          >
+                          </v-autocomplete>
+                          <v-autocomplete
+                            v-model="form.tagContentPadegogyIds"
+                            :items="contentPadegogyTags"
+                            item-text="name"
+                            item-value="id"
+                            chips
+                            label="ContentPadegogy"
+                            multiple
+                            deletable-chips
+                            clearable
+                          >
+                          </v-autocomplete>
+                          <v-autocomplete
+                            v-model="form.tagContentTopicIds"
+                            :items="contentTopicTags"
+                            item-text="name"
+                            item-value="id"
+                            chips
+                            label="ContentTopic"
+                            multiple
+                            deletable-chips
+                            clearable
+                          >
+                          </v-autocomplete>
+                          <v-autocomplete
+                            v-model="form.tagContentSymptomIds"
+                            :items="contentSymptomTags"
+                            item-text="name"
+                            item-value="id"
+                            chips
+                            label="ContentSymptom"
+                            multiple
+                            deletable-chips
+                            clearable
+                          >
+                          </v-autocomplete>
+                          <v-autocomplete
+                            v-model="form.tagContentIllnessIds"
+                            :items="contentIllnessTags"
+                            item-text="name"
+                            item-value="id"
+                            chips
+                            label="ContentIllness"
+                            multiple
+                            deletable-chips
+                            clearable
+                          >
+                          </v-autocomplete>
+                          <v-autocomplete
+                            v-model="form.tagContentContextIds"
+                            :items="contentContextTags"
+                            item-text="name"
+                            item-value="id"
+                            chips
+                            label="ContentContext"
+                            multiple
+                            deletable-chips
+                            clearable
+                          >
+                          </v-autocomplete>
+                          <v-autocomplete
+                            v-model="form.tagContentRoleIds"
+                            :items="contentRoleTags"
+                            item-text="name"
+                            item-value="id"
+                            chips
+                            label="ContentRole"
+                            multiple
+                            deletable-chips
+                            clearable
+                          >
+                          </v-autocomplete>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -282,7 +379,15 @@ export default {
     deleteConfirmDialog: false,
     selectedItemId: null,
     tags: [],
-    selectedTags: [],
+    filterAudienceTags: [],
+    filterTypeTags: [],
+    filterModeTags: [],
+    contentPadegogyTags: [],
+    contentTopicTags: [],
+    contentSymptomTags: [],
+    contentIllnessTags: [],
+    contentContextTags: [],
+    contentRoleTags: [],
     capabilityCodes: capabilityCodes,
     capabilityCodeItems: [],
     extensions: [
@@ -350,8 +455,17 @@ export default {
       let tagdata = await this.getTags();
       this.tags = tagdata.map((item, index) => {
         let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
-        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name, tagName: `${item.name} [${this.tagTypeItems[tagIndex].name}]` }
+        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
       });
+      this.filterAudienceTags = this.tags.filter(item => item.tagLabel == "FilterAudience");
+      this.filterTypeTags = this.tags.filter(item => item.tagLabel == "FilterType");
+      this.filterModeTags = this.tags.filter(item => item.tagLabel == "FilterMode");
+      this.contentPadegogyTags = this.tags.filter(item => item.tagLabel == "ContentPadegogy");
+      this.contentTopicTags = this.tags.filter(item => item.tagLabel == "ContentTopic");
+      this.contentSymptomTags = this.tags.filter(item => item.tagLabel == "ContentSymptom");
+      this.contentIllnessTags = this.tags.filter(item => item.tagLabel == "ContentIllness");
+      this.contentContextTags = this.tags.filter(item => item.tagLabel == "ContentContext");
+      this.contentRoleTags = this.tags.filter(item => item.tagLabel == "ContentRole");
       this.loadResources();
       this.isLoading = false;
     },
@@ -360,14 +474,6 @@ export default {
       this.editedIndex = this.resources.indexOf(item);
       let res = await this.getResourceDetail(item.id);
       this.form = Object.assign({}, res);
-      for (let i = 0; i < this.tagTypeItems.length; i ++) {
-        let tagType = this.tagTypeItems[i];
-        let itemTags = res[`tag${tagType.name}Ids`].map(tagId => {
-          let tag = this.tags.filter(tag => tag.id == tagId)
-          if (tag.length > 0) return tag[0]
-        })
-        this.selectedTags = this.selectedTags.concat(itemTags);
-      }
       this.dialog = true;
     },
 
@@ -409,28 +515,6 @@ export default {
       this.selectedItemId = item.id;
     },
 
-    refreshTags () {
-      this.form.tagFilterAudienceIds = [];
-      this.form.tagFilterTypeIds = [];
-      this.form.tagFilterModeIds = [];
-      this.form.tagContentPadegogyIds = [];
-      this.form.tagContentTopicIds = [];
-      this.form.tagContentSymptomIds = [];
-      this.form.tagContentIllnessIds = [];
-      this.form.tagContentContextIds = [];
-      this.form.tagContentRoleIds = [];
-    },
-
-    selectTags() {
-      this.refreshTags();
-      for (let i = 0; i < this.selectedTags.length ; i ++) {
-        let tag = this.selectedTags[i];
-        if (this.form['tag' + tag.tagLabel + 'Ids'].indexOf(tag.id) == -1) {
-          this.form['tag' + tag.tagLabel + 'Ids'].push(tag.id);
-        }
-      }
-    },
-
     async loadResources() {
       this.isLoading = true;
       this.filters['isProgram'] = false;
@@ -454,6 +538,7 @@ export default {
     },
 
     searchInput: debounce(async function () {
+      this.pagination.pageIndex = 1;
       this.loadResources();
     }, 500)
   }

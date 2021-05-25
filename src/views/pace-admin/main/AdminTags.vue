@@ -23,8 +23,10 @@
                   v-model="search"
                   append-icon="mdi-magnify"
                   label="Search tags"
+                  @input="searchInput"
                   single-line
                   hide-details
+                  clearable
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
@@ -178,7 +180,7 @@ export default {
       this.form.tagType = this.tagType;
       this.defaultItem.tagType = this.tagType;
       let tagIndex = findIndex(this.tagTypeItems, (o) => { return o.key == this.tagType; });
-      this.tagTypeLabel = this.tagTypeItems[tagIndex].name;
+      this.tagTypeLabel = this.tagTypeItems[tagIndex].pageTitle;
       this.initialize();
     }
   },
@@ -243,7 +245,12 @@ export default {
         this.initialize();
       }
       this.close();
-    }
+    },
+
+    searchInput: debounce(async function () {
+      this.page = 1;
+      this.initialize();
+    }, 500)
   }
 };
 </script>

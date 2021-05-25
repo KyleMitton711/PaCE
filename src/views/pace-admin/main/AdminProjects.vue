@@ -23,6 +23,7 @@
                   label="Search Projects"
                   single-line
                   hide-details
+                  clearable
                   @input="searchInput"
                 ></v-text-field>
               </v-toolbar-title>
@@ -265,7 +266,6 @@ export default {
 
   created() {
     this.initialize();
-    
   },
 
   methods: {
@@ -339,6 +339,7 @@ export default {
     },
 
     searchInput: debounce(async function () {
+      this.page = 1;
       this.initialize();
     }, 500)
   }

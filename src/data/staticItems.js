@@ -1,30 +1,39 @@
 const tagTypeEnumItems = [{
     key: 11,
-    name: "FilterAudience"
+    name: "FilterAudience",
+    pageTitle: "Filter: Audience"
   }, {
     key: 12,
-    name: "FilterType"
+    name: "FilterType",
+    pageTitle: "Filter: Type"
   }, {
     key: 13,
-    name: "FilterMode"
+    name: "FilterMode",
+    pageTitle: "Filter: Mode"
   }, {
     key: 21,
-    name: "ContentPadegogy"
+    name: "ContentPadegogy",
+    pageTitle: "Content: Padegogy"
   }, {
     key: 22,
-    name: "ContentTopic"
+    name: "ContentTopic",
+    pageTitle: "Content: Topic"
   }, {
     key: 23,
-    name: "ContentSymptom"
+    name: "ContentSymptom",
+    pageTitle: "Content: Symptom"
   }, {
     key: 24,
-    name: "ContentIllness"
+    name: "ContentIllness",
+    pageTitle: "Content: Illness"
   }, {
     key: 25,
-    name: "ContentContext"
+    name: "ContentContext",
+    pageTitle: "Content: Context"
   }, {
     key: 26,
-    name: "ContentRole"
+    name: "ContentRole",
+    pageTitle: "Content: Role"
   }];
 
 const resourceTypeEnumItems = [{

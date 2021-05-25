@@ -4,7 +4,6 @@
     :prepend-icon="item.icon"
     :sub-group="subGroup"
     :active-class="`primary white--text`"
-    
   >
     <template v-slot:activator>
       

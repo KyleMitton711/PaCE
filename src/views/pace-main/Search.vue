@@ -4,7 +4,7 @@
       <v-col lg="11" md="11" sm="8" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4">
           <v-row>
-            <v-col lg="5" md="5" cols="12" class="pa-0 full-height-md d-flex flex-column pt-0">
+            <v-col lg="5" md="5" cols="12" class="pa-0 full-height-md d-flex flex-column pt-0 left-block">
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
                   <a class="white--text ml-auto mr-3 mt-3 white--text signin-link" v-if="user">Hi {{ user.firstName + ' ' + user.lastName }} <span class="v-underline" @click="logout"> Sign out ></span></a>
@@ -597,6 +597,10 @@ export default {
   .v-dialog {
     margin: 0;
     height: 100vh;
+  }
+
+  .left-block {
+    min-height: calc(100vh - 86px);
   }
 }
 

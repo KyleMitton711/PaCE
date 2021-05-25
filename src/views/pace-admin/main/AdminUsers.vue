@@ -19,6 +19,8 @@
                   label="Search Users"
                   single-line
                   hide-details
+                  clearable
+                  autocomplete="false"
                   @input="searchInput"
                 ></v-text-field>
               </v-toolbar-title>
@@ -100,6 +102,7 @@
                             item-value="id"
                             item-text="name"
                             v-model="form.userType"
+                            v-if="editedIndex === -1"
                             :error-messages="fieldErrors('form.userType')"
                             @input="$v.form.userType.$touch()"
                             @blur="$v.form.userType.$touch()"
@@ -190,7 +193,11 @@ export default {
       lastName: { required },
       email: { required, email },
       phoneNumber: { required, numeric },
-      userType: { required },
+      userType: { 
+        required: requiredIf(function (nestedModel) {
+          return this.editedIndex === -1;
+        }),
+      },
       password: {
         required: requiredIf(function (nestedModel) {
           return this.editedIndex === -1;
@@ -234,7 +241,7 @@ export default {
   data: () => ({
     dialog: false,
     headers: [
-      { text: "Name", value: "name" },
+      { text: "Name", value: "name", sortable: false },
       { text: "Email", value: "email" },
       { text: "Phone number", value: "phoneNumber" },
       { text: "User type", value: "userType" },
@@ -279,7 +286,7 @@ export default {
         id: 0,
         name: 'User'
       }, {
-        id: 1,
+        id: 2,
         name: 'Admin'
       }],
     pagination: {
@@ -365,8 +372,30 @@ export default {
     async save() {
       if (this.editedIndex > -1) {
         let res = await this.updateUser(this.form);
+        if (res === true) {
+          this.$notify({
+            text: 'Project updated successfully',
+            type: 'success'
+          });
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: 'error'
+          });
+        }
       } else {
         let res = await this.addUser(this.form);
+        if (res === true) {
+          this.$notify({
+            text: 'Project added successfully',
+            type: 'success'
+          });
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: 'error'
+          });
+        }
       }
       this.initialize();
       this.close();
@@ -377,6 +406,7 @@ export default {
     },
 
     searchInput: debounce(async function () {
+      this.pagination.PageIndex = 1;
       this.initialize();
     }, 500),
 

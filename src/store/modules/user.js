@@ -32,13 +32,18 @@ const actions = {
         return result.data;
     },
     async addUser ({ commit }, payload) {
-        let result = await User.addUser(payload);
-        commit("ADD_TAG", result.data); // is ADD_TAG correct mutation name for this function?
-        return result.data;
+        return User.addUser(payload).then(res => {
+            return res.data;
+        }).catch(e => {
+            return e.data;
+        });
     },
     async updateUser ({ commit }, payload) {
-        let result = await User.updateUser(payload);
-        return result.data;
+        return User.updateUser(payload).then(res => {
+            return res.data;
+        }).catch(e => {
+            return e.data;
+        });
     },
     async deleteUser ({ commit }, payload) {
         let result = await User.deleteUser(payload);
