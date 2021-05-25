@@ -12,7 +12,7 @@
       <v-col cols="12" md="3">
         <TheDownloadCount
           title="Total Searches"
-          :value="metrics.trendSearch"
+          :value="metrics.totalSearch"
           :periodDays="searchData"
           icon="mdi-magnify"
         />
@@ -20,7 +20,7 @@
       <v-col cols="12" md="3">
         <TheDownloadCount
           title="Total Clicks"
-          :value="metrics.trendClick"
+          :value="metrics.totalClick"
           :periodDays="clickData"
           icon="mdi-cursor-default-click-outline"
         />

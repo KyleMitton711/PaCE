@@ -155,8 +155,31 @@
                   </v-tab-item>
                 </v-tabs-items>
               </div>
-              <div class="d-flex d-sm-none bg-pace-orange pa-2" v-if="user">
-                <h3 class="white--text">My resources</h3>
+              <div class="d-flex bg-pace-orange flex-column my-resources" v-if="user">
+                <h3 class="white--text pa-2">My resources</h3>
+                <v-list two-line subheader class="pa-2" v-if="myResources.length > 0">
+                  <v-list-item
+                    v-for="(item, i) in myResources"
+                    :key="i"
+                    :class="item['status'] ? 'opened' : 'closed'"
+                  >
+                    <v-list-item-avatar tile size="64">
+                      <img :src="item.projectLogo">
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                      <span class="black--text " @click="viewResource(item)" aria-controls>{{item.title}}</span>
+                      <p v-html="item.overview" class="mt-6 overview"></p>
+                      <p class="mt-3">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
+                    </v-list-item-content>
+
+                    <v-list-item-action>
+                      <v-btn icon @click="toggleResource(true, i)">
+                        <v-icon color="grey lighten-1">{{item['status'] ? "mdi-chevron-up" : "mdi-chevron-down"}}</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
               </div>
             </v-col>
             
@@ -164,7 +187,7 @@
               <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0">
                 <v-list-item
                   v-for="(item, i) in resources"
-                  :key="item.title"
+                  :key="i + item.title"
                   :class="item['status'] ? 'opened' : 'closed'"
                 >
                   <v-list-item-avatar tile size="64">
@@ -172,13 +195,13 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <span class="black--text " @click="viewResource(i)" aria-controls>{{item.title}}</span>
+                    <span class="black--text " @click="viewResource(item)" aria-controls>{{item.title}}</span>
                     <p v-html="item.overview" class="mt-6 overview"></p>
                     <p class="mt-3">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
                   </v-list-item-content>
 
                   <v-list-item-action>
-                    <v-btn icon @click="toggleResource(i)">
+                    <v-btn icon @click="toggleResource(false, i)">
                       <v-icon color="grey lighten-1">{{item['status'] ? "mdi-chevron-up" : "mdi-chevron-down"}}</v-icon>
                     </v-btn>
                   </v-list-item-action>
@@ -237,6 +260,7 @@ export default {
     mode: [],
     modeItems: [],
     resources: [],
+    myResources: [],
     selectedResource: {
       id: null,
       items: []
@@ -308,14 +332,20 @@ export default {
       this.$router.push({ name: 'Greeting' })
     },
 
-    toggleResource(i) {
-      let tmp = Object.assign([], this.resources);
-      tmp[i]['status'] = tmp[i]['status'] ? !tmp[i]['status'] : true;
-      this.resources = Object.assign([], tmp);
+    toggleResource(param, i) {
+      if (param) {
+        let tmp = Object.assign([], this.myResources);
+        tmp[i]['status'] = tmp[i]['status'] ? !tmp[i]['status'] : true;
+        this.myResources = Object.assign([], tmp);
+      } else {
+        let tmp = Object.assign([], this.resources);
+        tmp[i]['status'] = tmp[i]['status'] ? !tmp[i]['status'] : true;
+        this.resources = Object.assign([], tmp);
+      }
     },
 
-    viewResource(i) {
-      this.selectedResource = Object.assign({}, this.resources[i]);
+    viewResource(item) {
+      this.selectedResource = Object.assign({}, item);
       this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
       this.showResource = true;
     },
@@ -421,7 +451,7 @@ export default {
         pageIndex: 1,
         total: null
       });
-      this.pagination.pageSize = Math.floor((window.innerHeight - 100) / 120);
+      this.pagination.pageSize = Math.floor((window.innerHeight - 300) / 90);
     }
   },
 
@@ -432,7 +462,7 @@ export default {
   },
 
   async mounted() {
-    this.pagination.pageSize = Math.floor((window.innerHeight - 100) / 120);
+    this.pagination.pageSize = Math.floor((window.innerHeight - 300) / 90);
     this.selectedCapabilities = JSON.parse(localStorage.getItem('selectedCapabilities'));
     this.selectedResourceFilter = parseInt(localStorage.getItem('selectedResource'));
     let filters = JSON.parse(localStorage.getItem('filters'));
@@ -462,9 +492,13 @@ export default {
     this.modeItems = await this.getTags('FilterMode');
     this.changeFilters();
 
-    if (window.innerWidth < 600 && this.user) {
+    if (this.user) {
       let res = await this.getCurrentResources();
-      this.resources = res.data;
+      if (window.innerWidth < 600) {
+        this.resources = res.data;
+      } else {
+        this.myResources = res.data;
+      }
     }
   }
 };
@@ -528,6 +562,8 @@ export default {
 
 .tab-content {
   color: #4a4a4a;
+  height: 400px;
+  overflow-y: auto;
   .capability-link {
     color: #4a4a4a;
   }
@@ -548,7 +584,15 @@ export default {
   flex-direction: row-reverse;
 }
 
-::v-deep .resource-block {
+::v-deep .my-resources {
+  .v-list {
+    height: calc(100vh - 724px);
+    overflow-y: auto;
+  }
+}
+
+::v-deep .resource-block, .my-resources {
+
   .v-list-item {
     padding-left: 0;
     &.closed {
@@ -601,6 +645,10 @@ export default {
 
   .left-block {
     min-height: calc(100vh - 86px);
+  }
+
+  ::v-deep .my-resources {
+    height: unset;
   }
 }
 
