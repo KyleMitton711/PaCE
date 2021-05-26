@@ -56,11 +56,8 @@
                           <v-text-field 
                             label="Url" 
                             v-model="form.url"
-                            :error-messages="fieldErrors('form.url')"
-                            @input="$v.form.url.$touch()"
-                            @blur="$v.form.url.$touch()"
                           ></v-text-field>
-                          <p>Overview</p>
+                          <p class="subtitle-1 mb-0">Overview</p>
                           <tiptap-vuetify
                             v-model="form.overview"
                             placeholder="Overview"
@@ -94,7 +91,7 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12">
-                          <p>Outcome</p>
+                          <p class="subtitle-1 mb-0">Outcome</p>
                           <tiptap-vuetify
                             v-model="form.outcome"
                             placeholder="Outcome"
@@ -286,7 +283,6 @@ export default {
     form: {
       projectId: { required },
       title: { required },
-      url: { required },
       type: { required },
       duration: { required },
       capabilityCodes: { required }
@@ -299,9 +295,6 @@ export default {
       },
       title: { 
         required: "Title is required"
-      },
-      url: { 
-        required: "Url is required"
       },
       type: {
         required: "Type is required"

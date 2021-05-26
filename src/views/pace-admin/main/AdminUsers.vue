@@ -20,7 +20,7 @@
                   single-line
                   hide-details
                   clearable
-                  autocomplete="false"
+                  :autocomplete="false"
                   @input="searchInput"
                 ></v-text-field>
               </v-toolbar-title>
@@ -372,11 +372,14 @@ export default {
     async save() {
       if (this.editedIndex > -1) {
         let res = await this.updateUser(this.form);
+        console.log(res)
         if (res === true) {
           this.$notify({
             text: 'Project updated successfully',
             type: 'success'
           });
+          this.initialize();
+          this.close();
         } else {
           this.$notify({
             text: res.errors[0].errorMessage,
@@ -390,6 +393,8 @@ export default {
             text: 'Project added successfully',
             type: 'success'
           });
+          this.initialize();
+          this.close();
         } else {
           this.$notify({
             text: res.errors[0].errorMessage,
@@ -397,8 +402,7 @@ export default {
           });
         }
       }
-      this.initialize();
-      this.close();
+      
     },
 
     async fileAdded(file) {

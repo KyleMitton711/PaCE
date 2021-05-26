@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card flat class="stat-wrapper">
     <v-card-text class="pa-5 success">
       <div class="d-flex align-center">
         <div class="align-self-center">
@@ -114,3 +114,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.stat-wrapper {
+  height: 100%;
+  .v-card__text {
+    height: 100%;
+  }
+}
+</style>

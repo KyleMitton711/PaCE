@@ -56,29 +56,18 @@
                           <v-text-field 
                             label="Url" 
                             v-model="form.url"
-                            :error-messages="fieldErrors('form.url')"
-                            @input="$v.form.url.$touch()"
-                            @blur="$v.form.url.$touch()"
                           ></v-text-field>
-                          <p>Overview</p>
+                          <p class="subtitle-1 mb-0">Overview</p>
                           <tiptap-vuetify
                             v-model="form.overview"
                             placeholder="Overview"
                             :card-props="{ flat: true, outlined: true }"
                             :extensions="extensions"
                           />
-                          <!--tiptap-vuetify
-                            v-model="form.outcome"
-                            placeholder="Outcome"
-                            :extensions="extensions"
-                            :card-props="{ flat: true, outlined: true }"
-                          /-->
                           <v-textarea 
                             label="Certifications" 
                             v-model="form.endorsements"
                           ></v-textarea>
-                        </v-col>
-                        <v-col cols="12" md="6">
                           <v-select 
                             label="Type" 
                             v-model="form.type"
@@ -88,24 +77,6 @@
                             item-value="key"
                             item-text="name"
                           ></v-select>
-                        </v-col>
-                        <v-col cols="12" md="6">
-                          <v-text-field 
-                            label="Duration"
-                            v-model="form.duration"
-                            :error-messages="fieldErrors('form.duration')"
-                            @input="$v.form.duration.$touch()"
-                            @blur="$v.form.duration.$touch()"
-                          ></v-text-field>
-                        </v-col>
-                        
-                        <v-col cols="12">
-                          <!--tiptap-vuetify
-                            v-model="form.overview"
-                            placeholder="Overview"
-                            :card-props="{ flat: true, outlined: true }"
-                            :extensions="extensions"
-                          /-->
                           <v-select
                             v-model="form.capabilityCodes"
                             :items="capabilityCodeItems"
@@ -127,7 +98,7 @@
                             clearable
                           >
                           </v-autocomplete>
-                          <!--v-autocomplete
+                          <v-autocomplete
                             v-model="form.tagFilterTypeIds"
                             :items="filterTypeTags"
                             item-text="name"
@@ -138,7 +109,7 @@
                             deletable-chips
                             clearable
                           >
-                          </v-autocomplete-->
+                          </v-autocomplete>
                           <v-autocomplete
                             v-model="form.tagFilterModeIds"
                             :items="filterModeTags"
@@ -151,78 +122,6 @@
                             clearable
                           >
                           </v-autocomplete>
-                          <!--v-autocomplete
-                            v-model="form.tagContentPadegogyIds"
-                            :items="contentPadegogyTags"
-                            item-text="name"
-                            item-value="id"
-                            chips
-                            label="ContentPadegogy"
-                            multiple
-                            deletable-chips
-                            clearable
-                          >
-                          </v-autocomplete>
-                          <v-autocomplete
-                            v-model="form.tagContentTopicIds"
-                            :items="contentTopicTags"
-                            item-text="name"
-                            item-value="id"
-                            chips
-                            label="ContentTopic"
-                            multiple
-                            deletable-chips
-                            clearable
-                          >
-                          </v-autocomplete>
-                          <v-autocomplete
-                            v-model="form.tagContentSymptomIds"
-                            :items="contentSymptomTags"
-                            item-text="name"
-                            item-value="id"
-                            chips
-                            label="ContentSymptom"
-                            multiple
-                            deletable-chips
-                            clearable
-                          >
-                          </v-autocomplete>
-                          <v-autocomplete
-                            v-model="form.tagContentIllnessIds"
-                            :items="contentIllnessTags"
-                            item-text="name"
-                            item-value="id"
-                            chips
-                            label="ContentIllness"
-                            multiple
-                            deletable-chips
-                            clearable
-                          >
-                          </v-autocomplete>
-                          <v-autocomplete
-                            v-model="form.tagContentContextIds"
-                            :items="contentContextTags"
-                            item-text="name"
-                            item-value="id"
-                            chips
-                            label="ContentContext"
-                            multiple
-                            deletable-chips
-                            clearable
-                          >
-                          </v-autocomplete>
-                          <v-autocomplete
-                            v-model="form.tagContentRoleIds"
-                            :items="contentRoleTags"
-                            item-text="name"
-                            item-value="id"
-                            chips
-                            label="ContentRole"
-                            multiple
-                            deletable-chips
-                            clearable
-                          >
-                          </v-autocomplete-->
                         </v-col>
                       </v-row>
                       <v-row class="d-flex justify-center">
@@ -334,8 +233,7 @@
 <script>
 import { mapActions } from 'vuex';
 import {
-  required,
-  maxLength,
+  required
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
@@ -352,9 +250,7 @@ export default {
     form: {
       projectId: { required },
       title: { required },
-      url: { required },
       type: { required },
-      duration: {  },
       capabilityCodes: { required }
     }
   },
@@ -366,14 +262,8 @@ export default {
       title: { 
         required: "Title is required"
       },
-      url: { 
-        required: "Url is required"
-      },
       type: {
         required: "Type is required"
-      },
-      duration: {
-        required: "Duration is required"
       },
       capabilityCodes: {
         required: "Capability Codes is required"
@@ -405,22 +295,14 @@ export default {
       projectId: null,
       title: null,
       url: null,
-      outcome: null,
       endorsements: null,
       type: null,
-      duration: null,
       overview: null,
       isProgram: true,
       capabilityCodes: [],
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],
-      tagContentPadegogyIds: [],
-      tagContentTopicIds: [],
-      tagContentSymptomIds: [],
-      tagContentIllnessIds: [],
-      tagContentContextIds: [],
-      tagContentRoleIds: [],
       items: [] // modules
     },
     search: null,
@@ -428,22 +310,14 @@ export default {
       projectId: null,
       title: null,
       url: null,
-      outcome: null,
       endorsements: null,
       type: null,
-      duration: null,
       overview: null,
       isProgram: true,
       capabilityCodes: [],
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],
-      tagContentPadegogyIds: [],
-      tagContentTopicIds: [],
-      tagContentSymptomIds: [],
-      tagContentIllnessIds: [],
-      tagContentContextIds: [],
-      tagContentRoleIds: [],
       items: [] // modules
     },
     filters: {
