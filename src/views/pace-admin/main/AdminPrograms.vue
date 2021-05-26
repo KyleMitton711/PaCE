@@ -60,12 +60,19 @@
                             @input="$v.form.url.$touch()"
                             @blur="$v.form.url.$touch()"
                           ></v-text-field>
+                          <p>Overview</p>
                           <tiptap-vuetify
+                            v-model="form.overview"
+                            placeholder="Overview"
+                            :card-props="{ flat: true, outlined: true }"
+                            :extensions="extensions"
+                          />
+                          <!--tiptap-vuetify
                             v-model="form.outcome"
                             placeholder="Outcome"
                             :extensions="extensions"
                             :card-props="{ flat: true, outlined: true }"
-                          />
+                          /-->
                           <v-textarea 
                             label="Endorsements" 
                             v-model="form.endorsements"
@@ -91,13 +98,14 @@
                             @blur="$v.form.duration.$touch()"
                           ></v-text-field>
                         </v-col>
+                        
                         <v-col cols="12">
-                          <tiptap-vuetify
+                          <!--tiptap-vuetify
                             v-model="form.overview"
                             placeholder="Overview"
                             :card-props="{ flat: true, outlined: true }"
                             :extensions="extensions"
-                          />
+                          /-->
                           <v-select
                             v-model="form.capabilityCodes"
                             :items="capabilityCodeItems"
@@ -119,7 +127,7 @@
                             clearable
                           >
                           </v-autocomplete>
-                          <v-autocomplete
+                          <!--v-autocomplete
                             v-model="form.tagFilterTypeIds"
                             :items="filterTypeTags"
                             item-text="name"
@@ -130,7 +138,7 @@
                             deletable-chips
                             clearable
                           >
-                          </v-autocomplete>
+                          </v-autocomplete-->
                           <v-autocomplete
                             v-model="form.tagFilterModeIds"
                             :items="filterModeTags"
@@ -143,7 +151,7 @@
                             clearable
                           >
                           </v-autocomplete>
-                          <v-autocomplete
+                          <!--v-autocomplete
                             v-model="form.tagContentPadegogyIds"
                             :items="contentPadegogyTags"
                             item-text="name"
@@ -214,7 +222,7 @@
                             deletable-chips
                             clearable
                           >
-                          </v-autocomplete>
+                          </v-autocomplete-->
                         </v-col>
                       </v-row>
                       <v-row class="d-flex justify-center">
@@ -464,7 +472,7 @@ export default {
       HardBreak
     ],
     pagination: {
-      pageSize: 5,
+      pageSize: 15,
       pageIndex: 1,
       total: null
     },

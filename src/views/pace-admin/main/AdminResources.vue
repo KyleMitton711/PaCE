@@ -412,7 +412,7 @@ export default {
       HardBreak
     ],
     pagination: {
-      pageSize: 5,
+      pageSize: 15,
       pageIndex: 1,
       total: null
     },
