@@ -10,7 +10,8 @@ export default {
     resource: null,
     audienceItems: [],
     typeItems: [],
-    modeItems: []
+    modeItems: [],
+    snackbar: false
   }),
 
   computed: {
@@ -72,10 +73,8 @@ export default {
     ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
     async toggleBookmark() {
       if (this.user == null) {
-        this.$notify({
-          text: "Please login to bookmark.",
-          type: 'warning'
-        });
+        this.snackbar = true;
+        return;
       }
       let payload = {
         resourceId: this.resourceId

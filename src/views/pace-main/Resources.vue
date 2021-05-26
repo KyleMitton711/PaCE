@@ -14,32 +14,33 @@
               </v-btn>
               <v-toolbar-title>{{ searchText ? `"${searchText}"` : "" }} {{ resourceCount }} Results</v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn text class="pace-yellow--text" v-on:click = "onFilter()">
+              <v-btn text :class="filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0 ? 'pace-yellow--text' : 'pace-grey--text'" v-on:click = "onFilter()">
                   Filters
-                  <v-icon class="pace-yellow--text">{{isShowFilter ? "mdi-filter-variant-minus" : "mdi-filter-variant"}}</v-icon>
+                  <v-icon :class="filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0 ? 'pace-yellow--text' : 'pace-grey--text'">{{isShowFilter ? "mdi-filter-variant-minus" : "mdi-filter-variant"}}</v-icon>
               </v-btn>
             </v-system-bar>
             
             <div class="pa-3 content-filter mb-3" v-if="isShowFilter">
-              <p>Your filters:</p>
+              <p v-if="filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0">Your filters:</p>
+              <p v-else>No filters</p>
               <p v-if="filters && filters.tagFilterAudienceIds.length > 0">
                 <b>{{ filters.tagFilterAudienceIds.length }} Audiences:</b> {{ selectedAudienceItems }} 
-                <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterAudienceIds = [], viewResourceList()">mdi-close</v-icon></span>
+                <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterAudienceIds = [], changeFilters()">mdi-close</v-icon></span>
               </p>
               <p v-if="filters && filters.tagFilterTypeIds.length > 0">
                 <b>{{ filters.tagFilterTypeIds.length }} Types:</b> {{ selectedTypeItems }} 
-                <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterTypeIds = [], viewResourceList()">mdi-close</v-icon></span>
+                <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterTypeIds = [], changeFilters()">mdi-close</v-icon></span>
               </p>
               <p v-if="filters && filters.tagFilterModeIds.length > 0">
                 <b>{{ filters.tagFilterModeIds.length }} Modes:</b> {{ selectedModeItems }} 
-                <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterModeIds = [], viewResourceList()">mdi-close</v-icon></span>
+                <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterModeIds = [], changeFilters()">mdi-close</v-icon></span>
               </p>
             </div>
             
             <v-list two-line subheader class="pt-5 mb-10 px-3" v-if="resources.length > 0">
               <v-list-item
                 v-for="(item, i) in resources"
-                :key="item.title"
+                :key="i"
                 :class="item['status'] ? 'opened' : 'closed'"
               >
                 <v-list-item-avatar tile size="64">
@@ -175,13 +176,19 @@ export default {
       this.showResource = true;
     },
 
+    changeFilters() {
+      this.pagination.pageIndex = 1;
+      this.viewResourceList();
+    },
+
     async viewResourceList() {
       this.isLoadingResource = true;
       this.filters['pageIndex'] = this.pagination.pageIndex;
       this.filters['pageSize'] = this.pagination.pageSize;
       localStorage.setItem('filters', JSON.stringify(this.filters));
-      this.resourceCount = await this.getResourceCount(this.filters);
+      let count = await this.getResourceCount(this.filters);
       let res = await this.filterResources(this.filters);
+      this.resourceCount = count;
       this.resources = Object.assign([], res.results);
       this.resources.sort(function(a, b) {
         if (a.title > b.title) return 1;
@@ -226,6 +233,7 @@ export default {
   },
   
   async mounted() {
+    this.pagination.pageSize = Math.floor((window.innerHeight - 150) / 90);
     if (localStorage.getItem('filters')) {
       this.filters = JSON.parse(localStorage.getItem('filters'));
     }

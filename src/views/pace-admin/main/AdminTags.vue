@@ -32,7 +32,7 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="500px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-map-marker</v-icon>Add Tag</v-btn>
+                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-tag</v-icon>Add Tag</v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="bg-pace-yellow">

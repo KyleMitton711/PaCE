@@ -20,7 +20,7 @@
                   v-model="search"
                   @input="changeFilters"
                 ></v-text-field>
-                <p class="text-right"><a class="white--text v-underline" @click="viewResourceList" >Browse {{ resourceCount }} result{{ resourceCount && resourceCount > 1 ? 's' : ''}} ></a></p>
+                <p class="text-right"><a class="white--text v-underline" @click="viewResourceList" >Browse {{ resourceCount && resourceCount > 0 ? resourceCount : 'no' }} result{{ resourceCount != 1 ? 's' : ''}} ></a></p>
               </div>
               <div class="search-info px-sm-10 px-1 pt-2">
                 <v-tabs
@@ -51,15 +51,18 @@
                       </p>
                     </v-card>
                     <v-card class="elevation-1 pa-5 tab-content" v-else>
-                      <p class="mb-1">Too many results?</p>
-                      <p>Take a minute to review your filters.</p>
+                      <template v-if="resourceCount && resourceCount > 0">
+                        <p class="mb-1">Too many results?</p>
+                        <p>Take a minute to review your filters.</p>
+                      </template>
+                      <p v-else>Adjust filters for more results.</p>
                       <p>Current filters:</p>
 
                       <p class="mb-0 d-flex" v-if="selectedCapabilities.length > 0">
                         <router-link to="/?tab=2" class="capability-link"><b class="mr-2">Capabilities:</b></router-link> {{capabilityString }} 
                         <span class="ml-auto"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span>
                       </p>
-                      <p class="mb-0" v-else><b>Choose a capability</b></p>
+                      <p class="mb-0" v-else><router-link to="/" class="capability-link"><b>Choose a capability</b></router-link></p>
                       <p class="mb-0 d-flex" v-if="audience.length > 0">
                         <b class="mr-2" aria-controls @click="tab = 1">Audiences:</b> {{ selectedAudienceItems }}
                         <span class="ml-auto"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>

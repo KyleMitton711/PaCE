@@ -148,10 +148,13 @@ export default class APIService {
     if(refreshToken) {
       return await this.doRefreshToken(refreshToken);
     }
-  
     else if (!router.history.current.meta.publicRoute
       && !router.currentRoute.fullPath.includes("/auth")) {
-      document.location.href = "/auth";
+      if (window.location.pathname.indexOf('admin') > -1) {
+        document.location.href = "/admin/auth";
+      } else {
+        document.location.href = "/auth";
+      }
     }
     return false;
   }

@@ -34,7 +34,7 @@
           </v-avatar>
           <h3 class="ml-4">{{ resourceType }}</h3>
         </div>
-        <h3 class="mt-4"><a :href="resource.url">{{ resource.title }}</a></h3>
+        <h3 class="mt-4"><a :href="resource.url" target="_blank" >{{ resource.title }}</a></h3>
         <p v-html="resource.overview" class="mt-6"></p>
         <p v-html="resource.outcome" class="mt-2"></p>
         
@@ -143,9 +143,7 @@ export default {
   },
 
   async mounted() {
-    if (!this.user) {
-      this.snackbar = true;
-    }
+    
 
     if (this.resourceId) {
       this.resource = await this.getResourceDetail(this.resourceId);

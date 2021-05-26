@@ -27,7 +27,7 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="800px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-map-marker</v-icon>Add User</v-btn>
+                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-account-multiple</v-icon>Add User</v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="bg-pace-yellow">
@@ -291,7 +291,7 @@ export default {
       }],
     pagination: {
       PageIndex: 1,
-      PageSize: 5,
+      PageSize: 10,
       total: null
     }
   }),

@@ -26,7 +26,7 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" max-width="800px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-map-marker</v-icon>Add Program</v-btn>
+                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-select-group</v-icon>Add Program</v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="bg-pace-yellow">
@@ -229,7 +229,14 @@
                         <v-col md="6" cols="12">
                           <v-list>
                             <v-subheader inset>Selected modules</v-subheader>
-                            <draggable :list="selectedModules" group="resources" class="p-2 cursor-move" style="min-height: 150px;">
+                            <draggable
+                              :list="selectedModules" 
+                              group="resources" 
+                              class="p-2 cursor-move" 
+                              style="min-height: 150px;" 
+                              :multiDrag="true"
+                              selectedClass="bg-pace-grey"
+                            >
                               <v-list-item v-for="listItem in selectedModules" :key="listItem.id" @click.prevent>
                                 <v-list-item-avatar>
                                   <img :src="listItem.projectLogo" />
@@ -252,9 +259,20 @@
                             clearable
                             @input="searchResource"
                           ></v-text-field>
-                          <v-list max-height="200px" style="overflow-y: scroll;">
-                            <draggable :list="totalResources" group="resources" class="p-2 cursor-move">
-                              <v-list-item v-for="listItem in totalResources" :key="listItem.id" @click.prevent>
+                          <v-list max-height="200px" height="200px" style="overflow-y: scroll;">
+                            <draggable 
+                              :list="totalResources" 
+                              group="resources" 
+                              class="p-2 cursor-move" 
+                              :multiDrag="true"
+                              selectedClass="bg-pace-grey"
+                            >
+                              <v-list-item
+                                v-for="listItem in totalResources" 
+                                :key="listItem.id" 
+                                @click.prevent 
+                                role="item" 
+                              >
                                 <v-list-item-avatar>
                                   <img :src="listItem.projectLogo" />
                                 </v-list-item-avatar>
@@ -567,7 +585,11 @@ export default {
     },
 
     async save() {
-      this.form.items = this.selectedModules.map(item => item.id);
+      this.selectedModules = this.selectedModules.map((item, index) => ({ ...item, itemNum: index + 1}));
+      this.form.items = [];
+      for (let i = 0; i < this.selectedModules.length; i ++) {
+        this.form.items.push(this.selectedModules[i].id);
+      }
       if (this.editedIndex > -1) {
         let res = await this.updateResource(this.form);
       } else {
@@ -624,7 +646,7 @@ export default {
           }
         }
       });
-    }, 500),
+    }, 300),
   }
 };
 </script>
