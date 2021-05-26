@@ -496,7 +496,9 @@ export default {
 
     async save() {
       if (this.editedIndex > -1) {
-        this.form.items = this.form.items.map(item => item.id);
+        if (this.form.items) {
+          this.form.items = this.form.items.map(item => item.id);
+        }
         let res = await this.updateResource(this.form);
       } else {
         let res = await this.addResource(this.form);
