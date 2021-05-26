@@ -250,7 +250,7 @@ export default {
     isLoading: false,
     page: 1,
     pageCount: 0,
-    itemsPerPage: 5,
+    itemsPerPage: 15,
   }),
   computed: {
     formTitle() {
