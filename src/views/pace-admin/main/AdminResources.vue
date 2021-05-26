@@ -60,14 +60,16 @@
                             @input="$v.form.url.$touch()"
                             @blur="$v.form.url.$touch()"
                           ></v-text-field>
+                          <p>Overview</p>
                           <tiptap-vuetify
-                            v-model="form.outcome"
-                            placeholder="Outcome"
-                            :extensions="extensions"
+                            v-model="form.overview"
+                            placeholder="Overview"
                             :card-props="{ flat: true, outlined: true }"
+                            :extensions="extensions"
                           />
+                          
                           <v-textarea 
-                            label="Endorsements" 
+                            label="Certifications" 
                             v-model="form.endorsements"
                           ></v-textarea>
                         </v-col>
@@ -92,11 +94,12 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12">
+                          <p>Outcome</p>
                           <tiptap-vuetify
-                            v-model="form.overview"
-                            placeholder="Overview"
-                            :card-props="{ flat: true, outlined: true }"
+                            v-model="form.outcome"
+                            placeholder="Outcome"
                             :extensions="extensions"
+                            :card-props="{ flat: true, outlined: true }"
                           />
                           <v-select
                             v-model="form.capabilityCodes"

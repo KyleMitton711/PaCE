@@ -74,7 +74,7 @@
                             :card-props="{ flat: true, outlined: true }"
                           /-->
                           <v-textarea 
-                            label="Endorsements" 
+                            label="Certifications" 
                             v-model="form.endorsements"
                           ></v-textarea>
                         </v-col>
@@ -336,7 +336,7 @@ export default {
       title: { required },
       url: { required },
       type: { required },
-      duration: { required },
+      duration: {  },
       capabilityCodes: { required }
     }
   },
