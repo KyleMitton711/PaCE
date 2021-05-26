@@ -98,7 +98,7 @@
                             clearable
                           >
                           </v-autocomplete>
-                          <v-autocomplete
+                          <!-- <v-autocomplete
                             v-model="form.tagFilterTypeIds"
                             :items="filterTypeTags"
                             item-text="name"
@@ -109,7 +109,7 @@
                             deletable-chips
                             clearable
                           >
-                          </v-autocomplete>
+                          </v-autocomplete> -->
                           <v-autocomplete
                             v-model="form.tagFilterModeIds"
                             :items="filterModeTags"
