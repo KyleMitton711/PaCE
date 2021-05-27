@@ -265,6 +265,7 @@ export default {
   },
 
   created() {
+    this.itemsPerPage = Math.floor((window.innerHeight - 200) / 55);
     this.initialize();
   },
 

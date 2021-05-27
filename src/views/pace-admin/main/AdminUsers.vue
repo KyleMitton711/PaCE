@@ -8,6 +8,7 @@
           class="border"
           hide-default-footer
           :loading="isLoading"
+          :items-per-page="pagination.PageSize"
           loading-text="Loading... Please wait"
         >
           <template v-slot:top>
@@ -312,6 +313,7 @@ export default {
   },
 
   created() {
+    this.pagination.PageSize = Math.floor((window.innerHeight - 200) / 55);
     this.initialize();
   },
 

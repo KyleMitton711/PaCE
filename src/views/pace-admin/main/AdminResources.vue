@@ -5,7 +5,8 @@
         <v-data-table 
           :headers="headers" 
           :items="resources" 
-          hide-default-footer 
+          hide-default-footer
+          :items-per-page="pagination.pageSize"
           class="border" 
           :loading="isLoading" 
           loading-text="Loading... Please wait"
@@ -427,6 +428,7 @@ export default {
   },
 
   created() {
+    this.pagination.pageSize = Math.floor((window.innerHeight - 200) / 55);
     this.initialize();
   },
 

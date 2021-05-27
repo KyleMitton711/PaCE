@@ -186,6 +186,7 @@ export default {
   },
 
   created() {
+    this.itemsPerPage = Math.floor((window.innerHeight - 200) / 55);
     this.tagType = parseInt(this.$route.params.tagType);
     this.form.tagType = this.tagType;
     this.defaultItem.tagType = this.tagType;

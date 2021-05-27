@@ -32,37 +32,46 @@ export default {
     },
 
     selectedAudienceItems() {
-      let nameArray = this.resource.tagFilterAudienceIds.map(id => {
-        for (let i = 0; i < this.audienceItems.length ; i ++) {
-          if (this.audienceItems[i].id == id) {
-            return this.audienceItems[i].name;
+      let nameArray = [];
+      if (this.resource) {
+        nameArray = this.resource.tagFilterAudienceIds.map(id => {
+          for (let i = 0; i < this.audienceItems.length ; i ++) {
+            if (this.audienceItems[i].id == id) {
+              return this.audienceItems[i].name;
+            }
           }
-        }
-      });
+        });
+      }
 
       return nameArray.join(', ');
     },
 
     selectedTypeItems() {
-      let nameArray = this.resource.tagFilterTypeIds.map(id => {
-        for (let i = 0; i < this.typeItems.length ; i ++) {
-          if (this.typeItems[i].id == id) {
-            return this.typeItems[i].name;
+      let nameArray = [];
+      if (this.resource) {
+        nameArray = this.resource.tagFilterTypeIds.map(id => {
+          for (let i = 0; i < this.typeItems.length ; i ++) {
+            if (this.typeItems[i].id == id) {
+              return this.typeItems[i].name;
+            }
           }
-        }
-      });
+        });
+      }
 
       return nameArray.join(', ');
     },
 
     selectedModeItems() {
-      let nameArray = this.resource.tagFilterModeIds.map(id => {
-        for (let i = 0; i < this.modeItems.length ; i ++) {
-          if (this.modeItems[i].id == id) {
-            return this.modeItems[i].name;
+      let nameArray = [];
+      if (this.resource) {
+        nameArray = this.resource.tagFilterModeIds.map(id => {
+          for (let i = 0; i < this.modeItems.length ; i ++) {
+            if (this.modeItems[i].id == id) {
+              return this.modeItems[i].name;
+            }
           }
-        }
-      });
+        });
+      }
 
       return nameArray.join(', ');
     },

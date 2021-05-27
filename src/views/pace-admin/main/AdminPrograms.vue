@@ -8,6 +8,7 @@
           hide-default-footer 
           class="border" 
           :loading="isLoading"
+          :items-per-page="pagination.pageSize"
           loading-text="Loading... Please wait"
         >
           <template v-slot:top>
@@ -41,6 +42,7 @@
                             item-value="id"
                             item-text="name"
                             v-model="form.projectId"
+                            @change="projectChanged"
                             label="Project"
                             :error-messages="fieldErrors('form.projectId')"
                             @input="$v.form.projectId.$touch()"
@@ -158,7 +160,15 @@
                             clearable
                             @input="searchResource"
                           ></v-text-field>
-                          <v-list max-height="200px" height="200px" style="overflow-y: scroll;">
+                          <div v-if="isModuleLoading" class="text-center mt-5">
+                            <v-progress-circular
+                              :size="70"
+                              :width="4"
+                              color="primary"
+                              indeterminate
+                            ></v-progress-circular>
+                          </div>
+                          <v-list max-height="200px" height="200px" style="overflow-y: scroll;" v-else role="listbox">
                             <draggable 
                               :list="totalResources" 
                               group="resources" 
@@ -167,10 +177,9 @@
                               selectedClass="bg-pace-grey"
                             >
                               <v-list-item
-                                v-for="listItem in totalResources" 
+                                v-for="(listItem) in totalResources" 
                                 :key="listItem.id" 
-                                @click.prevent 
-                                role="item" 
+                                @click.prevent
                               >
                                 <v-list-item-avatar>
                                   <img :src="listItem.projectLogo" />
@@ -368,7 +377,8 @@ export default {
       pageIndex: 1,
       total: null
     },
-    resourceKeyword: null
+    resourceKeyword: null,
+    isModuleLoading: false
   }),
 
   computed: {
@@ -384,6 +394,7 @@ export default {
   },
 
   created() {
+    this.pagination.pageSize = Math.floor((window.innerHeight - 200) / 60);
     this.initialize();
   },
 
@@ -423,10 +434,8 @@ export default {
       let res = await this.filterResources({isProgram: false});
       this.totalResources = Object.assign([], res.results);
       this.totalResources = this.totalResources.filter(item => {
-        if (!item.isProgram) {
-          if (item.items == null || item.items.length == 0) {
-            return item;
-          }
+        if (item.items == null || item.items.length == 0) {
+          return item;
         }
       });
       
@@ -483,6 +492,23 @@ export default {
       this.selectedItemId = item.id;
     },
 
+    async projectChanged() {
+      this.isModuleLoading = true;
+      this.selectedModules = [];
+      let payload = {
+        isProgram: false,
+        projectId: this.form.projectId
+      };
+      let res = await this.filterResources(payload);
+      this.totalResources = Object.assign([], res.results);
+      this.totalResources = this.totalResources.filter(item => {
+        if (item.items == null || item.items.length == 0) {
+          return item;
+        }
+      });
+      this.isModuleLoading = false;
+    },
+
     async loadPrograms() {
       this.isLoading = true;
       if (this.search && this.search.length > 0) {
@@ -490,11 +516,11 @@ export default {
       } else {
         delete this.filters['searchText'];
       }
+      this.filters['isProgram'] = true;
       this.filters.pageIndex = this.pagination.pageIndex;
       this.filters.pageSize = this.pagination.pageSize;
       let res = await this.filterResources(this.filters);
       this.resources = res.results
-        .filter(item => item.isProgram)
         .map((item, index) => {
         let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
         return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }

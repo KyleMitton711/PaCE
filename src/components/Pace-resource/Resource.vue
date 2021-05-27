@@ -123,6 +123,14 @@ export default {
           this.snackbar = true;
         }
       }
+    },
+
+    resourceId: {
+      handler: async function (val) {
+        if (val) {
+          this.resource = await this.getResourceDetail(val);
+        }
+      }
     }
   },
 
@@ -143,8 +151,6 @@ export default {
   },
 
   async mounted() {
-    
-
     if (this.resourceId) {
       this.resource = await this.getResourceDetail(this.resourceId);
     }
