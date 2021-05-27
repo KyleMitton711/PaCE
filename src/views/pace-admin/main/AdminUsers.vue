@@ -368,6 +368,7 @@ export default {
       this.editedIndex = -1;
       setTimeout(() => {
         this.$v.$reset();
+        this.$refs.dropzone.removeAllFiles();
       }, 100)
     },
 

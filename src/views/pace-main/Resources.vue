@@ -50,6 +50,9 @@
                 <v-list-item-content>
                   <span class="black--text " @click="viewResource(i)">{{item.title}}</span>
                   <p v-html="item.overview" class="mt-6 overview"></p>
+                  <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
+                    Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id)">{{ item.items[0].title }}</a>
+                  </p>
                   <p class="mt-4"><b>Duration</b> {{ item.duration }}</p>
                 </v-list-item-content>
 
@@ -173,6 +176,14 @@ export default {
     viewResource(i) {
       this.selectedResource = Object.assign({}, this.resources[i]);
       this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
+      this.showResource = true;
+    },
+
+    viewProgram(id) {
+      this.selectedResource = {
+        id: id,
+        isProgram: true
+      };
       this.showResource = true;
     },
 

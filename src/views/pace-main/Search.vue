@@ -173,6 +173,9 @@
                     <v-list-item-content>
                       <span class="black--text " @click="viewResource(item)" aria-controls>{{item.title}}</span>
                       <p v-html="item.overview" class="mt-6 overview"></p>
+                      <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
+                        Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id)">{{ item.items[0].title }}</a>
+                      </p>
                       <p class="mt-3">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
                     </v-list-item-content>
 
@@ -200,6 +203,9 @@
                   <v-list-item-content>
                     <span class="black--text " @click="viewResource(item)" aria-controls>{{item.title}}</span>
                     <p v-html="item.overview" class="mt-6 overview"></p>
+                    <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
+                      Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id)">{{ item.items[0].title }}</a>
+                    </p>
                     <p class="mt-3">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
                   </v-list-item-content>
 
@@ -350,6 +356,14 @@ export default {
     viewResource(item) {
       this.selectedResource = Object.assign({}, item);
       this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
+      this.showResource = true;
+    },
+
+    viewProgram(id) {
+      this.selectedResource = {
+        id: id,
+        isProgram: true
+      };
       this.showResource = true;
     },
 
