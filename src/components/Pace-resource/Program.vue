@@ -59,6 +59,7 @@
               </div>
               <h3 class="mt-4"><a :href="resource.url" target="_blank">{{ resource.title }}</a></h3>
               <p v-html="resource.overview" class="mt-6"></p>
+              <p class="mb-2">Learning theory / approach</p>
               <p v-html="resource.outcome" class="mt-2"></p>
               
               <p class="mt-4"><b>Duration</b> {{ resource.duration }}</p>
