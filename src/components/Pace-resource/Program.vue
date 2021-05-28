@@ -156,39 +156,45 @@ export default {
     },
 
     selectedAudienceItems() {
-      let nameArray = this.resource.tagFilterAudienceIds.map(id => {
-        for (let i = 0; i < this.audienceItems.length ; i ++) {
-          if (this.audienceItems[i].id == id) {
-            return this.audienceItems[i].name;
+      if (this.resource && this.resource.tagFilterAudienceIds) {
+        let nameArray = this.resource.tagFilterAudienceIds.map(id => {
+          for (let i = 0; i < this.audienceItems.length ; i ++) {
+            if (this.audienceItems[i].id == id) {
+              return this.audienceItems[i].name;
+            }
           }
-        }
-      });
+        });
 
-      return nameArray.join(', ');
+        return nameArray.join(', ');
+      } else return null;
     },
 
     selectedTypeItems() {
-      let nameArray = this.resource.tagFilterTypeIds.map(id => {
-        for (let i = 0; i < this.typeItems.length ; i ++) {
-          if (this.typeItems[i].id == id) {
-            return this.typeItems[i].name;
+      if (this.resource && this.resource.tagFilterTypeIds) {
+        let nameArray = this.resource.tagFilterTypeIds.map(id => {
+          for (let i = 0; i < this.typeItems.length ; i ++) {
+            if (this.typeItems[i].id == id) {
+              return this.typeItems[i].name;
+            }
           }
-        }
-      });
+        });
 
-      return nameArray.join(', ');
+        return nameArray.join(', ');
+      } else return null;
     },
 
     selectedModeItems() {
-      let nameArray = this.resource.tagFilterModeIds.map(id => {
-        for (let i = 0; i < this.modeItems.length ; i ++) {
-          if (this.modeItems[i].id == id) {
-            return this.modeItems[i].name;
+      if (this.resource && this.resource.tagFilterModeIds) {
+        let nameArray = this.resource.tagFilterModeIds.map(id => {
+          for (let i = 0; i < this.modeItems.length ; i ++) {
+            if (this.modeItems[i].id == id) {
+              return this.modeItems[i].name;
+            }
           }
-        }
-      });
+        });
 
-      return nameArray.join(', ');
+        return nameArray.join(', ');
+      } else return null;
     },
 
     programModules() {
