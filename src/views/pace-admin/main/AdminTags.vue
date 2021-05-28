@@ -59,6 +59,36 @@
                             @blur="$v.form.tagType.$touch()"
                             readonly
                           ></v-select>
+                          <vue-dropzone
+                            v-if="form.tagType == 12"
+                            ref="dropzone"
+                            id="dropzone"
+                            :options="dropzoneOptions"
+                            :useCustomSlot="true"
+                            v-on:vdropzone-files-added="fileAdded"
+                          >
+                            <div
+                              class="dropzone-custom-content bg-pace-grey border-grey"
+                              v-if="form.logo"
+                            >
+                              <img
+                                :src="form.logo"
+                                width="100%"
+                                height="100%"
+                              />
+                            </div>
+                            <div
+                              class="dropzone-custom-content bg-pace-grey border-grey"
+                              v-else
+                            >
+                              <h3 class="dropzone-custom-title white--text">
+                                No Logo
+                              </h3>
+                              <div class="subtitle">
+                                Click here or drag drop to upload
+                              </div>
+                            </div>
+                          </vue-dropzone>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -110,13 +140,14 @@ import {
   required
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
+import fileuploadMixin from "@/mixins/fileuploadMixin";
 import debounce from "debounce";
 import { tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 
 export default {
   name: "AdminTags",
-  mixins: [validationMixin],
+  mixins: [validationMixin, fileuploadMixin],
   validations: {
     form: {
       name: { required },
@@ -130,7 +161,7 @@ export default {
       },
       tagType: {
         required: "Tag type is required"
-      }
+      },
     }
   },
   data: () => ({
@@ -148,12 +179,14 @@ export default {
     editedIndex: -1,
     defaultItem: {
       name: null,
-      tagType: null
+      tagType: null,
+      logo: null
     },
     search: null,
     form: {
       name: null,
-      tagType: null
+      tagType: null,
+      logo: null
     },
     deleteConfirmDialog: false,
     selectedItem: null,
@@ -231,10 +264,12 @@ export default {
 
     close() {
       this.dialog = false;
+      this.form = Object.assign({}, this.defaultItem);
+      this.editedIndex = -1;
       setTimeout(() => {
-        this.form = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
+        this.$v.$reset();
+        this.$refs.dropzone.removeAllFiles();
+      }, 100);
     },
 
     async save() {
@@ -255,7 +290,21 @@ export default {
   }
 };
 </script>
+
 <style lang="sass" scoped>
-.subtitle 
+.dropzone-custom-content
+  text-align: center
+
+.dropzone-custom-title
+  margin-top: 0
+  color: #00b782
+
+.subtitle
   color: #314b5f
+
+.vue-dropzone.dropzone
+  background-color: #939597
+
+::v-deep .dropzone .dz-preview .dz-progress
+  display: none
 </style>
