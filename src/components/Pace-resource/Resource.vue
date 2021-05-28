@@ -30,7 +30,7 @@
       <div class="pa-4">
         <div class="d-flex align-center">
           <v-avatar size="64">
-            <img :src="resource.projectLogo" />
+            <img :src="resource.typeLogo" />
           </v-avatar>
           <h3 class="ml-4">{{ resourceType }}</h3>
         </div>
@@ -99,21 +99,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters("auth", ["user"]),
-    resourceType() {
-      if (this.resource) {
-        let resourceTypeIndex = findIndex(this.resourceTypeItems, (o) => { return o.key == this.resource.type; });
-        return this.resourceTypeItems[resourceTypeIndex].name;
-      } else return null;
-    },
-
-    tagType() {
-      let tags = this.resource.tags.map((item, index) => {
-        let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
-        return this.tagTypeItems[tagIndex].name;
-      });
-      return tags;
-    }
+    ...mapGetters("auth", ["user"])
   },
 
   watch: {

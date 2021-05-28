@@ -74,9 +74,9 @@
                         <v-col cols="12" md="6">
                           <v-select 
                             label="Type" 
-                            v-model="form.type"
-                            :error-messages="fieldErrors('form.type')"
-                            @blur="$v.form.type.$touch()"
+                            v-model="form.typeId"
+                            :error-messages="fieldErrors('form.typeId')"
+                            @blur="$v.form.typeId.$touch()"
                             :items="resourceTypeItems"
                             item-value="key"
                             item-text="name"
@@ -284,7 +284,7 @@ export default {
     form: {
       projectId: { required },
       title: { required },
-      type: { required },
+      typeId: { required },
       duration: { required },
       capabilityCodes: { required }
     }
@@ -297,7 +297,7 @@ export default {
       title: { 
         required: "Title is required"
       },
-      type: {
+      typeId: {
         required: "Type is required"
       },
       duration: {
@@ -334,7 +334,7 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: null,
+      typeId: null,
       duration: null,
       overview: null,
       capabilityCodes: [],
@@ -355,7 +355,7 @@ export default {
       url: null,
       outcome: null,
       endorsements: null,
-      type: null,
+      typeId: null,
       duration: null,
       overview: null,
       capabilityCodes: [],
@@ -528,7 +528,7 @@ export default {
       let res = await this.filterResources(this.filters);
       let data = Object.assign([], res.results);
       this.resources = data.map((item, index) => {
-        let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.type; });
+        let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.typeId; });
         return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
       });
       this.pagination.pageSize = res.pageSize;

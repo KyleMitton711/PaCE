@@ -53,7 +53,7 @@
             <div class="pa-4">
               <div class="d-flex align-center">
                 <v-avatar size="64">
-                  <img :src="resource.projectLogo" />
+                  <img :src="resource.typeLogo" />
                 </v-avatar>
                 <h3 class="ml-4">{{ resourceType }}</h3>
               </div>
@@ -139,64 +139,6 @@ export default {
 
   computed: {
     ...mapGetters("auth", ["user"]),
-
-    resourceType() {
-      if (this.resource) {
-        let resourceTypeIndex = findIndex(this.resourceTypeItems, (o) => { return o.key == this.resource.type; });
-        return this.resourceTypeItems[resourceTypeIndex].name;
-      } else return null;
-    },
-
-    tagType() {
-      let tags = this.resource.tags.map((item, index) => {
-        let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
-        return this.tagTypeItems[tagIndex].name;
-      });
-      return tags;
-    },
-
-    selectedAudienceItems() {
-      if (this.resource && this.resource.tagFilterAudienceIds) {
-        let nameArray = this.resource.tagFilterAudienceIds.map(id => {
-          for (let i = 0; i < this.audienceItems.length ; i ++) {
-            if (this.audienceItems[i].id == id) {
-              return this.audienceItems[i].name;
-            }
-          }
-        });
-
-        return nameArray.join(', ');
-      } else return null;
-    },
-
-    selectedTypeItems() {
-      if (this.resource && this.resource.tagFilterTypeIds) {
-        let nameArray = this.resource.tagFilterTypeIds.map(id => {
-          for (let i = 0; i < this.typeItems.length ; i ++) {
-            if (this.typeItems[i].id == id) {
-              return this.typeItems[i].name;
-            }
-          }
-        });
-
-        return nameArray.join(', ');
-      } else return null;
-    },
-
-    selectedModeItems() {
-      if (this.resource && this.resource.tagFilterModeIds) {
-        let nameArray = this.resource.tagFilterModeIds.map(id => {
-          for (let i = 0; i < this.modeItems.length ; i ++) {
-            if (this.modeItems[i].id == id) {
-              return this.modeItems[i].name;
-            }
-          }
-        });
-
-        return nameArray.join(', ');
-      } else return null;
-    },
-
     programModules() {
       if (this.resource && this.resource.items) {
         let items = Object.assign([], this.resource.items);
