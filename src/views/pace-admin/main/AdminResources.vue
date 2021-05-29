@@ -77,9 +77,9 @@
                             v-model="form.typeId"
                             :error-messages="fieldErrors('form.typeId')"
                             @blur="$v.form.typeId.$touch()"
-                            :items="resourceTypeItems"
-                            item-value="key"
+                            :items="filterTypeTags"
                             item-text="name"
+                            item-value="id"
                           ></v-select>
                         </v-col>
                         <v-col cols="12" md="6">

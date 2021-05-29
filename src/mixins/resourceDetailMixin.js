@@ -17,9 +17,9 @@ export default {
   computed: {
     ...mapGetters("auth", ["user"]),
     resourceType() {
-      if (this.resource && this.resource.typeId) {
-        let resourceTypeIndex = findIndex(this.resourceTypeItems, (o) => { return o.key == this.resource.typeId; });
-        return this.resourceTypeItems[resourceTypeIndex].name;
+      if (this.resource && this.resource.typeId && this.typeItems.length > 0) {
+        let resourceTypeIndex = findIndex(this.typeItems, (o) => { return o.id == this.resource.typeId; });
+        return this.typeItems[resourceTypeIndex].name;
       } else return null;
     },
 
