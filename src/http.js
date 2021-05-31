@@ -2,7 +2,7 @@ import axios from 'axios';
 import router from '@/router';
 // import Vue from 'vue'
 
-const VUE_APP_API_URL = "https://pace-dev-api-stage.azurewebsites.net"
+const VUE_APP_API_URL = process.env.VUE_APP_API_URL;
 
 const http = axios.create({
   baseURL: VUE_APP_API_URL

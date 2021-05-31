@@ -1,6 +1,9 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 
-const blobServiceClient = new BlobServiceClient(`https://pacedevstore.blob.core.windows.net/?sv=2020-02-10&ss=b&srt=o&sp=rwdlacx&se=2025-04-20T07:59:31Z&st=2021-04-19T23:59:31Z&spr=https&sig=zvV3O6Y7uNIhlm3hezQUMay9lRfLDBh7bb7ZgOKEKYI%3D`);
+const azure_uri = process.env.VUE_APP_AZURE_URI;
+const azure_sas = process.env.VUE_APP_AZURE_SAS;
+
+const blobServiceClient = new BlobServiceClient(`${azure_uri}${azure_sas}`);
 
 const containerName = "project";
 
@@ -19,7 +22,7 @@ async function upload(file) {
   // upload file
   await blockBlobClient.uploadBrowserData(file, options);
   
-  return 'https://pacedevstore.blob.core.windows.net/project/' + blobName;
+  return `${azure_uri}project/` + blobName;
 }
 
 export {
