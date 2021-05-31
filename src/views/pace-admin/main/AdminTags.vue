@@ -30,7 +30,7 @@
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="500px">
+              <v-dialog v-model="dialog" persistent max-width="500px">
                 <template v-slot:activator="{ on }">
                   <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-tag</v-icon>Add Tag</v-btn>
                 </template>
@@ -59,36 +59,17 @@
                             @blur="$v.form.tagType.$touch()"
                             readonly
                           ></v-select>
-                          <vue-dropzone
+                          <v-text-field 
+                            label="Icon"
                             v-if="form.tagType == 12"
-                            ref="dropzone"
-                            id="dropzone"
-                            :options="dropzoneOptions"
-                            :useCustomSlot="true"
-                            v-on:vdropzone-files-added="fileAdded"
+                            v-model="form.logo"
+                            :hint="'https://materialdesignicons.com/'"
+                            persistent-hint
                           >
-                            <div
-                              class="dropzone-custom-content bg-pace-grey border-grey"
-                              v-if="form.logo"
-                            >
-                              <img
-                                :src="form.logo"
-                                width="100%"
-                                height="100%"
-                              />
-                            </div>
-                            <div
-                              class="dropzone-custom-content bg-pace-grey border-grey"
-                              v-else
-                            >
-                              <h3 class="dropzone-custom-title white--text">
-                                No Logo
-                              </h3>
-                              <div class="subtitle">
-                                Click here or drag drop to upload
-                              </div>
-                            </div>
-                          </vue-dropzone>
+                            <template v-slot:message="{ }">
+                              <a target="_blank" href="https://materialdesignicons.com/">https://materialdesignicons.com</a>
+                            </template>
+                          </v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -140,14 +121,13 @@ import {
   required
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
-import fileuploadMixin from "@/mixins/fileuploadMixin";
 import debounce from "debounce";
 import { tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 
 export default {
   name: "AdminTags",
-  mixins: [validationMixin, fileuploadMixin],
+  mixins: [validationMixin],
   validations: {
     form: {
       name: { required },
@@ -214,6 +194,7 @@ export default {
       this.defaultItem.tagType = this.tagType;
       let tagIndex = findIndex(this.tagTypeItems, (o) => { return o.key == this.tagType; });
       this.tagTypeLabel = this.tagTypeItems[tagIndex].pageTitle;
+      this.search = null;
       this.initialize();
     }
   },
@@ -224,7 +205,7 @@ export default {
     this.form.tagType = this.tagType;
     this.defaultItem.tagType = this.tagType;
     let tagIndex = findIndex(this.tagTypeItems, (o) => { return o.key == this.tagType; });
-    this.tagTypeLabel = this.tagTypeItems[tagIndex].name;
+    this.tagTypeLabel = this.tagTypeItems[tagIndex].pageTitle;
     this.initialize();
   },
 
@@ -268,7 +249,6 @@ export default {
       this.editedIndex = -1;
       setTimeout(() => {
         this.$v.$reset();
-        this.$refs.dropzone.removeAllFiles();
       }, 100);
     },
 

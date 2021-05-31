@@ -16,7 +16,7 @@ export default {
     },
     dropzoneOptions: {
       url: "https://httpbin.org/post",
-      thumbnailWidth: 150,
+      thumbnailWidth: 192,
       maxFilesize: 50,
       maxFiles: 1,
       headers: { "My-Awesome-Header": "header value" },
@@ -47,7 +47,7 @@ export default {
           var image = new Image();
           image.onload = (imageEvent) => {
             var canvas = document.createElement("canvas"),
-              max_size = 240,
+              max_size = 192,
               width = image.width,
               height = image.height;
             if (width > height) {

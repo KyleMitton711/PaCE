@@ -52,8 +52,8 @@
           <v-tab-item>
             <div class="pa-4">
               <div class="d-flex align-center">
-                <v-avatar size="64">
-                  <img :src="resource.typeLogo" />
+                <v-avatar size="64" color="grey">
+                  <v-icon>{{ 'mdi-' + resource.typeLogo }}</v-icon>
                 </v-avatar>
                 <h3 class="ml-4">{{ resourceType }}</h3>
               </div>

@@ -25,7 +25,7 @@
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="800px">
+              <v-dialog v-model="dialog" persistent max-width="800px">
                 <template v-slot:activator="{ on }">
                   <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-select-group</v-icon>Add Program</v-btn>
                 </template>
@@ -294,7 +294,6 @@ export default {
       },
       { text: "Title", value: "title" },
       { text: "Type", value: "resourceTypeLabel" },
-      { text: "Duration", value: "duration" },
       { text: "Actions", value: "actions", sortable: false }
     ],
     resources: [],

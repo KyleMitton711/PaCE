@@ -25,7 +25,7 @@
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="800px">
+              <v-dialog v-model="dialog" persistent max-width="800px">
                 <template v-slot:activator="{ on }">
                   <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-dots-grid</v-icon>Add Resource</v-btn>
                 </template>
@@ -86,9 +86,6 @@
                           <v-text-field 
                             label="Duration"
                             v-model="form.duration"
-                            :error-messages="fieldErrors('form.duration')"
-                            @input="$v.form.duration.$touch()"
-                            @blur="$v.form.duration.$touch()"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12">
@@ -285,7 +282,6 @@ export default {
       projectId: { required },
       title: { required },
       typeId: { required },
-      duration: { required },
       capabilityCodes: { required }
     }
   },
@@ -299,9 +295,6 @@ export default {
       },
       typeId: {
         required: "Type is required"
-      },
-      duration: {
-        required: "Duration is required"
       },
       capabilityCodes: {
         required: "Capability Codes is required"

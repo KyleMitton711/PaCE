@@ -26,7 +26,7 @@
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="800px">
+              <v-dialog v-model="dialog" persistent max-width="800px">
                 <template v-slot:activator="{ on }">
                   <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-account-multiple</v-icon>Add User</v-btn>
                 </template>
@@ -378,7 +378,7 @@ export default {
         console.log(res)
         if (res === true) {
           this.$notify({
-            text: 'Project updated successfully',
+            text: 'User updated successfully',
             type: 'success'
           });
           this.initialize();
@@ -393,7 +393,7 @@ export default {
         let res = await this.addUser(this.form);
         if (res === true) {
           this.$notify({
-            text: 'Project added successfully',
+            text: 'User added successfully',
             type: 'success'
           });
           this.initialize();

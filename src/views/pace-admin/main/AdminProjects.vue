@@ -28,7 +28,7 @@
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" max-width="800px">
+              <v-dialog v-model="dialog" persistent max-width="800px">
                 <template v-slot:activator="{ on }">
                   <v-btn color="primary" dark class="mb-2" v-on="on"
                     ><v-icon>mdi-map-marker</v-icon>Add Project</v-btn
@@ -41,7 +41,7 @@
                   <v-card-text>
                     <v-container>
                       <v-row>
-                        <v-col cols="12" md="8">
+                        <v-col cols="12" md="7">
                           <v-text-field
                             label="Name"
                             v-model="form.name"
@@ -80,7 +80,7 @@
                             @blur="$v.form.url.$touch()"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="12" md="4" class="position-relative">
+                        <v-col cols="12" md="5" class="position-relative">
                           <vue-dropzone
                             ref="dropzone"
                             id="dropzone"
@@ -341,10 +341,19 @@ export default {
     async save() {
       if (this.editedIndex > -1) {
         let res = await this.editProject(this.form);
-        this.$notify({
-          text: "Project updated successfully",
-          type: "success",
-        });
+        if (res.errors == null) {
+          this.$notify({
+            text: "Project updated successfully",
+            type: "success",
+          });
+          this.initialize();
+          this.close();
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: "error",
+          });
+        }
       } else {
         let res = await this.addProject(this.form);
         if (res.errors == null) {
@@ -383,6 +392,9 @@ export default {
 
 .vue-dropzone.dropzone
   background-color: #939597
+  max-width: 272px
+  height: 272px
+  margin-left: auto
 
 ::v-deep .dropzone .dz-preview .dz-progress
   display: none

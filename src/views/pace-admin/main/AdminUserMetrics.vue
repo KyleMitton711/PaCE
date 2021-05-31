@@ -126,7 +126,7 @@ export default {
     metrics: {},
     isLoading: false,
     tab: null,
-    dayCount: 1
+    dayCount: 7
   }),
 
   computed: {

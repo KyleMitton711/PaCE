@@ -1,6 +1,6 @@
 <template>
   <v-card flat class="stat-wrapper">
-    <v-card-text class="pa-5 success">
+    <v-card-text class="pa-5 success d-flex flex-column justify-space-between">
       <div class="d-flex align-center">
         <div class="align-self-center">
           <h1 class="white--text display-1">
@@ -18,7 +18,7 @@
           </h6>
         </div>
       </div>
-      <v-row class="mt-2">
+      <v-row class="mt-2" style="max-height: 100px;">
         <v-col cols="4" class="d-flex align-center">
           <h2 class="font-weight-light white--text text-nowrap">{{ value }}</h2>
         </v-col>
