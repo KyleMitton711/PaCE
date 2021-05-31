@@ -33,9 +33,11 @@ const actions = {
         });
     },
     async editProject ({ commit }, payload) {
-        let result = await ProjectService.editProject(payload);
-        commit("ADD_PROJECT", result.data);
-        return result.data;
+        return ProjectService.editProject(payload).then(res => {
+            return res.data;
+        }).catch(error => {
+            return error.data;
+        });
     },
     async deleteProject ({ commit }, payload) {
         let result = await ProjectService.deleteProject(payload);
