@@ -48,7 +48,7 @@
                 <div class="d-block d-sm-flex align-center mb-4 ml-4">
                   <div>
                     <span class="mr-3">None of above?</span>
-                    <a @click="goToSearch" class="link">Skip to search</a>
+                    <a @click="goToSearch(true)" class="link">Skip to search</a>
                   </div>
                 </div>
               </div>
@@ -87,7 +87,7 @@
                     <span
                       class="selected-count mr-2"
                     >View {{selectedCapabilities && selectedCapabilities.length}} of {{capabilityCodes[selectedResource].items.length}} selected</span>
-                    <v-btn color="bg-pace-yellow" fab small @click="goToSearch">
+                    <v-btn color="bg-pace-yellow" fab small @click="goToSearch(false)">
                       <v-icon color="white">mdi-chevron-right</v-icon>
                     </v-btn>
                   </div>
@@ -128,23 +128,18 @@ export default {
     }
   },
 
-  watch: {
-    selectedCapabilities: {
-      handler: function(val) {
-        localStorage.setItem("selectedCapabilities", JSON.stringify(val));
-      },
-      deep: true
-    }
-  },
-
   methods: {
     selectResource(index) {
-      localStorage.setItem("selectedResource", index);
+      this.selectedResource = index;
       this.selectedCapabilities = null;
       this.tab = 2;
     },
 
-    goToSearch() {
+    goToSearch(skip = false) {
+      if (!skip) {
+        localStorage.setItem("selectedResource", this.selectedResource);
+        localStorage.setItem("selectedCapabilities", JSON.stringify(this.selectedCapabilities));
+      }
       this.$router.push({ name: "Search" });
     },
 

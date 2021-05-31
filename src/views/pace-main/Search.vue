@@ -20,7 +20,7 @@
                   v-model="search"
                   @input="changeFilters"
                 ></v-text-field>
-                <p class="text-right"><a class="white--text v-underline" @click="viewResourceList" >Browse {{ resourceCount && resourceCount > 0 ? resourceCount : 'no' }} result{{ resourceCount != 1 ? 's' : ''}} ></a></p>
+                <p class="text-right"><a class="white--text v-underline" :style="`cursor: ` + (resourceCount && resourceCount > 0 ? 'pointer' : 'text')" @click="viewResourceList" >Browse {{ resourceCount && resourceCount > 0 ? resourceCount : 'no' }} result{{ resourceCount != 1 ? 's' : ''}} ></a></p>
               </div>
               <div class="search-info px-sm-10 px-1 pt-2">
                 <v-tabs
@@ -376,36 +376,38 @@ export default {
     },
 
     async viewResourceList() {
-      this.isLoadingResource = true;
-      let payload = {
-        tagFilterAudienceIds: this.audience,
-        tagFilterTypeIds: this.type,
-        tagFilterModeIds: this.mode,
-        searchText: this.search
-      };
+      if (this.resourceCount > 0) {
+        this.isLoadingResource = true;
+        let payload = {
+          tagFilterAudienceIds: this.audience,
+          tagFilterTypeIds: this.type,
+          tagFilterModeIds: this.mode,
+          searchText: this.search
+        };
 
-      payload['pageIndex'] = this.pagination.pageIndex;
-      payload['pageSize'] = this.pagination.pageSize;
-      
-      if (this.selectedCapabilityCodeStrings.length > 0) {
-        payload['capabilityCodes'] = this.selectedCapabilityCodeStrings;
-      }
-      if (this.search == null || this.search.length == 0) {
-        delete payload['searchText']
-      }
-      localStorage.setItem('filters', JSON.stringify(payload));
-      if (window.innerWidth < 600) {
-        this.$router.push('/resources');
-      } else {
-        let res = await this.filterResources(payload);
-        this.resources = res.results;
+        payload['pageIndex'] = this.pagination.pageIndex;
+        payload['pageSize'] = this.pagination.pageSize;
+        
+        if (this.selectedCapabilityCodeStrings.length > 0) {
+          payload['capabilityCodes'] = this.selectedCapabilityCodeStrings;
+        }
+        if (this.search == null || this.search.length == 0) {
+          delete payload['searchText']
+        }
+        localStorage.setItem('filters', JSON.stringify(payload));
+        if (window.innerWidth < 600) {
+          this.$router.push('/resources');
+        } else {
+          let res = await this.filterResources(payload);
+          this.resources = res.results;
 
-        this.pagination.pageSize = res.pageSize;
-        this.pagination.total = res.total;
-        this.pagination.pageIndex = res.currentPage;
+          this.pagination.pageSize = res.pageSize;
+          this.pagination.total = res.total;
+          this.pagination.pageIndex = res.currentPage;
+        }
+        this.isLoadingResource = false;
+        this.resourceLoaded = true;
       }
-      this.isLoadingResource = false;
-      this.resourceLoaded = true;
     },
 
     closeResourceList() {
@@ -457,6 +459,7 @@ export default {
 
     clearCapabilities() {
       this.selectedCapabilities = [];
+      this.selectedCapabilityCodeStrings = [];
       this.capabilityString = null;
       localStorage.removeItem('selectedCapabilities');
       localStorage.removeItem('selectedResource');
