@@ -61,9 +61,6 @@
               <p v-html="resource.overview" class="mt-6"></p>
               <p v-if="resource.outcome" class="mb-2">Learning theory / approach</p>
               <p v-html="resource.outcome" class="mt-2"></p>
-              
-              <p class="mt-4"><b>Duration</b> {{ resource.duration }}</p>
-
               <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0"><b>Audience:</b></p>
               <p class="mb-0">{{ selectedAudienceItems }}</p>
               <p class="mt-2 mb-0" v-if="selectedTypeItems.length > 0"><b>Type:</b></p>
