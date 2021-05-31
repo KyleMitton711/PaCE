@@ -445,6 +445,7 @@ export default {
       this.editedIndex = this.resources.indexOf(item);
       let res = await this.getResourceDetail(item.id);
       this.form = Object.assign({}, res);
+      this.projectChanged();
       this.selectedModules = this.form.items != null ? Object.assign([], this.form.items) : [];
       this.dialog = true;
     },
