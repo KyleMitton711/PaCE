@@ -16,7 +16,7 @@
 <style lang="scss">
 #blank {
   background: url('../../assets/PaCE_Spider_GraphicElement.png') #939597;
-  background-size: 65% 85%;
+  background-size: 65% 85vh;
   background-position: -100px -100px;
   background-repeat: no-repeat;
 }
