@@ -536,7 +536,14 @@ export default {
     }, 500),
 
     searchResource: debounce(async function () {
-      let res = await this.filterResources({isProgram: false, searchText: this.resourceKeyword});
+      let payload = {
+        isProgram: false, 
+        searchText: this.resourceKeyword
+      };
+      if (this.form.projectId) {
+        payload["projectId"] = this.form.projectId;
+      }
+      let res = await this.filterResources(payload);
       this.totalResources = Object.assign([], res.results);
       this.totalResources = this.totalResources.filter(item => {
         if (!item.isProgram) {

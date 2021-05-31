@@ -30,9 +30,9 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" persistent max-width="800px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark class="mb-2" v-on="on"
-                    ><v-icon>mdi-map-marker</v-icon>Add Project</v-btn
-                  >
+                  <v-btn color="primary" dark class="mb-2" v-on="on">
+                    <v-icon>mdi-map-marker</v-icon>Add Project
+                  </v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="bg-pace-yellow">
