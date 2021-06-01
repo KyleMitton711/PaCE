@@ -43,12 +43,16 @@
                       <v-row>
                         <v-col cols="12">
                           <v-text-field 
-                            label="Name" 
+                            label="Name *" 
                             v-model="form.name"
                             :error-messages="fieldErrors('form.name')"
                             @input="$v.form.name.$touch()"
                             @blur="$v.form.name.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Name</span><span class="red--text">*</span>
+                            </template>
+                          </v-text-field>
                           <v-select
                             label="Tag type"
                             :items="tagTypeItems"
@@ -185,7 +189,11 @@ export default {
 
   watch: {
     dialog(val) {
-      val || this.close();
+      if (val) {
+        // this.$v.$touch();
+      } else {
+        this.close();
+      }
     },
 
     "$route.params.tagType": function(val) {
