@@ -330,7 +330,7 @@ export default {
         value: "projectId"
       },
       { text: "Title", value: "title" },
-      { text: "Type", value: "resourceTypeLabel" },
+      { text: "Type", value: "typeName" },
       { text: "Duration", value: "duration" },
       { text: "Actions", value: "actions", sortable: false }
     ],
@@ -536,10 +536,7 @@ export default {
       this.filters.pageSize = this.pagination.pageSize;
       let res = await this.filterResources(this.filters);
       let data = Object.assign([], res.results);
-      this.resources = data.map((item, index) => {
-        let resourceTypeIndex = findIndex(this.resourceTypeItems, function(o) { return o.key == item.typeId; });
-        return { ...item, index, resourceTypeLabel: resourceTypeIndex > -1 ? this.resourceTypeItems[resourceTypeIndex].name : item.type }
-      });
+      this.resources = data;
       this.pagination.pageSize = res.pageSize;
       this.pagination.total = res.total;
       this.pagination.pageIndex = res.currentPage;
