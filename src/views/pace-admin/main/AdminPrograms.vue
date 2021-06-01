@@ -47,14 +47,22 @@
                             :error-messages="fieldErrors('form.projectId')"
                             @input="$v.form.projectId.$touch()"
                             @blur="$v.form.projectId.$touch()"
-                          ></v-select>
+                          >
+                            <template v-slot:label>
+                              <span>Project</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-select>
                           <v-text-field 
                             label="Title" 
                             v-model="form.title"
                             :error-messages="fieldErrors('form.title')"
                             @input="$v.form.title.$touch()"
                             @blur="$v.form.title.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Title</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                           <v-text-field 
                             label="Url" 
                             v-model="form.url"
@@ -78,7 +86,11 @@
                             :items="filterTypeTags"
                             item-text="name"
                             item-value="id"
-                          ></v-select>
+                          >
+                            <template v-slot:label>
+                              <span>Type</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-select>
                           <v-select
                             v-model="form.capabilityCodes"
                             :items="capabilityCodeItems"
@@ -87,7 +99,11 @@
                             multiple
                             :error-messages="fieldErrors('form.capabilityCodes')"
                             @blur="$v.form.capabilityCodes.$touch()"
-                          ></v-select>
+                          >
+                            <template v-slot:label>
+                              <span>Capability Codes</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-select>
                           <v-autocomplete
                             v-model="form.tagFilterAudienceIds"
                             :items="filterAudienceTags"
@@ -138,7 +154,13 @@
                               :multiDrag="true"
                               selectedClass="bg-pace-grey"
                             >
-                              <v-list-item v-for="listItem in selectedModules" :key="listItem.id" @click.prevent>
+                              <v-list-item 
+                                v-for="(listItem, index) in selectedModules" 
+                                :key="listItem.id"
+                                :ref="`selected-${listItem.id}`"
+                                @click.prevent
+                                @keydown="selectedItemKeyDownHandler($event, index)"
+                              >
                                 <v-list-item-avatar>
                                   <img :src="listItem.projectLogo" />
                                 </v-list-item-avatar>
@@ -177,9 +199,10 @@
                               selectedClass="bg-pace-grey"
                             >
                               <v-list-item
-                                v-for="(listItem) in totalResources" 
+                                v-for="(listItem, index) in totalResources" 
                                 :key="listItem.id" 
                                 @click.prevent
+                                @keydown="keyDownHandler($event, index)"
                               >
                                 <v-list-item-avatar>
                                   <img :src="listItem.projectLogo" />
@@ -411,6 +434,28 @@ export default {
     ...mapActions("project", ["getProjects"]),
     ...mapActions("resource", ["getResources", "filterResources", "addResource", "getResourceDetail", "deleteResource", "updateResource"]),
     ...mapActions("tag", ["getTags"]),
+
+    keyDownHandler(event, index) {
+      console.log(event, index)
+    },
+
+    selectedItemKeyDownHandler(event, index) {
+      let selectedElement = this.$refs['selected-' + this.selectedModules[index].id][0];
+      Array.prototype.move = function (from, to) {
+        this.splice(to, 0, this.splice(from, 1)[0]);
+      };
+      console.log(selectedElement)
+      // selectedElement.click();
+      if (event.key == "ArrowUp") {
+        if (index > 0) {
+          this.selectedModules.move(index, index - 1);
+        }
+      } else if (event.key == "ArrowDown") {
+        if (index < this.selectedModules.length - 1) {
+          this.selectedModules.move(index, index + 1);
+        }
+      }
+    },
     
     async initialize() {
       this.isLoading = true;

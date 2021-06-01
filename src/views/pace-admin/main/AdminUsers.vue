@@ -61,7 +61,11 @@
                             :error-messages="fieldErrors('form.firstName')"
                             @input="$v.form.firstName.$touch()"
                             @blur="$v.form.firstName.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>First name</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6">
                           <v-text-field 
@@ -70,7 +74,11 @@
                             :error-messages="fieldErrors('form.lastName')"
                             @input="$v.form.lastName.$touch()"
                             @blur="$v.form.lastName.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Last name</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                         </v-col>
                         <v-col cols="12" md="12">
                           <v-text-field 
@@ -80,7 +88,11 @@
                             :error-messages="fieldErrors('form.email')"
                             @input="$v.form.email.$touch()"
                             @blur="$v.form.email.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Email</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                           <v-text-field 
                             label="Password" 
                             v-model="form.password"
@@ -89,14 +101,22 @@
                             @input="$v.form.password.$touch()"
                             @blur="$v.form.password.$touch()"
                             v-if="editedIndex === -1"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Password</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                           <v-text-field 
                             label="Phone number" 
                             v-model="form.phoneNumber"
                             :error-messages="fieldErrors('form.phoneNumber')"
                             @input="$v.form.phoneNumber.$touch()"
                             @blur="$v.form.phoneNumber.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Phone number</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                           <v-select
                             label="User type"
                             :items="userTypeItems"
@@ -107,7 +127,11 @@
                             :error-messages="fieldErrors('form.userType')"
                             @input="$v.form.userType.$touch()"
                             @blur="$v.form.userType.$touch()"
-                          ></v-select>
+                          >
+                            <template v-slot:label>
+                              <span>User type</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-select>
                         </v-col>
                       </v-row>
                     </v-container>

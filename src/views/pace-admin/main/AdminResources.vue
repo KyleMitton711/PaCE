@@ -46,14 +46,22 @@
                             :error-messages="fieldErrors('form.projectId')"
                             @input="$v.form.projectId.$touch()"
                             @blur="$v.form.projectId.$touch()"
-                          ></v-select>
+                          >
+                            <template v-slot:label>
+                              <span>Project</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-select>
                           <v-text-field 
                             label="Title" 
                             v-model="form.title"
                             :error-messages="fieldErrors('form.title')"
                             @input="$v.form.title.$touch()"
                             @blur="$v.form.title.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Title</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                           <v-text-field 
                             label="Url" 
                             v-model="form.url"
@@ -80,7 +88,11 @@
                             :items="filterTypeTags"
                             item-text="name"
                             item-value="id"
-                          ></v-select>
+                          >
+                            <template v-slot:label>
+                              <span>Type</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-select>
                         </v-col>
                         <v-col cols="12" md="6">
                           <v-text-field 
@@ -104,7 +116,11 @@
                             multiple
                             :error-messages="fieldErrors('form.capabilityCodes')"
                             @blur="$v.form.capabilityCodes.$touch()"
-                          ></v-select>
+                          >
+                            <template v-slot:label>
+                              <span>Capability Codes</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-select>
                           <v-autocomplete
                             v-model="form.tagFilterAudienceIds"
                             :items="filterAudienceTags"

@@ -19,6 +19,7 @@
   background-size: 65% 85vh;
   background-position: -100px -100px;
   background-repeat: no-repeat;
+  position: relative;
 }
 
 @media (max-width: 600px) {

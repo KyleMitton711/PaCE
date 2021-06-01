@@ -50,7 +50,7 @@
                             @blur="$v.form.name.$touch()"
                           >
                             <template v-slot:label>
-                              <span>Name</span><span class="red--text">*</span>
+                              <span>Name</span><span class="red--text ml-1">*</span>
                             </template>
                           </v-text-field>
                           <v-select

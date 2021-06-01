@@ -239,6 +239,7 @@ export default {
   background-size: 800px 800px;
   background-position: -400px -100px;
   background-repeat: no-repeat;
+  position: relative;
 }
 
 @media (min-width: 960px) {

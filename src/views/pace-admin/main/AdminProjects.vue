@@ -13,6 +13,7 @@
           :items-per-page="itemsPerPage"
           hide-default-footer
           @page-count="pageCount = $event"
+          @update:options="onOptionUpdated"
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
@@ -48,21 +49,33 @@
                             :error-messages="fieldErrors('form.name')"
                             @input="$v.form.name.$touch()"
                             @blur="$v.form.name.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Name</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                           <v-text-field
                             label="Abbreviation"
                             v-model="form.abbreviation"
                             :error-messages="fieldErrors('form.abbreviation')"
                             @input="$v.form.abbreviation.$touch()"
                             @blur="$v.form.abbreviation.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Abbreviation</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                           <v-text-field
                             label="ProjectLead"
                             v-model="form.projectLead"
                             :error-messages="fieldErrors('form.projectLead')"
                             @input="$v.form.projectLead.$touch()"
                             @blur="$v.form.projectLead.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>ProjectLead</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                           <v-textarea
                             label="Description"
                             v-model="form.description"
@@ -71,16 +84,25 @@
                             @blur="$v.form.description.$touch()"
                             :counter="1200"
                             :rows="4"
-                          ></v-textarea>
+                          >
+                            <template v-slot:label>
+                              <span>Description</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-textarea>
                           <v-text-field
                             label="Url"
                             v-model="form.url"
                             :error-messages="fieldErrors('form.url')"
                             @input="$v.form.url.$touch()"
                             @blur="$v.form.url.$touch()"
-                          ></v-text-field>
+                          >
+                            <template v-slot:label>
+                              <span>Url</span><span class="red--text ml-1">*</span>
+                            </template>
+                          </v-text-field>
                         </v-col>
                         <v-col cols="12" md="5" class="position-relative">
+                          <span>Logo</span><span class="red--text ml-1">*</span>
                           <vue-dropzone
                             ref="dropzone"
                             id="dropzone"
@@ -300,6 +322,11 @@ export default {
       "editProject",
       "deleteProject",
     ]),
+
+    onOptionUpdated(options) {
+      console.log(options)
+    },
+
     async initialize() {
       this.isLoading = true;
       this.page = 1;
@@ -395,7 +422,6 @@ export default {
   background-color: #939597
   max-width: 272px
   height: 272px
-  margin-left: auto
 
 ::v-deep .dropzone .dz-preview .dz-progress
   display: none

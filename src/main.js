@@ -14,7 +14,9 @@ import Notifications from 'vue-notification'
 import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
 import 'tiptap-vuetify/dist/main.css'
 import InfiniteLoading from 'vue-infinite-loading';
+import VueHotkey from 'v-hotkey'
 
+Vue.use(VueHotkey)
 Vue.use(InfiniteLoading, { /* options */ });
 Vue.use(TiptapVuetifyPlugin, {
   vuetify,
