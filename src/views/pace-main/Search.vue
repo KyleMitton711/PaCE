@@ -616,19 +616,19 @@ export default {
   flex-direction: row-reverse;
 }
 
-::v-deep .my-resources {
-  .v-list {
-    height: calc(100vh - 724px);
-    overflow-y: auto;
-  }
-}
+// ::v-deep .my-resources {
+//   .v-list {
+//     height: calc(100vh - 724px);
+//     overflow-y: auto;
+//   }
+// }
 
-::v-deep .resource-block {
-  .v-list {
-    max-height: calc(100vh - 160px);
-    overflow-x: scroll;
-  }
-}
+// ::v-deep .resource-block {
+//   .v-list {
+//     max-height: calc(100vh - 160px);
+//     overflow-x: scroll;
+//   }
+// }
 
 ::v-deep .resource-block, .my-resources {
 
@@ -682,9 +682,9 @@ export default {
     height: 100vh;
   }
 
-  .left-block {
-    min-height: calc(100vh - 86px);
-  }
+  // .left-block {
+  //   min-height: calc(100vh - 86px);
+  // }
 
   ::v-deep .my-resources {
     height: unset;
