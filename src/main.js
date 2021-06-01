@@ -13,7 +13,9 @@ import Notifications from 'vue-notification'
 // rich editor for vuetify
 import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
 import 'tiptap-vuetify/dist/main.css'
+import InfiniteLoading from 'vue-infinite-loading';
 
+Vue.use(InfiniteLoading, { /* options */ });
 Vue.use(TiptapVuetifyPlugin, {
   vuetify,
   iconsGroup: 'mdi'

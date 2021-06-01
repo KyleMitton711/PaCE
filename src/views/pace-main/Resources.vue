@@ -53,7 +53,7 @@
                   <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
                     Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id)">{{ item.items[0].title }}</a>
                   </p>
-                  <p class="mt-4" v-if="!item.isProgram"><b>Duration</b> {{ item.duration }}</p>
+                  <p class="mt-4" v-if="!item.isProgram && item.duration"><b>Duration</b> {{ item.duration }}</p>
                 </v-list-item-content>
 
                 <v-list-item-action>
@@ -62,6 +62,10 @@
                   </v-btn>
                 </v-list-item-action>
               </v-list-item>
+
+              <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
+                <div slot="no-more"></div>
+              </infinite-loading>
             </v-list>
             <template v-else>
               <p v-if="!isLoadingResource && resourceLoaded" class="px-2">
@@ -69,7 +73,7 @@
               </p>
             </template>
           </div>
-          <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-center" v-if="pagination.total">
+          <!-- <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-center" v-if="pagination.total">
             <v-btn color="bg-pace-yellow" fab small @click="prevPage" v-if="pagination.pageIndex > 1">
               <v-icon color="white">mdi-chevron-left</v-icon>
             </v-btn>
@@ -77,7 +81,7 @@
             <v-btn color="bg-pace-yellow" fab small @click="nextPage" v-if="pagination.pageIndex < Math.ceil(pagination.total / pagination.pageSize)">
               <v-icon color="white">mdi-chevron-right</v-icon>
             </v-btn>
-          </div>
+          </div> -->
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
             <Program @close-modal="closeResource" :resourceId="selectedResource.id" v-if="selectedResource && selectedResource.isProgram" />
             <Resource @close-modal="closeResource" :resourceId="selectedResource.id" v-else />
@@ -188,11 +192,27 @@ export default {
     },
 
     changeFilters() {
-      this.pagination.pageIndex = 1;
+      this.resources = [];
+      this.pagination = Object.assign({}, {
+        pageSize: 5,
+        pageIndex: 1,
+        total: null
+      });
+      this.pagination.pageSize = Math.floor((window.innerHeight - 200) / 90);
       this.viewResourceList();
     },
 
-    async viewResourceList() {
+    infiniteHandler($state) {
+      let totalPages = Math.ceil(this.pagination.total / this.pagination.pageSize);
+      if (totalPages > this.pagination.pageIndex) {
+        this.pagination.pageIndex ++;
+        this.viewResourceList($state);
+      } else {
+        $state.complete();
+      }
+    },
+
+    async viewResourceList($state = null) {
       this.isLoadingResource = true;
       this.filters['pageIndex'] = this.pagination.pageIndex;
       this.filters['pageSize'] = this.pagination.pageSize;
@@ -200,11 +220,10 @@ export default {
       let count = await this.getResourceCount(this.filters);
       let res = await this.filterResources(this.filters);
       this.resourceCount = count;
-      this.resources = Object.assign([], res.results);
-      this.resources.sort(function(a, b) {
-        if (a.title > b.title) return 1;
-        else return -1;
-      })
+      this.resources = [ ...this.resources, ...res.results];
+      if ($state) {
+        $state.loaded();
+      }
       this.pagination.pageSize = res.pageSize;
       this.pagination.total = res.total;
       this.pagination.pageIndex = res.currentPage;
@@ -271,6 +290,13 @@ export default {
 
 .v-list-item {
   padding: 0;
+}
+
+::v-deep .resource-list {
+  .v-list {
+    max-height: calc(100vh - 160px);
+    overflow-x: scroll;
+  }
 }
 
 ::v-deep .resource-list {
