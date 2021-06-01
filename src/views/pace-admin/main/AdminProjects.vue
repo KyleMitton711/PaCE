@@ -368,7 +368,6 @@ export default {
     async save() {
       if (this.editedIndex > -1) {
         let res = await this.editProject(this.form);
-        console.log(res)
         if (res.errors == null) {
           this.$notify({
             text: "Project updated successfully",

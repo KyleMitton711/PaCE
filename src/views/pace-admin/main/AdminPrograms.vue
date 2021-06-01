@@ -67,7 +67,7 @@
                             label="Url" 
                             v-model="form.url"
                           ></v-text-field>
-                          <p class="subtitle-1 mb-0">Overview</p>
+                          <p class="tiptap-label mb-0">Overview</p>
                           <tiptap-vuetify
                             v-model="form.overview"
                             placeholder="Overview"
@@ -497,6 +497,10 @@ export default {
 
     async deleteItem() {
       await this.deleteResource(this.selectedItemId);
+      this.$notify({
+        text: "Program deleted successfully",
+        type: "success",
+      });
       this.deleteConfirmDialog = false;
       this.pagination.pageIndex = 1;
       this.initialize();
@@ -520,8 +524,34 @@ export default {
       }
       if (this.editedIndex > -1) {
         let res = await this.updateResource(this.form);
+        if (res.errors == null) {
+          this.$notify({
+            text: "Program updated successfully",
+            type: "success",
+          });
+          this.initialize();
+          this.close();
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: "error",
+          });
+        }
       } else {
         let res = await this.addResource(this.form);
+        if (res.errors == null) {
+          this.$notify({
+            text: "Resource added successfully",
+            type: "success",
+          });
+          this.initialize();
+          this.close();
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: "error",
+          });
+        }
       }
       this.initialize();
       this.close();

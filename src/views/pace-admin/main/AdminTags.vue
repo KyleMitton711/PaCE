@@ -208,17 +208,13 @@ export default {
   },
 
   created() {
-    this.itemsPerPage = Math.floor((window.innerHeight - 200) / 55);
+    this.itemsPerPage = Math.floor((window.innerHeight - 300) / 55);
     this.tagType = parseInt(this.$route.params.tagType);
     this.form.tagType = this.tagType;
     this.defaultItem.tagType = this.tagType;
     let tagIndex = findIndex(this.tagTypeItems, (o) => { return o.key == this.tagType; });
     this.tagTypeLabel = this.tagTypeItems[tagIndex].pageTitle;
     this.initialize();
-  },
-
-  mounted() {
-    
   },
 
   methods: {
@@ -241,6 +237,10 @@ export default {
 
     async deleteItem() {
       await this.deleteTag(this.selectedItem);
+      this.$notify({
+        text: "Tag deleted successfully",
+        type: "success",
+      });
       this.deleteConfirmDialog = false;
       this.page = 1;
       this.initialize();
@@ -263,12 +263,35 @@ export default {
     async save() {
       if (this.editedIndex > -1) {
         let res = await this.updateTag(this.form);
-        this.initialize();
+        if (res.errors == null) {
+          this.$notify({
+            text: "Tag updated successfully",
+            type: "success",
+          });
+          this.initialize();
+          this.close();
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: "error",
+          });
+        }
       } else {
         let res = await this.addTag(this.form);
-        this.initialize();
+        if (res.errors == null) {
+          this.$notify({
+            text: "Project added successfully",
+            type: "success",
+          });
+          this.initialize();
+          this.close();
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: "error",
+          });
+        }
       }
-      this.close();
     },
 
     searchInput: debounce(async function () {

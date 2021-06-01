@@ -26,13 +26,18 @@ const actions = {
         return result.data;
     },
     async addTag ({ commit }, payload) {
-        let result = await TagService.addTag(payload);
-        commit("ADD_TAG", result.data);
-        return result.data;
+        return TagService.addTag(payload).then(res => {
+            return res.data;
+        }).catch(error => {
+            return error.data;
+        });
     },
     async updateTag ({ commit }, payload) {
-        let result = await TagService.updateTag(payload)
-        return result.data;
+        return TagService.updateTag(payload).then(res => {
+            return res.data;
+        }).catch(error => {
+            return error.data;
+        });
     },
     async deleteTag ({ commit }, payload) {
         let result = await TagService.deleteTag(payload);

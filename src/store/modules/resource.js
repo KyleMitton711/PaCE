@@ -30,16 +30,22 @@ const actions = {
         return result.data;
     },
     async addResource ({ commit }, payload = null) {
-        let result = await ResourceService.addResource(payload);
-        return result;
+        return ResourceService.addResource(payload).then(res => {
+            return res;
+        }).catch(error => {
+            return error.data;
+        });
     },
     async getResourceDetail ({ commit }, payload = null) {
         let result = await ResourceService.getResourceDetail(payload)
         return result.data;
     },
     async updateResource ({ commit }, payload) {
-        let result = await ResourceService.updateResource(payload);
-        return result;
+        return ResourceService.updateResource(payload).then(res => {
+            return res;
+        }).catch(error => {
+            return error.data;
+        });
     },
     async deleteResource ({ commit }, id) {
         let result = await ResourceService.deleteResource(id)

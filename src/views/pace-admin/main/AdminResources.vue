@@ -66,7 +66,7 @@
                             label="Url" 
                             v-model="form.url"
                           ></v-text-field>
-                          <p class="subtitle-1 mb-0">Overview</p>
+                          <p class="tiptap-label mb-0">Overview</p>
                           <tiptap-vuetify
                             v-model="form.overview"
                             placeholder="Overview"
@@ -101,7 +101,7 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12">
-                          <p class="subtitle-1 mb-0">Outcome</p>
+                          <p class="tiptap-label mb-0">Outcome</p>
                           <tiptap-vuetify
                             v-model="form.outcome"
                             placeholder="Outcome"
@@ -486,6 +486,10 @@ export default {
 
     async deleteItem() {
       await this.deleteResource(this.selectedItemId);
+      this.$notify({
+        text: "Resource deleted successfully",
+        type: "success",
+      });
       this.deleteConfirmDialog = false;
       this.pagination.pageIndex = 1;
       this.initialize();
@@ -507,8 +511,34 @@ export default {
           this.form.items = this.form.items.map(item => item.id);
         }
         let res = await this.updateResource(this.form);
+        if (res.errors == null) {
+          this.$notify({
+            text: "Resource updated successfully",
+            type: "success",
+          });
+          this.initialize();
+          this.close();
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: "error",
+          });
+        }
       } else {
         let res = await this.addResource(this.form);
+        if (res.errors == null) {
+          this.$notify({
+            text: "Resource added successfully",
+            type: "success",
+          });
+          this.initialize();
+          this.close();
+        } else {
+          this.$notify({
+            text: res.errors[0].errorMessage,
+            type: "error",
+          });
+        }
       }
       this.initialize();
       this.close();
