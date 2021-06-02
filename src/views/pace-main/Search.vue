@@ -3,7 +3,7 @@
     <v-row justify="center" class="full-height">
       <v-col lg="11" md="11" sm="8" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4">
-          <v-row>
+          <v-row class="bg-pace-yellow">
             <v-col lg="5" md="5" cols="12" class="pa-0 full-height-md d-flex flex-column pt-0 left-block">
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
