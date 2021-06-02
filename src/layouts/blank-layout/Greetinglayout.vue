@@ -30,10 +30,26 @@ export default {
 
 @media (max-width: 600px) {
   #search {
-    background: url('../../assets/PaCE_Spider_GraphicElement.png') #F15F35;
+    background: #F15F35;
+    position: relative;
+    .v-application--wrap {
+      z-index: 1;
+    }
+  }
+
+  #search::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: url('../../assets/PaCE_Spider_GraphicElement.png');
     background-size: 500px 700px;
     background-position: -200px -200px;
     background-repeat: no-repeat;
+    opacity: 0.6;
   }
 }
 </style>

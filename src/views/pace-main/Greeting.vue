@@ -8,7 +8,9 @@
       <v-col lg="11" md="11" sm="8" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4 pl-2 pr-2">
           <v-row>
-            <v-col lg="5" md="5" class="d-none d-md-flex full-height left-panel"></v-col>
+            <v-col lg="5" md="5" class="d-none d-md-flex pa-0 full-height left-panel">
+              <div></div>
+            </v-col>
             <v-col lg="7" md="7" class="pl-md-10">
               <div class="d-none d-md-flex mt-10 mb-16">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
@@ -235,11 +237,18 @@ export default {
 }
 
 .left-panel {
-  background: url("../../assets/PaCE_Spider_GraphicElement.png") #fdbb2a;
-  background-size: 800px 800px;
-  background-position: -400px -100px;
-  background-repeat: no-repeat;
+  background:#fdbb2a;
   position: relative;
+
+  div {
+    background: url("../../assets/PaCE_Spider_GraphicElement.png");
+    background-size: 800px 800px;
+    background-position: -400px -100px;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    opacity: 0.6;
+  }
 }
 
 @media (min-width: 960px) {

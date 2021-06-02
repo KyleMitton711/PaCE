@@ -44,7 +44,7 @@
           <v-tab-item>
             <div class="pa-4">
               <div v-for="(item, index) in programModules" :key="index">
-                <h3>{{item.title}}</h3>
+                <h3 aria-controls @click="goToModule(item)">{{item.title}}</h3>
                 <p class="pace-grey--text" v-html="item.overview"></p>
               </div>
             </div>
@@ -58,9 +58,10 @@
                 <h3 class="ml-4">{{ resourceType }}</h3>
               </div>
               <h3 class="mt-4"><a :href="resource.url" target="_blank">{{ resource.title }}</a></h3>
-              <p v-html="resource.overview" class="mt-6"></p>
+              <div v-html="resource.overview" class="mt-6"></div>
+              <p>{{ resource.endorsements }}</p>
               <p v-if="resource.outcome" class="mb-2">Learning theory / approach</p>
-              <p v-html="resource.outcome" class="mt-2"></p>
+              <div v-html="resource.outcome" class="mt-2"></div>
               <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0"><b>Audience:</b></p>
               <p class="mb-0">{{ selectedAudienceItems }}</p>
               <p class="mt-2 mb-0" v-if="selectedTypeItems.length > 0"><b>Type:</b></p>
@@ -178,6 +179,10 @@ export default {
         text: 'Link copied!',
         type: 'success'
       });
+    },
+
+    goToModule(item) {
+      this.$emit('view-module', item);
     }
   },
 
@@ -200,6 +205,12 @@ export default {
 
 ::v-deep .resource .theme--light.v-tabs-items {
   border: none;
+}
+
+.page-header-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media (max-width: 600px) {
