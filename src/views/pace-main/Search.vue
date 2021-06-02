@@ -192,21 +192,22 @@
               </template>
               <div class="d-flex justify-space-between mt-auto mb-5">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
-                <!-- <div class="text-right" v-if="pagination.total">
-                  <v-btn color="bg-pace-yellow" fab small @click="prevPage" v-if="pagination.pageIndex > 1">
-                    <v-icon color="white">mdi-chevron-left</v-icon>
-                  </v-btn>
-                  <span class="mx-2">{{ pagination.pageIndex }} / {{ Math.ceil(pagination.total / pagination.pageSize) }}</span>
-                  <v-btn color="bg-pace-yellow" fab small @click="nextPage" v-if="pagination.pageIndex < Math.ceil(pagination.total / pagination.pageSize)">
-                    <v-icon color="white">mdi-chevron-right</v-icon>
-                  </v-btn>
-                </div> -->
               </div>
             </v-col>
           </v-row>
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
-            <Program @close-modal="closeResource" :resourceId="selectedResource.id" v-if="selectedResource && selectedResource.isProgram" />
-            <Resource @close-modal="closeResource" :resourceId="selectedResource.id" v-else />
+            <Program 
+              @close-modal="closeResource" 
+              @view-module="viewModule"
+              :resourceId="selectedResource.id" 
+              v-if="selectedResource && selectedResource.isProgram" 
+            />
+            <Resource 
+              @close-modal="closeResource" 
+              :resourceId="selectedResource.id" 
+              :isModuleView="moduleMode" 
+              v-else 
+            />
           </v-dialog>
         </v-card>
       </v-col>
@@ -261,7 +262,8 @@ export default {
       total: null
     },
     isLoadingResource: false,
-    resourceLoaded: false
+    resourceLoaded: false,
+    moduleMode: false
   }),
 
   computed: {
@@ -338,7 +340,16 @@ export default {
       this.showResource = true;
     },
 
+    viewModule(item) {
+      this.showResource = false;
+      this.selectedResource = Object.assign({}, item);
+      this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
+      this.moduleMode = true;
+      this.showResource = true;
+    },
+
     closeResource() {
+      this.moduleMode = false;
       this.showResource = false;
       this.selectedResource = Object.assign({}, {
         id: null,

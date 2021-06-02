@@ -15,6 +15,6 @@
 
 <style lang="scss">
 #search {
-    background: url('../../assets/PaCE_Spider_GraphicElement.png') #F15F35;
+  background: url('../../assets/PaCE_Spider_GraphicElement.png') #F15F35;
 }
 </style>

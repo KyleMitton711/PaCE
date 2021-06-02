@@ -91,19 +91,6 @@
                               <span>Type</span><span class="red--text ml-1">*</span>
                             </template>
                           </v-select>
-                          <v-select
-                            v-model="form.capabilityCodes"
-                            :items="capabilityCodeItems"
-                            chips
-                            label="Capability Codes"
-                            multiple
-                            :error-messages="fieldErrors('form.capabilityCodes')"
-                            @blur="$v.form.capabilityCodes.$touch()"
-                          >
-                            <template v-slot:label>
-                              <span>Capability Codes</span><span class="red--text ml-1">*</span>
-                            </template>
-                          </v-select>
                           <v-autocomplete
                             v-model="form.tagFilterAudienceIds"
                             :items="filterAudienceTags"
@@ -282,8 +269,7 @@ export default {
     form: {
       projectId: { required },
       title: { required },
-      typeId: { required },
-      capabilityCodes: { required }
+      typeId: { required }
     }
   },
   validationMessages: {
@@ -296,9 +282,6 @@ export default {
       },
       typeId: {
         required: "Type is required"
-      },
-      capabilityCodes: {
-        required: "Capability Codes is required"
       }
     }
   },
@@ -330,7 +313,6 @@ export default {
       typeId: null,
       overview: null,
       isProgram: true,
-      capabilityCodes: [],
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],
@@ -345,7 +327,6 @@ export default {
       typeId: null,
       overview: null,
       isProgram: true,
-      capabilityCodes: [],
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],

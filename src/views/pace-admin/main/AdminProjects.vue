@@ -68,13 +68,7 @@
                           <v-text-field
                             label="ProjectLead"
                             v-model="form.projectLead"
-                            :error-messages="fieldErrors('form.projectLead')"
-                            @input="$v.form.projectLead.$touch()"
-                            @blur="$v.form.projectLead.$touch()"
                           >
-                            <template v-slot:label>
-                              <span>ProjectLead</span><span class="red--text ml-1">*</span>
-                            </template>
                           </v-text-field>
                           <v-textarea
                             label="Description"
@@ -233,8 +227,7 @@ export default {
       },
       abbreviation: { required },
       logo: { required },
-      url: { required },
-      projectLead: { required },
+      url: { required }
     },
   },
   validationMessages: {
@@ -250,8 +243,7 @@ export default {
         required: "Abbreviation is required",
       },
       logo: { required: "Logo is required" },
-      url: { required: "Url is required" },
-      projectLead: { required: "Project lead is required" },
+      url: { required: "Url is required" }
     },
   },
   components: {

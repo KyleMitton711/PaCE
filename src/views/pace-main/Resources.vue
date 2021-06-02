@@ -14,14 +14,14 @@
               </v-btn>
               <v-toolbar-title>{{ searchText ? `"${searchText}"` : "" }} {{ resourceCount }} Results</v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn text :class="filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0 ? 'pace-yellow--text' : 'pace-grey--text'" v-on:click = "onFilter()">
+              <v-btn text :class="filters && (filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0) ? 'pace-yellow--text' : 'pace-grey--text'" v-on:click = "onFilter()">
                   Filters
-                  <v-icon :class="filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0 ? 'pace-yellow--text' : 'pace-grey--text'">{{isShowFilter ? "mdi-filter-variant-minus" : "mdi-filter-variant"}}</v-icon>
+                  <v-icon :class="filters && (filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0) ? 'pace-yellow--text' : 'pace-grey--text'">{{isShowFilter ? "mdi-filter-variant-minus" : "mdi-filter-variant"}}</v-icon>
               </v-btn>
             </v-system-bar>
             
             <div class="pa-3 content-filter mb-3" v-if="isShowFilter">
-              <p v-if="filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0">Your filters:</p>
+              <p v-if="filters && (filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0)">Your filters:</p>
               <p v-else>No filters</p>
               <p v-if="filters && filters.tagFilterAudienceIds.length > 0">
                 <b>{{ filters.tagFilterAudienceIds.length }} Audiences:</b> {{ selectedAudienceItems }} 
@@ -65,8 +65,18 @@
             </v-btn>
           </div> -->
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
-            <Program @close-modal="closeResource" :resourceId="selectedResource.id" v-if="selectedResource && selectedResource.isProgram" />
-            <Resource @close-modal="closeResource" :resourceId="selectedResource.id" v-else />
+            <Program 
+              v-if="selectedResource && selectedResource.isProgram"
+              @close-modal="closeResource" 
+              :resourceId="selectedResource.id"
+              @view-module="viewModule"
+            />
+            <Resource 
+              v-else
+              @close-modal="closeResource" 
+              :resourceId="selectedResource.id" 
+              :isModuleView="moduleMode" 
+            />
           </v-dialog>
         </v-card>
       </v-col>
@@ -109,43 +119,50 @@ export default {
     resourceCount: null,
     searchText: null,
     isLoadingResource: false,
-    resourceLoaded: false
+    resourceLoaded: false,
+    moduleMode: false
   }),
   computed: {
     selectedAudienceItems() {
-      let nameArray = this.filters.tagFilterAudienceIds.map(id => {
-        for (let i = 0; i < this.audienceItems.length ; i ++) {
-          if (this.audienceItems[i].id == id) {
-            return this.audienceItems[i].name;
+      if (this.filters && this.filters.tagFilterAudienceIds) {
+        let nameArray = this.filters.tagFilterAudienceIds.map(id => {
+          for (let i = 0; i < this.audienceItems.length ; i ++) {
+            if (this.audienceItems[i].id == id) {
+              return this.audienceItems[i].name;
+            }
           }
-        }
-      });
+        });
 
-      return nameArray.join(', ');
+        return nameArray.join(', ');
+      } else return "";
     },
 
     selectedTypeItems() {
-      let nameArray = this.filters.tagFilterTypeIds.map(id => {
-        for (let i = 0; i < this.typeItems.length ; i ++) {
-          if (this.typeItems[i].id == id) {
-            return this.typeItems[i].name;
+      if (this.filters && this.filters.tagFilterTypeIds) {
+        let nameArray = this.filters.tagFilterTypeIds.map(id => {
+          for (let i = 0; i < this.typeItems.length ; i ++) {
+            if (this.typeItems[i].id == id) {
+              return this.typeItems[i].name;
+            }
           }
-        }
-      });
+        });
 
-      return nameArray.join(', ');
+        return nameArray.join(', ');
+      } else return "";
     },
 
     selectedModeItems() {
-      let nameArray = this.filters.tagFilterModeIds.map(id => {
-        for (let i = 0; i < this.modeItems.length ; i ++) {
-          if (this.modeItems[i].id == id) {
-            return this.modeItems[i].name;
+      if (this.filters && this.filters.tagFilterModeIds) {
+        let nameArray = this.filters.tagFilterModeIds.map(id => {
+          for (let i = 0; i < this.modeItems.length ; i ++) {
+            if (this.modeItems[i].id == id) {
+              return this.modeItems[i].name;
+            }
           }
-        }
-      });
+        });
 
-      return nameArray.join(', ');
+        return nameArray.join(', ');
+      } else return "";
     },
   },
   methods: {
@@ -196,6 +213,14 @@ export default {
       }
     },
 
+    viewModule(item) {
+      this.showResource = false;
+      this.selectedResource = Object.assign({}, item);
+      this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
+      this.moduleMode = true;
+      this.showResource = true;
+    },
+
     async viewResourceList($state = null) {
       this.isLoadingResource = true;
       this.filters['pageIndex'] = this.pagination.pageIndex;
@@ -220,6 +245,7 @@ export default {
     },
 
     closeResource() {
+      this.moduleMode = false;
       this.showResource = false;
       this.selectedResource = Object.assign({}, {
         id: null,
