@@ -47,6 +47,7 @@
               />
               <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
                 <div slot="no-more"></div>
+                <div slot="no-results"></div>
               </infinite-loading>
             </v-list>
             <template v-else>

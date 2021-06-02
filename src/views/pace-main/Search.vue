@@ -173,7 +173,7 @@
             </v-col>
             
             <v-col lg="7" md="7" cols="12" class="resource-block pa-2 white pa-md-5 d-flex flex-column">
-              <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0">
+              <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0 && !isMobile">
                 <ResourceListItem
                   v-for="(item, i) in resources"
                   :key="i + item.title"
@@ -183,10 +183,11 @@
                 />
                 <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
                   <div slot="no-more"></div>
+                  <div slot="no-results"></div>
                 </infinite-loading>
               </v-list>
               <template v-else>
-                <p v-if="!isLoadingResource" class="no-more-text">
+                <p v-if="!isLoadingResource && !isMobile" class="no-more-text">
                   There are no matching results. Please try clearing some filters and keywords from your search.
                 </p>
               </template>
@@ -263,7 +264,8 @@ export default {
     },
     isLoadingResource: false,
     resourceLoaded: false,
-    moduleMode: false
+    moduleMode: false,
+    isMobile: false
   }),
 
   computed: {
@@ -462,16 +464,49 @@ export default {
       this.capabilityString = null;
       localStorage.removeItem('selectedCapabilities');
       localStorage.removeItem('selectedResource');
+    },
+
+    async onResize() {
+      if (window.innerWidth < 600) {
+        if (!this.isMobile) {
+          if (this.user) {
+            let res = await this.getCurrentResources();
+            if (window.innerWidth < 600) {
+              this.resources = res.data;
+            } else {
+              this.myResources = res.data;
+            }
+          }
+          this.changeFilters();
+        }
+        this.isMobile = true;
+      } else {
+        if (this.isMobile) {
+          if (this.user) {
+            let res = await this.getCurrentResources();
+            if (window.innerWidth < 600) {
+              this.resources = res.data;
+            } else {
+              this.myResources = res.data;
+            }
+          }
+          this.changeFilters();
+        }
+        this.isMobile = false;
+      }
     }
   },
 
   watch: {
     showResource(val) {
       val || this.closeResource();
-    }
+    },
   },
 
   async mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    })
     this.selectedCapabilities = JSON.parse(localStorage.getItem('selectedCapabilities'));
     this.selectedResourceFilter = parseInt(localStorage.getItem('selectedResource'));
     let filters = JSON.parse(localStorage.getItem('filters'));
@@ -500,6 +535,10 @@ export default {
     this.typeItems = await this.getTags('FilterType');
     this.modeItems = await this.getTags('FilterMode');
     this.changeFilters();
+
+    if (window.innerWidth < 600) {
+      this.isMobile = true;
+    } else this.isMobile = false;
 
     if (this.user) {
       let res = await this.getCurrentResources();

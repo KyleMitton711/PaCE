@@ -69,6 +69,7 @@
                             v-model="form.logo"
                             :hint="'https://materialdesignicons.com/'"
                             persistent-hint
+                            :append-icon="form.logo ? 'mdi-' + form.logo : ''"
                           >
                             <template v-slot:message="{ }">
                               <a target="_blank" href="https://materialdesignicons.com/">https://materialdesignicons.com</a>
