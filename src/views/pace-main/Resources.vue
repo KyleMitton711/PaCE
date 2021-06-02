@@ -38,31 +38,13 @@
             </div>
             
             <v-list two-line subheader class="pt-5 mb-10 px-3" v-if="resources.length > 0">
-              <v-list-item
+              <ResourceListItem
                 v-for="(item, i) in resources"
-                :key="i"
-                :class="item['status'] ? 'opened' : 'closed'"
-              >
-                <v-list-item-avatar tile size="64">
-                  <img :src="item.projectLogo" />
-                </v-list-item-avatar>
-
-                <v-list-item-content>
-                  <span class="black--text " @click="viewResource(i)">{{item.title}}</span>
-                  <p v-html="item.overview" class="mt-6 overview"></p>
-                  <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
-                    Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id)">{{ item.items[0].title }}</a>
-                  </p>
-                  <p class="mt-4" v-if="!item.isProgram && item.duration"><b>Duration</b> {{ item.duration }}</p>
-                </v-list-item-content>
-
-                <v-list-item-action>
-                  <v-btn icon @click="toggleResource(i)">
-                    <v-icon color="grey lighten-1">{{item['status'] ? "mdi-chevron-up" : "mdi-chevron-down"}}</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-
+                :key="i + 'resources'"
+                :item="item"
+                @view-resource="viewResource(item)"
+                @view-program="viewProgram(item)"
+              />
               <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
                 <div slot="no-more"></div>
               </infinite-loading>
@@ -98,12 +80,14 @@ import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 import Resource from '@/components/Pace-resource/Resource'
 import Program from '@/components/Pace-resource/Program'
+import ResourceListItem from '@/components/customComponents/ResourceListItem'
 
 export default {
   name: "Resources",
   components: {
     Resource,
-    Program
+    Program,
+    ResourceListItem
   },
   data: () => ({
     resources: [],
@@ -177,8 +161,8 @@ export default {
       this.resources = Object.assign([], tmp);
     },
 
-    viewResource(i) {
-      this.selectedResource = Object.assign({}, this.resources[i]);
+    viewResource(item) {
+      this.selectedResource = Object.assign({}, item);
       this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
       this.showResource = true;
     },
