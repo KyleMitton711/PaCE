@@ -161,60 +161,26 @@
               <div class="d-flex bg-pace-orange flex-column my-resources" v-if="user">
                 <h3 class="white--text pa-2">My resources</h3>
                 <v-list two-line subheader class="pa-2" v-if="myResources.length > 0">
-                  <v-list-item
+                  <ResourceListItem
                     v-for="(item, i) in myResources"
-                    :key="i"
-                    :class="item['status'] ? 'opened' : 'closed'"
-                  >
-                    <v-list-item-avatar tile size="64">
-                      <img :src="item.projectLogo">
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                      <span class="black--text " @click="viewResource(item)" aria-controls>{{item.title}}</span>
-                      <p v-html="item.overview" class="mt-6 overview"></p>
-                      <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
-                        Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id)">{{ item.items[0].title }}</a>
-                      </p>
-                      <p class="mt-3" v-if="!item.isProgram && item.duration">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
-                    </v-list-item-content>
-
-                    <v-list-item-action>
-                      <v-btn icon @click="toggleResource(true, i)">
-                        <v-icon color="grey lighten-1">{{item['status'] ? "mdi-chevron-up" : "mdi-chevron-down"}}</v-icon>
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
+                    :key="i + 'bookmarked'"
+                    :item="item"
+                    @view-resource="viewResource(item)"
+                    @view-program="viewProgram(item)"
+                  />
                 </v-list>
               </div>
             </v-col>
             
             <v-col lg="7" md="7" cols="12" class="resource-block pa-2 white pa-md-5 d-flex flex-column">
               <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0">
-                <v-list-item
+                <ResourceListItem
                   v-for="(item, i) in resources"
                   :key="i + item.title"
-                  :class="item['status'] ? 'opened' : 'closed'"
-                >
-                  <v-list-item-avatar tile size="64">
-                    <img :src="item.projectLogo">
-                  </v-list-item-avatar>
-
-                  <v-list-item-content>
-                    <span class="black--text " @click="viewResource(item)" aria-controls>{{item.title}}</span>
-                    <p v-html="item.overview" class="mt-6 overview"></p>
-                    <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
-                      Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id)">{{ item.items[0].title }}</a>
-                    </p>
-                    <p class="mt-3" v-if="!item.isProgram && item.duration"><b>Duration</b> {{ item.duration }}</p>
-                  </v-list-item-content>
-
-                  <v-list-item-action>
-                    <v-btn icon @click="toggleResource(false, i)">
-                      <v-icon color="grey lighten-1">{{item['status'] ? "mdi-chevron-up" : "mdi-chevron-down"}}</v-icon>
-                    </v-btn>
-                  </v-list-item-action>
-                </v-list-item>
+                  :item="item"
+                  @view-resource="viewResource(item)"
+                  @view-program="viewProgram(item)"
+                />
                 <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
                   <div slot="no-more"></div>
                 </infinite-loading>
@@ -253,6 +219,7 @@ import { capabilityCodes } from "@/data/capabilitycodes";
 import { mapGetters, mapActions } from 'vuex'
 import Resource from '@/components/Pace-resource/Resource'
 import Program from '@/components/Pace-resource/Program'
+import ResourceListItem from '@/components/customComponents/ResourceListItem'
 import debounce from 'debounce'
 
 export default {
@@ -260,7 +227,8 @@ export default {
 
   components: {
     Resource,
-    Program
+    Program,
+    ResourceListItem
   },
 
   data: () => ({
@@ -288,7 +256,7 @@ export default {
     search: null,
     selectedCapabilityCodeStrings: [],
     pagination: {
-      pageSize: 5,
+      pageSize: 10,
       pageIndex: 1,
       total: null
     },
@@ -422,11 +390,10 @@ export default {
     changeFilters: debounce(async function () {
       this.resources = [];
       this.pagination = Object.assign({}, {
-        pageSize: 5,
+        pageSize: 10,
         pageIndex: 1,
         total: null
       });
-      this.pagination.pageSize = Math.floor((window.innerHeight - 200) / 90);
       let payload = {
         tagFilterAudienceIds: this.audience,
         tagFilterTypeIds: this.type,
@@ -494,7 +461,6 @@ export default {
   },
 
   async mounted() {
-    this.pagination.pageSize = Math.floor((window.innerHeight - 200) / 90);
     this.selectedCapabilities = JSON.parse(localStorage.getItem('selectedCapabilities'));
     this.selectedResourceFilter = parseInt(localStorage.getItem('selectedResource'));
     let filters = JSON.parse(localStorage.getItem('filters'));
@@ -580,6 +546,9 @@ export default {
   background: url('../../assets/PaCE_Spider_GraphicElement.png') #FDBB2A;
   background-size: 300px 300px;
   background-repeat: no-repeat;
+}
+
+.my-resources {
   flex: 1;
 }
 
@@ -614,59 +583,6 @@ export default {
 ::v-deep .v-input--checkbox .v-input__slot {
   display: flex;
   flex-direction: row-reverse;
-}
-
-// ::v-deep .my-resources {
-//   .v-list {
-//     height: calc(100vh - 724px);
-//     overflow-y: auto;
-//   }
-// }
-
-// ::v-deep .resource-block {
-//   .v-list {
-//     max-height: calc(100vh - 160px);
-//     overflow-x: scroll;
-//   }
-// }
-
-::v-deep .resource-block, .my-resources {
-
-  .v-list-item {
-    padding-left: 0;
-    &.closed {
-      height: 90px;
-      overflow: hidden;
-    }
-
-    &.opened {
-      height: auto;
-      transition: height 1s;
-    }
-  }
-
-  .v-list-item__avatar {
-    align-self: flex-start;
-  }
-
-  .v-list-item__action {
-    align-self: flex-start;
-  }
-
-  .v-list-item__content {
-    align-self: flex-start;
-    padding: 16px 0;
-
-    span {
-      font-size: 18px;
-    }
-
-    p {
-      color: #4a4a4a;
-      letter-spacing: .5px;
-      line-height: inherit;
-    }
-  }
 }
 
 .logo {
