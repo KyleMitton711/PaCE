@@ -10,6 +10,7 @@
           class="border" 
           :loading="isLoading" 
           loading-text="Loading... Please wait"
+          @update:options="onOptionUpdated"
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
@@ -330,7 +331,7 @@ export default {
         value: "projectId"
       },
       { text: "Title", value: "title" },
-      { text: "Type", value: "typeName" },
+      { text: "Type", value: "typeName", sortable: false },
       { text: "Duration", value: "duration" },
       { text: "Actions", value: "actions", sortable: false }
     ],
@@ -422,6 +423,10 @@ export default {
       pageIndex: 1,
       total: null
     },
+    sort: {
+      sortBy: null,
+      isDescending: true,
+    }
   }),
 
   computed: {
@@ -455,6 +460,13 @@ export default {
     ...mapActions("project", ["getProjects"]),
     ...mapActions("resource", ["filterResources", "addResource", "getResourceDetail", "deleteResource", "updateResource"]),
     ...mapActions("tag", ["getTags"]),
+
+    onOptionUpdated(options) {
+      console.log(options)
+      this.sort.sortBy = options.sortBy[0];
+      this.sort.isDescending = options.sortDesc[0];
+      this.loadResources();
+    },
     
     async initialize() {
       this.isLoading = true;
@@ -561,6 +573,9 @@ export default {
         this.filters['searchText'] = this.search;
       } else {
         delete this.filters['searchText'];
+      }
+      if (this.sort.sortBy) {
+        this.filters = { ...this.filters, ...this.sort };
       }
       this.filters.pageIndex = this.pagination.pageIndex;
       this.filters.pageSize = this.pagination.pageSize;

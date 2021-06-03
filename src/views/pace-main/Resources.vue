@@ -56,15 +56,6 @@
               </p>
             </template>
           </div>
-          <!-- <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-center" v-if="pagination.total">
-            <v-btn color="bg-pace-yellow" fab small @click="prevPage" v-if="pagination.pageIndex > 1">
-              <v-icon color="white">mdi-chevron-left</v-icon>
-            </v-btn>
-            <p class="pa-2 mb-0">{{ pagination.pageIndex }} / {{ Math.ceil(pagination.total / pagination.pageSize) }}</p>
-            <v-btn color="bg-pace-yellow" fab small @click="nextPage" v-if="pagination.pageIndex < Math.ceil(pagination.total / pagination.pageSize)">
-              <v-icon color="white">mdi-chevron-right</v-icon>
-            </v-btn>
-          </div> -->
           <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
             <Program 
               v-if="selectedResource && selectedResource.isProgram"

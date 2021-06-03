@@ -103,12 +103,11 @@ import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 import { mapGetters, mapActions } from 'vuex'
 import resourceDetailMixin from "@/mixins/resourceDetailMixin";
-import shareResourceMixin from "@/mixins/shareResourceMixin";
 
 export default {
   name: "Program",
 
-  mixins: [resourceDetailMixin, shareResourceMixin],
+  mixins: [resourceDetailMixin],
 
   props: {
     resourceId: String
@@ -172,14 +171,6 @@ export default {
 
   methods: {
     ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
-
-    shareResource() {
-      this.copyTextToClipboard('https://pcc4u.org.au/learning/topics/topic1/');
-      this.$notify({
-        text: 'Link copied!',
-        type: 'success'
-      });
-    },
 
     goToModule(item) {
       this.$emit('view-module', item);

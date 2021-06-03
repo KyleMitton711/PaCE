@@ -10,6 +10,7 @@
           :loading="isLoading"
           :items-per-page="pagination.PageSize"
           loading-text="Loading... Please wait"
+          @update:options="onOptionUpdated"
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
@@ -269,7 +270,7 @@ export default {
       { text: "Name", value: "name", sortable: false },
       { text: "Email", value: "email" },
       { text: "Phone number", value: "phoneNumber" },
-      { text: "User type", value: "userType" },
+      { text: "User type", value: "userType", sortable: false },
       { text: "Archived", value: "archived" },
       { text: "Actions", value: "actions", sortable: false }
     ],
@@ -318,6 +319,10 @@ export default {
       PageIndex: 1,
       PageSize: 10,
       total: null
+    },
+    sort: {
+      sortBy: null,
+      isDescending: true,
     }
   }),
 
@@ -343,6 +348,13 @@ export default {
 
   methods: {
     ...mapActions("user", ["getUsers", "addUser", "updateUser", "deleteUser"]),
+    
+    onOptionUpdated(options) {
+      this.sort.sortBy = options.sortBy[0];
+      this.sort.isDescending = options.sortDesc[0];
+      this.initialize();
+    },
+
     async initialize() {
       this.isLoading = true;
       let payload = {
@@ -350,6 +362,9 @@ export default {
         PageSize: this.pagination.PageSize,
         SearchText: this.search
       };
+      if (this.sort.sortBy) {
+        payload = { ...payload, ...this.sort };
+      }
       if (this.search == null || this.search.length == 0) {
         delete payload['SearchText'];
       }

@@ -44,6 +44,9 @@ export default class UserService {
     if (payload.SearchText) {
       url += '&SearchText=' + payload.SearchText;
     }
+    if (payload.sortBy) {
+      url += '&SortBy=' + payload.sortBy + '&IsDescending=' + payload.isDescending;
+    }
     let res = await API.get(url, headers);
     return res.data;
   }

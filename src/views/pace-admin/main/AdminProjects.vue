@@ -13,7 +13,6 @@
           :items-per-page="itemsPerPage"
           hide-default-footer
           @page-count="pageCount = $event"
-          @update:options="onOptionUpdated"
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
@@ -200,15 +199,10 @@
 
 <script>
 import vue2Dropzone from "vue2-dropzone";
-import Vue from "vue";
 import { mapActions } from "vuex";
 import {
   required,
-  requiredIf,
   maxLength,
-  minLength,
-  email,
-  numeric,
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
 import fileuploadMixin from "@/mixins/fileuploadMixin";
@@ -314,10 +308,6 @@ export default {
       "editProject",
       "deleteProject",
     ]),
-
-    onOptionUpdated(options) {
-      console.log(options)
-    },
 
     async initialize() {
       this.isLoading = true;

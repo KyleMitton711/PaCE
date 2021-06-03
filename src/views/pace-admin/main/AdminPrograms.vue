@@ -10,6 +10,7 @@
           :loading="isLoading"
           :items-per-page="pagination.pageSize"
           loading-text="Loading... Please wait"
+          @update:options="onOptionUpdated"
         >
           <template v-slot:top>
             <v-toolbar flat color="white">
@@ -299,7 +300,7 @@ export default {
         value: "projectId"
       },
       { text: "Title", value: "title" },
-      { text: "Type", value: "typeName" },
+      { text: "Type", value: "typeName", sortable: false },
       { text: "Actions", value: "actions", sortable: false }
     ],
     resources: [],
@@ -381,7 +382,11 @@ export default {
       total: null
     },
     resourceKeyword: null,
-    isModuleLoading: false
+    isModuleLoading: false,
+    sort: {
+      sortBy: null,
+      isDescending: true,
+    }
   }),
 
   computed: {
@@ -418,6 +423,12 @@ export default {
 
     keyDownHandler(event, index) {
       console.log(event, index)
+    },
+
+    onOptionUpdated(options) {
+      this.sort.sortBy = options.sortBy[0];
+      this.sort.isDescending = options.sortDesc[0];
+      this.loadPrograms();
     },
 
     selectedItemKeyDownHandler(event, index) {
@@ -571,6 +582,9 @@ export default {
         this.filters['searchText'] = this.search;
       } else {
         delete this.filters['searchText'];
+      }
+      if (this.sort.sortBy) {
+        this.filters = { ...this.filters, ...this.sort };
       }
       this.filters['isProgram'] = true;
       this.filters.pageIndex = this.pagination.pageIndex;

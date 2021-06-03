@@ -52,12 +52,6 @@
                     submit
                     @click="submit"
                   >Sign In</v-btn>
-
-                  <!-- <div class="d-block d-sm-flex align-center mb-4 mb-sm-0 mt-4">
-                    <div class="ml-auto text-center">
-                      <a href="/auth/register" class="link">Create your account</a>
-                    </div>
-                  </div> -->
                 </v-form>
               </div>
             </v-col>
@@ -80,7 +74,6 @@ export default {
     show1: false,
     passwordRules: [
       v => !!v || "Password is required",
-      // v => (v && v.length <= 10) || "Password must be less than 10 characters"
     ],
     email: "",
     emailRules: [

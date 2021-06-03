@@ -158,7 +158,7 @@
                   </v-tab-item>
                 </v-tabs-items>
               </div>
-              <div class="d-flex bg-pace-orange flex-column my-resources" v-if="user">
+              <div class="d-flex bg-pace-orange flex-column my-resources" v-if="user && isMobile">
                 <h3 class="white--text pa-2">My resources</h3>
                 <v-list two-line subheader class="pa-2" v-if="myResources.length > 0">
                   <ResourceListItem
@@ -173,24 +173,72 @@
             </v-col>
             
             <v-col lg="7" md="7" cols="12" class="resource-block pa-2 white pa-md-5 d-flex flex-column">
-              <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0 && !isMobile">
-                <ResourceListItem
-                  v-for="(item, i) in resources"
-                  :key="i + item.title"
-                  :item="item"
-                  @view-resource="viewResource(item)"
-                  @view-program="viewProgram(item)"
-                />
-                <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
-                  <div slot="no-more"></div>
-                  <div slot="no-results"></div>
-                </infinite-loading>
-              </v-list>
-              <template v-else>
-                <p v-if="!isLoadingResource && !isMobile" class="no-more-text">
-                  There are no matching results. Please try clearing some filters and keywords from your search.
-                </p>
-              </template>
+              <div v-if="!isMobile">
+                <template v-if="user">
+                  <v-tabs grow v-model="resourceListTab" color="white" slider-color="#FDBB2A" background-color="bg-pace-grey">
+                    <v-tab>Results</v-tab>
+                    <v-tab>My Resources</v-tab>
+                  </v-tabs>
+
+                  <v-tabs-items v-model="resourceListTab">
+                    <v-tab-item>
+                      <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0">
+                        <ResourceListItem
+                          v-for="(item, i) in resources"
+                          :key="i + item.title"
+                          :item="item"
+                          @view-resource="viewResource(item)"
+                          @view-program="viewProgram(item)"
+                        />
+                        <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
+                          <div slot="no-more"></div>
+                          <div slot="no-results"></div>
+                        </infinite-loading>
+                      </v-list>
+                      <template v-else>
+                        <p v-if="!isLoadingResource" class="no-more-text">
+                          There are no matching results. Please try clearing some filters and keywords from your search.
+                        </p>
+                      </template>
+                    </v-tab-item>
+                    <v-tab-item>
+                      <v-list two-line subheader class="pa-2" v-if="myResources.length > 0">
+                        <ResourceListItem
+                          v-for="(item, i) in myResources"
+                          :key="i + 'bookmarked'"
+                          :item="item"
+                          @view-resource="viewResource(item)"
+                          @view-program="viewProgram(item)"
+                        />
+                      </v-list>
+                      <p class="no-more-text" v-else>
+                        Resources can be kept for later reference. Simply tap the bookmark (Symbol).
+                      </p>
+                    </v-tab-item>
+                  </v-tabs-items>
+                </template>
+                <template v-else>
+                  <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0">
+                    <ResourceListItem
+                      v-for="(item, i) in resources"
+                      :key="i + item.title"
+                      :item="item"
+                      @view-resource="viewResource(item)"
+                      @view-program="viewProgram(item)"
+                    />
+                    <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
+                      <div slot="no-more"></div>
+                      <div slot="no-results"></div>
+                    </infinite-loading>
+                  </v-list>
+                  <template v-else>
+                    <p v-if="!isLoadingResource" class="no-more-text">
+                      There are no matching results. Please try clearing some filters and keywords from your search.
+                    </p>
+                  </template>
+                </template>
+              </div>
+              
               <div class="d-flex justify-space-between mt-auto mb-5">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
               </div>
@@ -265,7 +313,8 @@ export default {
     isLoadingResource: false,
     resourceLoaded: false,
     moduleMode: false,
-    isMobile: false
+    isMobile: false,
+    resourceListTab: 0
   }),
 
   computed: {
@@ -568,56 +617,58 @@ export default {
   display: none!important;
 }
 
-::v-deep .v-tab {
-  color: #757575;
-  font-weight: normal;
-  font-size: 16px;
-  text-transform: capitalize;
-  letter-spacing: 0;
-  text-align: center;
-  padding: 0;
-}
+.left-block {
+  ::v-deep .v-tab {
+    color: #757575;
+    font-weight: normal;
+    font-size: 16px;
+    text-transform: capitalize;
+    letter-spacing: 0;
+    text-align: center;
+    padding: 0;
+  }
 
-::v-deep .v-tab::after {
-  content: '';
-  width: 100%;
-  height: 2px;
-  background-color: currentColor;
-  position: absolute;
-  bottom: 0;
-}
+  ::v-deep .v-tab::after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background-color: currentColor;
+    position: absolute;
+    bottom: 0;
+  }
 
-::v-deep .v-tab--active {
-  background-color: transparent;
-  color: white;
-}
+  ::v-deep .v-tab--active {
+    background-color: transparent;
+    color: white;
+  }
 
-.search-info {
-  background: url('../../assets/PaCE_Spider_GraphicElement.png') #FDBB2A;
-  background-size: 300px 300px;
-  background-repeat: no-repeat;
+  .search-info {
+    background: url('../../assets/PaCE_Spider_GraphicElement.png') #FDBB2A;
+    background-size: 300px 300px;
+    background-repeat: no-repeat;
+  }
+
+  ::v-deep .theme--light.v-tabs > .v-tabs-bar {
+    background-color: transparent;
+  }
+
+  ::v-deep .theme--light.v-tabs-items {
+    border-radius: 4px;
+    border: 1px solid #B2B2B2;
+  }
+
+  .tab-content {
+    color: #4a4a4a;
+    height: 400px;
+    overflow-y: auto;
+    .capability-link {
+      color: #4a4a4a;
+    }
+  }
 }
 
 .my-resources {
   flex: 1;
-}
-
-::v-deep .theme--light.v-tabs > .v-tabs-bar {
-  background-color: transparent;
-}
-
-::v-deep .theme--light.v-tabs-items {
-  border-radius: 4px;
-  border: 1px solid #B2B2B2;
-}
-
-.tab-content {
-  color: #4a4a4a;
-  height: 400px;
-  overflow-y: auto;
-  .capability-link {
-    color: #4a4a4a;
-  }
 }
 
 .more-filters {
