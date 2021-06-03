@@ -248,6 +248,9 @@
             <v-icon small class="mr-2 pace-yellow--text" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small class="pace-orange--text" @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
           </template>
+          <template slot="item.title" slot-scope="{ item }">
+            <span class="font-weight-bold">{{ item.title }}</span>
+          </template>
           <template slot="item.projectId" slot-scope="{ item }">
             {{ getProjectName(item.projectId) }}
           </template>

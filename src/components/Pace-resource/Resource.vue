@@ -14,12 +14,19 @@
               {{ isModuleView ? 'Module ' + (resource && resource.items[0].itemNum) + ' : ' : '' }}
               {{ resource && resource.title }}
             </span>
-            <v-icon
-              class="pace-yellow--text bookmark-icon ml-auto"
-              size="30"
-              aria-controls
-              @click="toggleBookmark"
-            >{{ resource.isBookmark ? 'mdi-bookmark' : 'mdi-bookmark-outline' }}</v-icon>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  class="pace-yellow--text bookmark-icon ml-auto"
+                  size="30"
+                  aria-controls
+                  @click="toggleBookmark"
+                  v-bind="attrs"
+                  v-on="on"
+                >{{ resource.isBookmark ? 'mdi-bookmark' : 'mdi-bookmark-outline' }}</v-icon>
+              </template>
+              <span>Add to 'My Resources'</span>
+            </v-tooltip>
           </div>
           <div class="d-none d-sm-block">
             <v-icon

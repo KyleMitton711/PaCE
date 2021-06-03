@@ -223,6 +223,9 @@
           <template slot="item.projectId" slot-scope="{ item }">
             {{ getProjectName(item.projectId) }}
           </template>
+          <template slot="item.title" slot-scope="{ item }">
+            <span class="font-weight-bold">{{ item.title }}</span>
+          </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reload</v-btn>
           </template>

@@ -148,6 +148,9 @@
               </v-dialog>
             </v-toolbar>
           </template>
+          <template slot="item.name" slot-scope="{ item }">
+            <span class="font-weight-bold">{{ item.name }}</span>
+          </template>
           <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2 pace-yellow--text" @click="editItem(item)"
               >mdi-pencil</v-icon

@@ -296,8 +296,8 @@ export default {
 
 ::v-deep .resource-list {
   .v-list {
-    max-height: calc(100vh - 160px);
-    overflow-x: scroll;
+    // max-height: calc(100vh - 160px);
+    // overflow-x: scroll;
   }
 }
 

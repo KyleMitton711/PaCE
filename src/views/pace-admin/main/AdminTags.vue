@@ -12,6 +12,8 @@
           loading-text="Loading... Please wait"
           :page.sync="page"
           :items-per-page="itemsPerPage"
+          sort-by="name"
+          :sort-desc.sync="sortDesc"
           hide-default-footer
           @page-count="pageCount = $event"
           :search="search"
@@ -92,6 +94,9 @@
           <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2 pace-yellow--text" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small class="pace-orange--text" @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
+          </template>
+          <template slot="item.name" slot-scope="{ item }">
+            <span class="font-weight-bold">{{ item.name }}</span>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reload</v-btn>
@@ -180,7 +185,8 @@ export default {
     pageCount: 0,
     itemsPerPage: 15,
     tagType: null,
-    tagTypeLabel: null
+    tagTypeLabel: null,
+    sortDesc: false
   }),
   computed: {
     formTitle() {
@@ -204,6 +210,7 @@ export default {
       let tagIndex = findIndex(this.tagTypeItems, (o) => { return o.key == this.tagType; });
       this.tagTypeLabel = this.tagTypeItems[tagIndex].pageTitle;
       this.search = null;
+      this.sortDesc = false;
       this.initialize();
     }
   },

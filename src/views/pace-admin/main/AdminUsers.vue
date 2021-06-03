@@ -151,8 +151,8 @@
             <v-icon small class="mr-2 pace-yellow--text" @click="editItem(item)">mdi-pencil</v-icon>
             <v-icon small class="pace-orange--text" @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
           </template>
-          <template slot="item.name" slot-scope="{ item }">
-            {{ item.firstName + ' ' + item.lastName }}
+          <template slot="item.fullName" slot-scope="{ item }">
+            <span class="font-weight-bold">{{ item.fullName }}</span>
           </template>
           <template slot="item.userType" slot-scope="{ item }">
             {{ item.userTypeLabel }}
@@ -267,7 +267,7 @@ export default {
   data: () => ({
     dialog: false,
     headers: [
-      { text: "Name", value: "name", sortable: false },
+      { text: "Name", value: "fullName" },
       { text: "Email", value: "email" },
       { text: "Phone number", value: "phoneNumber" },
       { text: "User type", value: "userType", sortable: false },
