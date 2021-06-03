@@ -271,7 +271,7 @@ import Resource from '@/components/Pace-resource/Resource'
 import Program from '@/components/Pace-resource/Program'
 import ResourceListItem from '@/components/customComponents/ResourceListItem'
 import debounce from 'debounce'
-
+import { findIndex } from "lodash";
 export default {
   name: "Search",
 
@@ -515,6 +515,41 @@ export default {
       localStorage.removeItem('selectedResource');
     },
 
+    validFilters() {
+      let items = [];
+      for (let i = 0; i < this.audience.length; i ++) {
+        let index = findIndex(this.audienceItems, (e) => {
+            return e.id == this.audience[i];
+        }, 0);
+        if (index > -1) {
+          items.push(this.audience[i]);
+        }
+      }
+      this.audience = Object.assign([], items);
+
+      items = [];
+      for (let i = 0; i < this.type.length; i ++) {
+        let index = findIndex(this.typeItems, (e) => {
+            return e.id == this.type[i];
+        }, 0);
+        if (index > -1) {
+          items.push(this.type[i]);
+        }
+      }
+      this.type = Object.assign([], items);
+
+      items = [];
+      for (let i = 0; i < this.mode.length; i ++) {
+        let index = findIndex(this.modeItems, (e) => {
+            return e.id == this.mode[i];
+        }, 0);
+        if (index > -1) {
+          items.push(this.mode[i]);
+        }
+      }
+      this.mode = Object.assign([], items);
+    },
+
     async onResize() {
       if (window.innerWidth < 600) {
         if (!this.isMobile) {
@@ -552,6 +587,12 @@ export default {
     },
   },
 
+  created() {
+    if (window.innerWidth < 600) {
+      this.isMobile = true;
+    } else this.isMobile = false;
+  },
+
   async mounted() {
     this.$nextTick(() => {
       window.addEventListener('resize', this.onResize);
@@ -583,11 +624,8 @@ export default {
     this.audienceItems = await this.getTags('FilterAudience');
     this.typeItems = await this.getTags('FilterType');
     this.modeItems = await this.getTags('FilterMode');
+    this.validFilters();
     this.changeFilters();
-
-    if (window.innerWidth < 600) {
-      this.isMobile = true;
-    } else this.isMobile = false;
 
     if (this.user) {
       let res = await this.getCurrentResources();

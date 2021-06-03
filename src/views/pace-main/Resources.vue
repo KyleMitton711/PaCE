@@ -24,15 +24,15 @@
               <p v-if="filters && (filters.tagFilterAudienceIds.length > 0 || filters.tagFilterTypeIds.length > 0 || filters.tagFilterModeIds.length > 0)">Your filters:</p>
               <p v-else>No filters</p>
               <p v-if="filters && filters.tagFilterAudienceIds.length > 0">
-                <b>{{ filters.tagFilterAudienceIds.length }} Audiences:</b> {{ selectedAudienceItems }} 
+                <b>{{ filters.tagFilterAudienceIds.length }} Audience{{ filters.tagFilterAudienceIds.length > 1 ? 's' : '' }}:</b> {{ selectedAudienceItems }} 
                 <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterAudienceIds = [], changeFilters()">mdi-close</v-icon></span>
               </p>
               <p v-if="filters && filters.tagFilterTypeIds.length > 0">
-                <b>{{ filters.tagFilterTypeIds.length }} Types:</b> {{ selectedTypeItems }} 
+                <b>{{ filters.tagFilterTypeIds.length }} Type{{ filters.tagFilterTypeIds.length > 1 ? 's' : '' }}:</b> {{ selectedTypeItems }} 
                 <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterTypeIds = [], changeFilters()">mdi-close</v-icon></span>
               </p>
               <p v-if="filters && filters.tagFilterModeIds.length > 0">
-                <b>{{ filters.tagFilterModeIds.length }} Modes:</b> {{ selectedModeItems }} 
+                <b>{{ filters.tagFilterModeIds.length }} Mode{{ filters.tagFilterModeIds.length > 1 ? 's' : '' }}:</b> {{ selectedModeItems }} 
                 <span class="float-right pace-yellow--text"><v-icon @click="filters.tagFilterModeIds = [], changeFilters()">mdi-close</v-icon></span>
               </p>
             </div>
@@ -256,6 +256,47 @@ export default {
       if (this.pagination.pageIndex > 1) this.pagination.pageIndex --;
       this.viewResourceList();
     },
+
+    validFilters() {
+      let items = [];
+      if (this.filters && this.filters.tagFilterAudienceIds) {
+        for (let i = 0; i < this.filters.tagFilterAudienceIds.length; i ++) {
+          let index = findIndex(this.audienceItems, (e) => {
+              return e.id == this.filters.tagFilterAudienceIds[i];
+          }, 0);
+          if (index > -1) {
+            items.push(this.filters.tagFilterAudienceIds[i]);
+          }
+        }
+        this.filters.tagFilterAudienceIds = Object.assign([], items);
+      }
+
+      if (this.filters && this.filters.tagFilterTypeIds) {
+        items = [];
+        for (let i = 0; i < this.filters.tagFilterTypeIds.length; i ++) {
+          let index = findIndex(this.typeItems, (e) => {
+              return e.id == this.filters.tagFilterTypeIds[i];
+          }, 0);
+          if (index > -1) {
+            items.push(this.filters.tagFilterTypeIds[i]);
+          }
+        }
+        this.filters.tagFilterTypeIds = Object.assign([], items);
+      }
+
+      if (this.filters && this.filters.tagFilterModeIds) {
+        items = [];
+        for (let i = 0; i < this.filters.tagFilterModeIds.length; i ++) {
+          let index = findIndex(this.modeItems, (e) => {
+              return e.id == this.filters.tagFilterModeIds[i];
+          }, 0);
+          if (index > -1) {
+            items.push(this.filters.tagFilterModeIds[i]);
+          }
+        }
+        this.filters.tagFilterModeIds = Object.assign([], items);
+      }
+    },
   },
 
   watch: {
@@ -277,6 +318,7 @@ export default {
     this.audienceItems = await this.getTags('FilterAudience');
     this.typeItems = await this.getTags('FilterType');
     this.modeItems = await this.getTags('FilterMode');
+    this.validFilters();
   }
 };
 </script>
