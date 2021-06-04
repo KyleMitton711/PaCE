@@ -67,7 +67,7 @@
               <h3 class="mt-4"><a :href="resource.url" target="_blank">{{ resource.title }}</a></h3>
               <div v-html="resource.overview" class="mt-6"></div>
               <p>{{ resource.endorsements }}</p>
-              <p v-if="resource.outcome" class="mb-2">Learning theory / approach</p>
+              <p v-if="resource.outcome" class="mb-2"><b>Learning theory / approach</b></p>
               <div v-html="resource.outcome" class="mt-2"></div>
               <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0"><b>Audience:</b></p>
               <p class="mb-0">{{ selectedAudienceItems }}</p>
@@ -117,22 +117,16 @@ export default {
   mixins: [resourceDetailMixin],
 
   props: {
-    resourceId: String
+    resourceId: String,
+    viewMode: {
+      type: String,
+      default: 'MODULES'
+    }
   },
 
   data: () => ({
     tab: null,
     isBookmarked: true,
-    modules: [{
-      title: 'Module1: The role of law in end of life care',
-      content: 'Describe the role of law in end of life clinical practice.'
-    },{
-      title: 'Module2: Capacity and consent to medical treatment',
-      content: 'Identify when consent to medical treatment is required and when it will be valid'
-    },{
-      title: 'Module item 3',
-      content: 'Secondary text'
-    }],
     resourceTypeItems: resourceTypeEnumItems,
     tagTypeItems: tagTypeEnumItems,
     resource: null,
@@ -173,6 +167,12 @@ export default {
           this.resource = await this.getResourceDetail(val);
         }
       }
+    },
+
+    viewMode(val) {
+      if (val == 'SUMMARY') {
+        this.tab = 1;
+      }
     }
   },
 
@@ -187,6 +187,9 @@ export default {
   async mounted() {
     if (this.resourceId) {
       this.resource = await this.getResourceDetail(this.resourceId);
+    }
+    if (this.viewMode == 'SUMMARY') {
+      this.tab = 1;
     }
   }
 };
@@ -209,6 +212,10 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.page-header-title-block {
+  width: calc(100% - 40px);
 }
 
 @media (max-width: 600px) {

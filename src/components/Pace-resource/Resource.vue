@@ -47,7 +47,7 @@
           </div>
           <h3 class="mt-4"><a :href="resource.url" target="_blank" >{{ isModuleView ? 'Module ' + (resource && resource.items[0].itemNum) + ' : ' : '' }} {{ resource.title }}</a></h3>
           <div v-html="resource.overview" class="mt-6"></div>
-          <p v-if="resource.outcome" class="mb-2">Learning theory / approach</p>
+          <p v-if="resource.outcome" class="mb-2"><b>Learning theory / approach</b></p>
           <div v-html="resource.outcome" class="mt-2"></div>
           
           <p class="mt-4" v-if="resource.duration"><b>Duration</b> {{ resource.duration }}</p>
@@ -137,7 +137,7 @@ export default {
     ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
     
     closeDialog() {
-      this.$emit('close-modal');
+      this.$emit('close-modal', this.isModuleView);
     }
   },
 
@@ -166,6 +166,10 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.page-header-title-block {
+  width: calc(100% - 40px);
 }
 
 @media (max-width: 600px) {

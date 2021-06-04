@@ -12,8 +12,8 @@ const tagTypeEnumItems = [{
     pageTitle: "Filter: Mode"
   }, {
     key: 21,
-    name: "ContentPadegogy",
-    pageTitle: "Content: Padegogy"
+    name: "ContentPedagogy",
+    pageTitle: "Content: Pedagogy"
   }, {
     key: 22,
     name: "ContentTopic",

@@ -159,12 +159,12 @@
                           >
                           </v-autocomplete>
                           <v-autocomplete
-                            v-model="form.tagContentPadegogyIds"
-                            :items="contentPadegogyTags"
+                            v-model="form.tagContentPedagogyIds"
+                            :items="contentPedagogyTags"
                             item-text="name"
                             item-value="id"
                             chips
-                            label="ContentPadegogy"
+                            label="ContentPedagogy"
                             multiple
                             deletable-chips
                             clearable
@@ -249,7 +249,7 @@
             <v-icon small class="pace-orange--text" @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
           </template>
           <template slot="item.title" slot-scope="{ item }">
-            <span class="font-weight-bold">{{ item.title }}</span>
+            <span class="font-weight-title">{{ item.title }}</span>
           </template>
           <template slot="item.projectId" slot-scope="{ item }">
             {{ getProjectName(item.projectId) }}
@@ -354,7 +354,7 @@ export default {
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],
-      tagContentPadegogyIds: [],
+      tagContentPedagogyIds: [],
       tagContentTopicIds: [],
       tagContentSymptomIds: [],
       tagContentIllnessIds: [],
@@ -375,7 +375,7 @@ export default {
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],
-      tagContentPadegogyIds: [],
+      tagContentPedagogyIds: [],
       tagContentTopicIds: [],
       tagContentSymptomIds: [],
       tagContentIllnessIds: [],
@@ -392,7 +392,7 @@ export default {
     filterAudienceTags: [],
     filterTypeTags: [],
     filterModeTags: [],
-    contentPadegogyTags: [],
+    contentPedagogyTags: [],
     contentTopicTags: [],
     contentSymptomTags: [],
     contentIllnessTags: [],
@@ -479,15 +479,19 @@ export default {
         let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
         return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
       });
-      this.filterAudienceTags = this.tags.filter(item => item.tagLabel == "FilterAudience");
-      this.filterTypeTags = this.tags.filter(item => item.tagLabel == "FilterType");
-      this.filterModeTags = this.tags.filter(item => item.tagLabel == "FilterMode");
-      this.contentPadegogyTags = this.tags.filter(item => item.tagLabel == "ContentPadegogy");
-      this.contentTopicTags = this.tags.filter(item => item.tagLabel == "ContentTopic");
-      this.contentSymptomTags = this.tags.filter(item => item.tagLabel == "ContentSymptom");
-      this.contentIllnessTags = this.tags.filter(item => item.tagLabel == "ContentIllness");
-      this.contentContextTags = this.tags.filter(item => item.tagLabel == "ContentContext");
-      this.contentRoleTags = this.tags.filter(item => item.tagLabel == "ContentRole");
+      var sortTags = function(a, b) {
+        if (a.name > b.name) return 1;
+        else return -1;
+      }
+      this.filterAudienceTags = this.tags.filter(item => item.tagLabel == "FilterAudience").sort(sortTags);
+      this.filterTypeTags = this.tags.filter(item => item.tagLabel == "FilterType").sort(sortTags);
+      this.filterModeTags = this.tags.filter(item => item.tagLabel == "FilterMode").sort(sortTags);
+      this.contentPedagogyTags = this.tags.filter(item => item.tagLabel == "ContentPedagogy").sort(sortTags);
+      this.contentTopicTags = this.tags.filter(item => item.tagLabel == "ContentTopic").sort(sortTags);
+      this.contentSymptomTags = this.tags.filter(item => item.tagLabel == "ContentSymptom").sort(sortTags);
+      this.contentIllnessTags = this.tags.filter(item => item.tagLabel == "ContentIllness").sort(sortTags);
+      this.contentContextTags = this.tags.filter(item => item.tagLabel == "ContentContext").sort(sortTags);
+      this.contentRoleTags = this.tags.filter(item => item.tagLabel == "ContentRole").sort(sortTags);
       this.loadResources();
       this.isLoading = false;
     },

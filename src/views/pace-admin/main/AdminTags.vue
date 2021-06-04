@@ -96,7 +96,7 @@
             <v-icon small class="pace-orange--text" @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
           </template>
           <template slot="item.name" slot-scope="{ item }">
-            <span class="font-weight-bold">{{ item.name }}</span>
+            <span class="font-weight-title">{{ item.name }}</span>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reload</v-btn>
@@ -211,6 +211,7 @@ export default {
       this.tagTypeLabel = this.tagTypeItems[tagIndex].pageTitle;
       this.search = null;
       this.sortDesc = false;
+      this.page = 1;
       this.initialize();
     }
   },

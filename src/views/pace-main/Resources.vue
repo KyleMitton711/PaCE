@@ -43,7 +43,7 @@
                 :key="i + 'resources'"
                 :item="item"
                 @view-resource="viewResource(item)"
-                @view-program="viewProgram(item)"
+                @view-program="viewProgram"
               />
               <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
                 <div slot="no-more"></div>
@@ -56,11 +56,12 @@
               </p>
             </template>
           </div>
-          <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
+          <v-dialog v-model="showResource" persistent content-class="resource-dialog ma-0">
             <Program 
               v-if="selectedResource && selectedResource.isProgram"
               @close-modal="closeResource" 
               :resourceId="selectedResource.id"
+              :viewMode="selectedResource.viewMode"
               @view-module="viewModule"
             />
             <Resource 
@@ -176,10 +177,11 @@ export default {
       this.showResource = true;
     },
 
-    viewProgram(id) {
+    viewProgram(id, viewMode) {
       this.selectedResource = {
         id: id,
-        isProgram: true
+        isProgram: true,
+        viewMode
       };
       this.showResource = true;
     },
@@ -236,13 +238,21 @@ export default {
       this.$router.push('/search');
     },
 
-    closeResource() {
+    closeResource(isModuleView = false) {
       this.moduleMode = false;
       this.showResource = false;
-      this.selectedResource = Object.assign({}, {
-        id: null,
-        items: []
-      });
+      if (isModuleView) {
+        this.selectedResource = Object.assign({}, {
+          id: this.selectedResource.programResourceId,
+          isProgram: true
+        });
+        this.showResource = true;
+      } else {
+        this.selectedResource = Object.assign({}, {
+          id: null,
+          items: []
+        });
+      }
     },
 
     nextPage() {
@@ -334,13 +344,6 @@ export default {
 
 .v-list-item {
   padding: 0;
-}
-
-::v-deep .resource-list {
-  .v-list {
-    // max-height: calc(100vh - 160px);
-    // overflow-x: scroll;
-  }
 }
 
 ::v-deep .resource-list {

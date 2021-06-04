@@ -42,7 +42,7 @@ export default [
       subGroup: true,
       children: [
         {
-          title: "Padegogy",
+          title: "Pedagogy",
           icon: "mdi-undefined",
           to: "21",
         }, {

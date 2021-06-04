@@ -14,7 +14,7 @@
 
       <div v-html="item.overview" v-if="item.overview" class="mt-2 overview mb-0"></div>
       <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
-        Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id)">{{ item.items[0].title }}</a>
+        Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id, 'SUMMARY')">{{ item.items[0].title }}</a>
       </p>
       <p class="mt-2 mb-0" v-if="!item.isProgram && item.duration">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
     </v-list-item-content>
@@ -48,8 +48,8 @@ export default {
       this.$emit('view-resource', item);
     },
 
-    viewProgram(item) {
-      this.$emit('view-program', item);
+    viewProgram(item, viewMode) {
+      this.$emit('view-program', item, viewMode);
     },
 
     toggleResource() {
@@ -97,15 +97,15 @@ export default {
   font-style: all-small-caps;
 }
 
-.v-list-item__avatar {
+::v-deep .v-list-item__avatar {
   align-self: flex-start;
 }
 
-.v-list-item__action {
+::v-deep .v-list-item__action {
   align-self: flex-start;
 }
 
-.v-list-item__content {
+::v-deep .v-list-item__content {
   align-self: flex-start;
   padding: 16px 0;
 

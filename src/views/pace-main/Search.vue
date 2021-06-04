@@ -166,7 +166,7 @@
                     :key="i + 'bookmarked'"
                     :item="item"
                     @view-resource="viewResource(item)"
-                    @view-program="viewProgram(item)"
+                    @view-program="viewProgram"
                   />
                 </v-list>
               </div>
@@ -188,7 +188,7 @@
                           :key="i + item.title"
                           :item="item"
                           @view-resource="viewResource(item)"
-                          @view-program="viewProgram(item)"
+                          @view-program="viewProgram"
                         />
                         <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
                           <div slot="no-more"></div>
@@ -244,11 +244,12 @@
               </div>
             </v-col>
           </v-row>
-          <v-dialog v-model="showResource" content-class="resource-dialog ma-0">
+          <v-dialog v-model="showResource" persistent content-class="resource-dialog ma-0">
             <Program 
               @close-modal="closeResource" 
               @view-module="viewModule"
-              :resourceId="selectedResource.id" 
+              :resourceId="selectedResource.id"
+              :viewMode="selectedResource.viewMode"
               v-if="selectedResource && selectedResource.isProgram" 
             />
             <Resource 
@@ -383,10 +384,11 @@ export default {
       this.showResource = true;
     },
 
-    viewProgram(id) {
+    viewProgram(id, viewMode) {
       this.selectedResource = {
         id: id,
-        isProgram: true
+        isProgram: true,
+        viewMode
       };
       this.showResource = true;
     },
@@ -399,13 +401,21 @@ export default {
       this.showResource = true;
     },
 
-    closeResource() {
+    closeResource(isModuleView = false) {
       this.moduleMode = false;
       this.showResource = false;
-      this.selectedResource = Object.assign({}, {
-        id: null,
-        items: []
-      });
+      if (isModuleView) {
+        this.selectedResource = Object.assign({}, {
+          id: this.selectedResource.programResourceId,
+          isProgram: true
+        });
+        this.showResource = true;
+      } else {
+        this.selectedResource = Object.assign({}, {
+          id: null,
+          items: []
+        });
+      }
     },
 
     async viewResourceList($state = null) {

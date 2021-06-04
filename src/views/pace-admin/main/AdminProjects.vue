@@ -149,7 +149,7 @@
             </v-toolbar>
           </template>
           <template slot="item.name" slot-scope="{ item }">
-            <span class="font-weight-bold">{{ item.name }}</span>
+            <span class="font-weight-title">{{ item.name }}</span>
           </template>
           <template slot="item.actions" slot-scope="{ item }">
             <v-icon small class="mr-2 pace-yellow--text" @click="editItem(item)"

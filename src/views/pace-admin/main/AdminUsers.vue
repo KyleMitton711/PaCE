@@ -152,7 +152,7 @@
             <v-icon small class="pace-orange--text" @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
           </template>
           <template slot="item.fullName" slot-scope="{ item }">
-            <span class="font-weight-bold">{{ item.fullName }}</span>
+            <span class="font-weight-title">{{ item.fullName }}</span>
           </template>
           <template slot="item.userType" slot-scope="{ item }">
             {{ item.userTypeLabel }}
