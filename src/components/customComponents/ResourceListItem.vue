@@ -83,9 +83,10 @@ export default {
     left: 64px;
     bottom: 0;
     right: 0;
-    height: 40px!important;
+    height: 50px!important;
     min-height: 0;
-    background-image: linear-gradient(rgba(0, 0, 0, 0), white);
+    background-image: linear-gradient(rgba(255, 255, 255, 0), white);
+    // background-image: linear-gradient(white, rgba(255, 255, 255, 0));
   }
 }
 

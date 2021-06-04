@@ -401,7 +401,7 @@ export default {
       this.showResource = true;
     },
 
-    closeResource(isModuleView = false) {
+    async closeResource(isModuleView = false) {
       this.moduleMode = false;
       this.showResource = false;
       if (isModuleView) {
@@ -415,6 +415,11 @@ export default {
           id: null,
           items: []
         });
+      }
+
+      if (this.user && !this.isMobile) {
+        let res = await this.getCurrentResources();
+        this.myResources = Object.assign([], res.data);
       }
     },
 
@@ -591,11 +596,11 @@ export default {
     }
   },
 
-  watch: {
-    showResource(val) {
-      val || this.closeResource();
-    },
-  },
+  // watch: {
+  //   showResource(val) {
+  //     val || this.closeResource();
+  //   },
+  // },
 
   created() {
     if (window.innerWidth < 600) {
@@ -639,11 +644,7 @@ export default {
 
     if (this.user) {
       let res = await this.getCurrentResources();
-      if (window.innerWidth < 600) {
-        this.resources = res.data;
-      } else {
-        this.myResources = res.data;
-      }
+      this.myResources = res.data;
     }
   }
 };
