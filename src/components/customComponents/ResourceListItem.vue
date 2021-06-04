@@ -1,6 +1,7 @@
 <template>
   <v-list-item
     ref="wrapper"
+    class="mt-6"
     :class=" { 'opened' : opened, 'overflowed': heightOverflowed }"
   >
     <v-list-item-avatar tile size="64">
@@ -8,12 +9,14 @@
     </v-list-item-avatar>
 
     <v-list-item-content ref="content">
-      <span class="black--text" @click="viewResource(item)" aria-controls>{{item.title}}</span>
-      <div v-html="item.overview" v-if="item.overview" class="mt-6 overview mb-0"></div>
+      <span v-if="!item.isProgram" class="black--text heading" @click="viewResource(item)" aria-controls>{{item.title}}</span>
+      <span v-if="item.isProgram" class="black--text heading program" @click="viewResource(item)" aria-controls>{{item.title}}</span>
+
+      <div v-html="item.overview" v-if="item.overview" class="mt-2 overview mb-0"></div>
       <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
         Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id)">{{ item.items[0].title }}</a>
       </p>
-      <p class="mt-3 mb-0" v-if="!item.isProgram && item.duration">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
+      <p class="mt-2 mb-0" v-if="!item.isProgram && item.duration">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
     </v-list-item-content>
 
     <v-list-item-action>
@@ -31,7 +34,7 @@ export default {
     item: Object,
     heightLimit: {
       type: Number,
-      default: 90
+      default: 140
     }
   },
   data() {
@@ -86,6 +89,14 @@ export default {
   }
 }
 
+.heading{
+  font-weight: 600;
+}
+
+.program {
+  font-style: all-small-caps;
+}
+
 .v-list-item__avatar {
   align-self: flex-start;
 }
@@ -105,7 +116,7 @@ export default {
   p {
     color: #4a4a4a;
     letter-spacing: .5px;
-    line-height: inherit;
+    line-height: 1.5 !important;
   }
 }
 </style>
