@@ -29,7 +29,7 @@
                 <h4 class="tab-title mt-4">Resources for:</h4>
                 <div class="mt-4">
                   <v-list>
-                    <v-list-item-group v-model="selectedResource" color="pace_grey">
+                    <v-list-item-group v-model="selectedResource" mandatory color="pace_grey">
                       <v-list-item
                         v-for="(item, i) in resourcesForItems"
                         :key="i"

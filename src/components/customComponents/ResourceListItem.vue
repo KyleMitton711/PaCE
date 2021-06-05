@@ -1,10 +1,10 @@
 <template>
   <v-list-item
     ref="wrapper"
-    class="mt-6"
+    class="mt-2"
     :class=" { 'opened' : opened, 'overflowed': heightOverflowed }"
   >
-    <v-list-item-avatar tile size="64">
+    <v-list-item-avatar tile size="64" ref="avatar">
       <img :src="item.projectLogo">
     </v-list-item-avatar>
 
@@ -65,6 +65,9 @@ export default {
     this.$refs.wrapper.$el.style.height = this.heightLimit + 'px';
     if (this.$refs.content.clientHeight > this.heightLimit) {
       this.heightOverflowed = true;
+    } else {
+      let height = Math.max(this.$refs.avatar.$el.clientHeight + 32, this.$refs.content.clientHeight);
+      this.$refs.wrapper.$el.style.height = height + 'px';
     }
   }
 };

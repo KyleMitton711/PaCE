@@ -51,7 +51,15 @@
               </infinite-loading>
             </v-list>
             <template v-else>
-              <p v-if="!isLoadingResource && resourceLoaded" class="px-2">
+              <div v-if="isLoadingResource" class="text-center">
+                <v-progress-circular
+                  :size="70"
+                  :width="7"
+                  color="pace-yellow"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+              <p v-else class="no-more-text">
                 There are no matching results. Please try clearing some filters and keywords from your search.
               </p>
             </template>
@@ -111,7 +119,7 @@ export default {
     },
     resourceCount: null,
     searchText: null,
-    isLoadingResource: false,
+    isLoadingResource: true,
     resourceLoaded: false,
     moduleMode: false
   }),
@@ -187,6 +195,7 @@ export default {
     },
 
     changeFilters() {
+      this.isLoadingResource = true;
       this.resources = [];
       this.pagination = Object.assign({}, {
         pageSize: 5,
@@ -344,6 +353,12 @@ export default {
 
 .v-list-item {
   padding: 0;
+}
+
+.no-more-text {
+  font-size: 14px;
+  padding: 0 40px;
+  text-align: center;
 }
 
 ::v-deep .resource-list {

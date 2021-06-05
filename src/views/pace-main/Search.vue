@@ -196,7 +196,15 @@
                         </infinite-loading>
                       </v-list>
                       <template v-else>
-                        <p v-if="!isLoadingResource" class="no-more-text">
+                        <div v-if="isLoadingResource" class="text-center">
+                          <v-progress-circular
+                            :size="70"
+                            :width="7"
+                            color="pace-yellow"
+                            indeterminate
+                          ></v-progress-circular>
+                        </div>
+                        <p v-else class="no-more-text">
                           There are no matching results. Please try clearing some filters and keywords from your search.
                         </p>
                       </template>
@@ -232,7 +240,15 @@
                     </infinite-loading>
                   </v-list>
                   <template v-else>
-                    <p v-if="!isLoadingResource" class="no-more-text">
+                    <div v-if="isLoadingResource" class="text-center">
+                      <v-progress-circular
+                        :size="70"
+                        :width="7"
+                        color="pace-yellow"
+                        indeterminate
+                      ></v-progress-circular>
+                    </div>
+                    <p v-else class="no-more-text">
                       There are no matching results. Please try clearing some filters and keywords from your search.
                     </p>
                   </template>
@@ -297,7 +313,6 @@ export default {
       items: []
     },
     showResource: false,
-    showResourceList: false,
     tags: [],
     resourceCount: null,
     selectedCapabilities: [],
@@ -311,7 +326,7 @@ export default {
       pageIndex: 1,
       total: null
     },
-    isLoadingResource: false,
+    isLoadingResource: true,
     resourceLoaded: false,
     moduleMode: false,
     isMobile: false,
@@ -455,16 +470,14 @@ export default {
           this.pagination.total = res.total;
           this.pagination.pageIndex = res.currentPage;
         }
-        this.isLoadingResource = false;
         this.resourceLoaded = true;
+        setTimeout(() => { this.isLoadingResource = false; }, 200);
       }
-    },
-
-    closeResourceList() {
-      this.showResourceList = false;
+      this.isLoadingResource = false;
     },
 
     changeFilters: debounce(async function () {
+      this.isLoadingResource = true;
       this.resources = [];
       this.pagination = Object.assign({}, {
         pageSize: 10,
@@ -502,18 +515,6 @@ export default {
       } else {
         $state.complete();
       }
-    },
-
-    nextPage() {
-      let totalPages = Math.ceil(this.pagination.total / this.pagination.pageSize);
-      if (totalPages > this.pagination.pageIndex) this.pagination.pageIndex ++;
-      this.viewResourceList();
-    },
-
-    prevPage() {
-      let totalPages = Math.ceil(this.pagination.total / this.pagination.pageSize);
-      if (this.pagination.pageIndex > 1) this.pagination.pageIndex --;
-      this.viewResourceList();
     },
 
     logout() {
@@ -595,12 +596,6 @@ export default {
       }
     }
   },
-
-  // watch: {
-  //   showResource(val) {
-  //     val || this.closeResource();
-  //   },
-  // },
 
   created() {
     if (window.innerWidth < 600) {
@@ -742,15 +737,17 @@ export default {
   height: auto;
 }
 
+.no-more-text {
+  font-size: 14px;
+  padding: 0 40px;
+  text-align: center;
+}
+
 @media (max-width: 600px) {
   .v-dialog {
     margin: 0;
     height: 100vh;
   }
-
-  // .left-block {
-  //   min-height: calc(100vh - 86px);
-  // }
 
   ::v-deep .my-resources {
     height: unset;
