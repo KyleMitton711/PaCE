@@ -5,7 +5,6 @@
         <v-data-table
           :headers="headers"
           :items="projects"
-          sort-by="name"
           class="border"
           :loading="isLoading"
           loading-text="Loading... Please wait"

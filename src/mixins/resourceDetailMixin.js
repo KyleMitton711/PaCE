@@ -136,7 +136,7 @@ export default {
     },
 
     shareResource() {
-      this.copyTextToClipboard(this.resource.url);
+      this.copyTextToClipboard(this.resource.url || this.resource.projectUrl);
       this.$notify({
         text: 'Link copied!',
         type: 'success'
