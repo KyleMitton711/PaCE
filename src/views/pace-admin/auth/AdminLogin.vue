@@ -9,7 +9,7 @@
               <div class="pa-7 pa-sm-11">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
                 <h2 class="font-weight-bold mt-4 blue-grey--text text--darken-2">Sign in</h2>
-                <v-form ref="form" v-model="valid" lazy-validation action="/dashboards/analytical">
+                <v-form ref="form" @submit="submit">
                   <v-text-field
                     v-model="email"
                     :rules="emailRules"
@@ -39,7 +39,7 @@
                     block
                     class="mr-4 bg-pace-yellow white--text"
                     submit
-                    @click="submit"
+                    type="submit"
                     :loading="isLoading"
                   >Sign In</v-btn>
                 </v-form>
@@ -74,7 +74,8 @@ export default {
   }),
   methods: {
     ...mapActions("auth", ["adminLogin"]),
-    async submit() {
+    async submit(event) {
+      event.preventDefault();
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
         this.isLoading = true;

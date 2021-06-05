@@ -7,13 +7,18 @@
             <v-col lg="7" md="6" class="d-none d-md-flex login-image">
             </v-col>
             <v-col lg="5" md="6" class="pr-0">
+              <div class="pa-0 px-4 d-flex justify-end">
+                <v-btn icon text @click="$router.push('/')">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </div>
               <div class="pa-7 pa-sm-12">
                 <p class="font-weight-bold mt-4 text-center blue-grey--text text--darken-2">Request reset</p>
                 <h6 class="subtitle-1 mb-5 text-center">
                   Enter your email address to receive a link to reset your password
                 </h6>
 
-                <v-form ref="form" v-model="valid" lazy-validation>
+                <v-form ref="form" @submit="submit">
                   <v-text-field
                     v-model="email"
                     :rules="emailRules"
@@ -26,7 +31,7 @@
                     block
                     class="mr-4 white--text bg-pace-yellow"
                     submit
-                    @click="submit"
+                    type="submit"
                   >Reset Password</v-btn>
                 </v-form>
               </div>
@@ -53,7 +58,8 @@ export default {
   }),
   methods: {
     ...mapActions("account", ["forgotPassword"]),
-    async submit() {
+    async submit(event) {
+      event.preventDefault();
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
         let payload = {

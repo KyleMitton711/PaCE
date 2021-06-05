@@ -7,40 +7,47 @@
             <v-col lg="7" md="6" class="d-none d-md-flex login-image">
             </v-col>
             <v-col lg="5" md="6" class="pr-0">
+              <div class="pa-0 px-4 d-flex justify-end">
+                <v-btn icon text @click="$router.push('/')">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </div>
               <div class="pa-7 pa-sm-12">
                 <p class="font-weight-bold mt-4 text-center blue-grey--text text--darken-2">New Password</p>
                 <h6 class="subtitle-1 mb-5 text-center">
                   Enter a new password
                 </h6>
 
-                <v-text-field
-                  v-model="password"
-                  :error-messages="fieldErrors('password')"
-                  @input="$v.password.$touch()"
-                  @blur="$v.password.$touch()"
-                  label="Password"
-                  outlined
-                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="show1 = !show1"
-                  :type="show1 ? 'text' : 'password'"
-                ></v-text-field>
-                <v-text-field
-                  v-model="confirmPass"
-                  :error-messages="fieldErrors('confirmPass')"
-                  @input="$v.confirmPass.$touch()"
-                  @blur="$v.confirmPass.$touch()"
-                  label="Confirm password"
-                  outlined
-                  :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="show2 = !show2"
-                  :type="show2 ? 'text' : 'password'"
-                ></v-text-field>
-                <v-btn
-                  :disabled="$v.$invalid"
-                  block
-                  class="mr-4 white--text bg-pace-yellow"
-                  @click="submit"
-                >Save password</v-btn>
+                <v-form ref="form" @submit="submit">
+                  <v-text-field
+                    v-model="password"
+                    :error-messages="fieldErrors('password')"
+                    @input="$v.password.$touch()"
+                    @blur="$v.password.$touch()"
+                    label="Password"
+                    outlined
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="show1 = !show1"
+                    :type="show1 ? 'text' : 'password'"
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="confirmPass"
+                    :error-messages="fieldErrors('confirmPass')"
+                    @input="$v.confirmPass.$touch()"
+                    @blur="$v.confirmPass.$touch()"
+                    label="Confirm password"
+                    outlined
+                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="show2 = !show2"
+                    :type="show2 ? 'text' : 'password'"
+                  ></v-text-field>
+                  <v-btn
+                    :disabled="$v.$invalid"
+                    block
+                    class="mr-4 white--text bg-pace-yellow"
+                    type="submit"
+                  >Save password</v-btn>
+                </v-form>
               </div>
             </v-col>
           </v-row>
@@ -96,13 +103,13 @@ export default {
   }),
   methods: {
     ...mapActions("account", ["resetPassword"]),
-    async submit() {
+    async submit(event) {
+      event.preventDefault();
       let payload = {
         token: this.$route.query.token,
         newPassword: this.password
       }
       let res = await this.resetPassword(payload);
-      console.log(res)
       if (res === true) {
         this.$notify({
           text: 'Password is reset successfully!',

@@ -18,33 +18,35 @@
                   Keep your data by recording your email address and setting a password
                 </h6>
 
-                <v-text-field
-                  v-model="form.email"
-                  type="email"
-                  :error-messages="fieldErrors('form.email')"
-                  @input="$v.form.email.$touch()"
-                  @blur="$v.form.email.$touch()"
-                  label="E-mail"
-                  outlined
-                ></v-text-field>
-                <v-text-field
-                  v-model="form.password"
-                  :error-messages="fieldErrors('form.password')"
-                  @input="$v.form.password.$touch()"
-                  @blur="$v.form.password.$touch()"
-                  label="Password"
-                  outlined
-                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="show1 = !show1"
-                  :type="show1 ? 'text' : 'password'"
-                ></v-text-field>
-                <v-btn
-                  :disabled="$v.form.$invalid"
-                  block
-                  class="mr-4 white--text bg-pace-yellow"
-                  submit
-                  @click="submit"
-                >Submit</v-btn>
+                <v-form ref="form" @submit="submit">
+                  <v-text-field
+                    v-model="form.email"
+                    type="email"
+                    :error-messages="fieldErrors('form.email')"
+                    @input="$v.form.email.$touch()"
+                    @blur="$v.form.email.$touch()"
+                    label="E-mail"
+                    outlined
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="form.password"
+                    :error-messages="fieldErrors('form.password')"
+                    @input="$v.form.password.$touch()"
+                    @blur="$v.form.password.$touch()"
+                    label="Password"
+                    outlined
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="show1 = !show1"
+                    :type="show1 ? 'text' : 'password'"
+                  ></v-text-field>
+                  <v-btn
+                    :disabled="$v.form.$invalid"
+                    block
+                    class="mr-4 white--text bg-pace-yellow"
+                    submit
+                    type="submit"
+                  >Submit</v-btn>
+                </v-form>
               </div>
             </v-col>
           </v-row>
@@ -99,7 +101,8 @@ export default {
   }),
   methods: {
     ...mapActions("account", ["register"]),
-    async submit() {
+    async submit(event) {
+      event.preventDefault();
       let res = await this.register(this.form);
       if (res === true) {
         this.$notify({

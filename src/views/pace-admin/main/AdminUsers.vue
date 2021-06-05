@@ -391,6 +391,10 @@ export default {
 
     async deleteItem() {
       await this.deleteUser(this.selectedItemId);
+      this.$notify({
+        text: "User deleted successfully",
+        type: "success",
+      });
       this.deleteConfirmDialog = false;
       this.pagination.PageIndex = 1;
       this.initialize();

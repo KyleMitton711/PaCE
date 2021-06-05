@@ -20,7 +20,7 @@
                   <a href="/auth/register" class="pace-orange--text">Sign Up</a>
                 </h6>
 
-                <v-form ref="form" v-model="valid" lazy-validation action="/dashboards/analytical">
+                <v-form ref="form" v-model="valid" @submit="submit">
                   <v-text-field
                     v-model="email"
                     :rules="emailRules"
@@ -50,7 +50,7 @@
                     block
                     class="mr-4 bg-pace-yellow white--text"
                     submit
-                    @click="submit"
+                    type="submit"
                   >Sign In</v-btn>
                 </v-form>
               </div>
@@ -85,7 +85,8 @@ export default {
   computed: {},
   methods: {
     ...mapActions("auth", ["login"]),
-    submit() {
+    submit(event) {
+      event.preventDefault();
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
         this.login({

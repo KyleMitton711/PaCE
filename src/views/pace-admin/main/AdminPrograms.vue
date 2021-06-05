@@ -528,7 +528,7 @@ export default {
         let res = await this.addResource(this.form);
         if (res.errors == null) {
           this.$notify({
-            text: "Resource added successfully",
+            text: "Program added successfully",
             type: "success",
           });
           this.initialize();

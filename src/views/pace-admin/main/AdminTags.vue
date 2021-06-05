@@ -289,7 +289,7 @@ export default {
         let res = await this.addTag(this.form);
         if (res.errors == null) {
           this.$notify({
-            text: "Project added successfully",
+            text: "Tag added successfully",
             type: "success",
           });
           this.initialize();

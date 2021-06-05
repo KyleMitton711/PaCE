@@ -16,7 +16,7 @@
       <p v-if="!item.isProgram && item.items && item.items.length > 0" class="mt-6">
         Module {{ item.items[0].itemNum }} of <a @click="viewProgram(item.items[0].id, 'SUMMARY')">{{ item.items[0].title }}</a>
       </p>
-      <p class="mt-2 mb-0" v-if="!item.isProgram && item.duration">Duration {{ item.duration }} &nbsp; {{ item.endorsements }}</p>
+      <p class="mt-2 mb-0" v-if="!item.isProgram && item.duration">Duration {{ item.duration }} <br> {{ item.endorsements }}</p>
     </v-list-item-content>
 
     <v-list-item-action>
