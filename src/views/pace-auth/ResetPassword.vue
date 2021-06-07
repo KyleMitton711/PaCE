@@ -8,7 +8,7 @@
             </v-col>
             <v-col lg="5" md="6" class="pr-0">
               <div class="pa-0 px-4 d-flex justify-end">
-                <v-btn icon text @click="$router.push('/')">
+                <v-btn icon text @click="$router.go(-1)">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </div>

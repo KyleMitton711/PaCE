@@ -102,10 +102,10 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12">
-                          <p class="tiptap-label mb-0">Outcome</p>
+                          <p class="tiptap-label mb-0">Learning Outcomes</p>
                           <tiptap-vuetify
                             v-model="form.outcome"
-                            placeholder="Outcome"
+                            placeholder="Learning Outcomes"
                             :extensions="extensions"
                             :card-props="{ flat: true, outlined: true }"
                           />

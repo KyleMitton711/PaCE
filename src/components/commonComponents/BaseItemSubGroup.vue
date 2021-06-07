@@ -1,5 +1,4 @@
 <template>
-
   <BaseItemGroup
     :item="item"
     text
@@ -7,6 +6,7 @@
     sub-group
     append-icon="mdi-menu-down"
     class="ml-8 pl-2"
+    :noAction="true"
   />
 </template>
 

@@ -50,7 +50,7 @@
           <p v-if="resource.outcome" class="mb-2"><b>Learning theory / approach</b></p>
           <div v-html="resource.outcome" class="mt-2"></div>
           
-          <p class="mt-4" v-if="resource.duration"><b>Duration</b> {{ resource.duration }}</p>
+          <p class="mt-4" v-if="resource.duration"><b>Duration</b> {{ resource.duration }} <br> {{ resource.endorsements }}</p>
 
           <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0"><b>Audience:</b></p>
           <p class="mb-0">{{ selectedAudienceItems }}</p>

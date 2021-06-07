@@ -59,12 +59,7 @@ export const routes = [
                 meta: {
                     publicRoute: true
                 }
-            },
-            {
-                name: "Test",
-                path: "test",
-                component: Test
-            },
+            }
         ]
     },
 

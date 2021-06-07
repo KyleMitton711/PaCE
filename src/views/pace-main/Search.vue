@@ -36,7 +36,7 @@
                 <v-tabs-items v-model="tab" class="ma-1 mt-2">
                   <v-tab-item>
                     <v-card class="elevation-1 pa-5 tab-content" v-if="!user && selectedCapabilities.length == 0 && audience.length == 0 && type.length == 0 && mode.length == 0">
-                      <p class="mb-1">Welcome to Palliative Care Education Directory</p> <br>
+                      <p class="mb-1">Welcome to the Palliative Care Education Directory</p> <br>
                       <p>To help you find what you need, take a moment to set your search filters</p>
                       <div class="mt-10">
                         <div class="text-right">
@@ -62,7 +62,7 @@
                         <router-link to="/?tab=2" class="capability-link"><b class="mr-2">Capabilities:</b></router-link> {{capabilityString }} 
                         <span class="ml-auto"><v-icon @click="clearCapabilities(), changeFilters()">mdi-close</v-icon></span>
                       </p>
-                      <p class="mb-0" v-else><router-link to="/" class="capability-link"><b>Choose a capability</b></router-link></p>
+                      <p class="mb-0" v-else><router-link to="/" class="capability-link"><b>Back to capability options</b></router-link></p>
                       <p class="mb-0 d-flex" v-if="audience.length > 0">
                         <b class="mr-2" aria-controls @click="tab = 1">Audiences:</b> {{ selectedAudienceItems }}
                         <span class="ml-auto"><v-icon @click="audience = [], changeFilters()">mdi-close</v-icon></span>

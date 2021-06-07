@@ -398,6 +398,10 @@ export default {
   margin-top: 0
   color: #00b782
 
+>>>.vue-dropzone .dz-progress 
+  display: none
+
+
 .subtitle
   color: #314b5f
 
