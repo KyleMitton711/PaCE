@@ -2,11 +2,11 @@
   <div>
     <div class="mt-4">
       <v-card>
-        <v-data-table 
-          :headers="headers" 
-          :items="resources" 
-          hide-default-footer 
-          class="border" 
+        <v-data-table
+          :headers="headers"
+          :items="resources"
+          hide-default-footer
+          class="border"
           :loading="isLoading"
           :items-per-page="pagination.pageSize"
           loading-text="Loading... Please wait"
@@ -28,7 +28,10 @@
               <v-spacer></v-spacer>
               <v-dialog v-model="dialog" persistent max-width="800px">
                 <template v-slot:activator="{ on }">
-                  <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-select-group</v-icon>Add Program</v-btn>
+                  <v-btn color="primary" dark class="mb-2" v-on="on">
+                    <v-icon>mdi-select-group</v-icon>
+                    Add Program
+                  </v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="bg-pace-yellow">
@@ -50,22 +53,24 @@
                             @blur="$v.form.projectId.$touch()"
                           >
                             <template v-slot:label>
-                              <span>Project</span><span class="red--text ml-1">*</span>
+                              <span>Project</span>
+                              <span class="red--text ml-1">*</span>
                             </template>
                           </v-select>
-                          <v-text-field 
-                            label="Title" 
+                          <v-text-field
+                            label="Title"
                             v-model="form.title"
                             :error-messages="fieldErrors('form.title')"
                             @input="$v.form.title.$touch()"
                             @blur="$v.form.title.$touch()"
                           >
                             <template v-slot:label>
-                              <span>Title</span><span class="red--text ml-1">*</span>
+                              <span>Title</span>
+                              <span class="red--text ml-1">*</span>
                             </template>
                           </v-text-field>
-                          <v-text-field 
-                            label="Url" 
+                          <v-text-field
+                            label="Url"
                             v-model="form.url"
                           ></v-text-field>
                           <p class="tiptap-label mb-0">Overview</p>
@@ -75,12 +80,12 @@
                             :card-props="{ flat: true, outlined: true }"
                             :extensions="extensions"
                           />
-                          <v-textarea 
-                            label="Certifications" 
+                          <v-textarea
+                            label="Certifications"
                             v-model="form.endorsements"
                           ></v-textarea>
-                          <v-select 
-                            label="Type" 
+                          <v-select
+                            label="Type"
                             v-model="form.typeId"
                             :error-messages="fieldErrors('form.typeId')"
                             @blur="$v.form.typeId.$touch()"
@@ -89,7 +94,8 @@
                             item-value="id"
                           >
                             <template v-slot:label>
-                              <span>Type</span><span class="red--text ml-1">*</span>
+                              <span>Type</span>
+                              <span class="red--text ml-1">*</span>
                             </template>
                           </v-select>
                           <v-autocomplete
@@ -104,18 +110,6 @@
                             clearable
                           >
                           </v-autocomplete>
-                          <!-- <v-autocomplete
-                            v-model="form.tagFilterTypeIds"
-                            :items="filterTypeTags"
-                            item-text="name"
-                            item-value="id"
-                            chips
-                            label="FilterType"
-                            multiple
-                            deletable-chips
-                            clearable
-                          >
-                          </v-autocomplete> -->
                           <v-autocomplete
                             v-model="form.tagFilterModeIds"
                             :items="filterModeTags"
@@ -135,15 +129,15 @@
                           <v-list>
                             <v-subheader inset>Selected modules</v-subheader>
                             <draggable
-                              :list="selectedModules" 
-                              group="resources" 
-                              class="p-2 cursor-move" 
-                              style="min-height: 150px;" 
+                              :list="selectedModules"
+                              group="resources"
+                              class="p-2 cursor-move"
+                              style="min-height: 150px"
                               :multiDrag="true"
                               selectedClass="bg-pace-grey"
                             >
-                              <v-list-item 
-                                v-for="(listItem, index) in selectedModules" 
+                              <v-list-item
+                                v-for="(listItem, index) in selectedModules"
                                 :key="listItem.id"
                                 :ref="`selected-${listItem.id}`"
                                 @click.prevent
@@ -154,7 +148,9 @@
                                 </v-list-item-avatar>
 
                                 <v-list-item-content>
-                                  <v-list-item-title v-text="listItem.title"></v-list-item-title>
+                                  <v-list-item-title
+                                    v-text="listItem.title"
+                                  ></v-list-item-title>
                                 </v-list-item-content>
                               </v-list-item>
                             </draggable>
@@ -178,17 +174,23 @@
                               indeterminate
                             ></v-progress-circular>
                           </div>
-                          <v-list max-height="200px" height="200px" style="overflow-y: scroll;" v-else role="listbox">
-                            <draggable 
-                              :list="totalResources" 
-                              group="resources" 
-                              class="p-2 cursor-move" 
+                          <v-list
+                            max-height="200px"
+                            height="200px"
+                            style="overflow-y: scroll"
+                            v-else
+                            role="listbox"
+                          >
+                            <draggable
+                              :list="totalResources"
+                              group="resources"
+                              class="p-2 cursor-move"
                               :multiDrag="true"
                               selectedClass="bg-pace-grey"
                             >
                               <v-list-item
-                                v-for="(listItem, index) in totalResources" 
-                                :key="listItem.id" 
+                                v-for="(listItem, index) in totalResources"
+                                :key="listItem.id"
                                 @click.prevent
                                 @keydown="keyDownHandler($event, index)"
                               >
@@ -197,7 +199,9 @@
                                 </v-list-item-avatar>
 
                                 <v-list-item-content>
-                                  <v-list-item-title v-text="listItem.title"></v-list-item-title>
+                                  <v-list-item-title
+                                    v-text="listItem.title"
+                                  ></v-list-item-title>
                                 </v-list-item-content>
                               </v-list-item>
                             </draggable>
@@ -209,16 +213,35 @@
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn class="border-pace-orange pace-orange--text" @click="close">Cancel</v-btn>
-                    <v-btn class="bg-pace-orange white--text" :disabled="$v.form.$invalid" @click="save">Save</v-btn>
+                    <v-btn
+                      class="border-pace-orange pace-orange--text"
+                      @click="close"
+                    >
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      class="bg-pace-orange white--text"
+                      :disabled="$v.form.$invalid"
+                      @click="save"
+                    >
+                      Save
+                    </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
             </v-toolbar>
           </template>
           <template slot="item.actions" slot-scope="{ item }">
-            <v-icon small class="mr-2 pace-yellow--text" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon small class="pace-orange--text" @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
+            <v-icon 
+              small 
+              class="mr-2 pace-yellow--text" 
+              @click="editItem(item)"
+            >mdi-pencil</v-icon>
+            <v-icon
+              small
+              class="pace-orange--text"
+              @click="showDeleteConfirmDialog(item)"
+            >mdi-delete</v-icon>
           </template>
           <template slot="item.projectId" slot-scope="{ item }">
             {{ getProjectName(item.projectId) }}
@@ -231,7 +254,11 @@
           </template>
         </v-data-table>
         <div class="text-xs-center pt-2" v-if="pagination.total">
-          <v-pagination v-model="pagination.pageIndex" :length="Math.ceil(pagination.total / pagination.pageSize)" @input="loadPrograms"></v-pagination>
+          <v-pagination
+            v-model="pagination.pageIndex"
+            :length="Math.ceil(pagination.total / pagination.pageSize)"
+            @input="loadPrograms"
+          ></v-pagination>
         </div>
         <v-dialog v-model="deleteConfirmDialog" max-width="400px">
           <v-card>
@@ -242,9 +269,15 @@
               <span class="title black--text">Are you sure you want to delete this item?</span>
             </v-card-text>
             <v-card-actions>
-              <v-btn class="border-pace-orange pace-orange--text" @click="deleteConfirmDialog = false">Cancel</v-btn>
+              <v-btn
+                class="border-pace-orange pace-orange--text"
+                @click="deleteConfirmDialog = false"
+              >Cancel</v-btn>
               <v-spacer></v-spacer>
-              <v-btn class="bg-pace-orange white--text" @click="deleteItem">Delete</v-btn>
+              <v-btn 
+                class="bg-pace-orange white--text" 
+                @click="deleteItem"
+              >Delete</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -254,17 +287,32 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import {
-  required
-} from "vuelidate/lib/validators";
+import { mapActions } from "vuex";
+import { required } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
 import debounce from "debounce";
 import { capabilityCodes } from "@/data/capabilitycodes";
 import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 import draggable from "vuedraggable";
-import { TiptapVuetify, Heading, Bold, Italic, Strike, Underline, Code, Paragraph, BulletList, OrderedList, ListItem, Link, Blockquote, HardBreak, HorizontalRule, History } from 'tiptap-vuetify'
+import {
+  TiptapVuetify,
+  Heading,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Code,
+  Paragraph,
+  BulletList,
+  OrderedList,
+  ListItem,
+  Link,
+  Blockquote,
+  HardBreak,
+  HorizontalRule,
+  History,
+} from "tiptap-vuetify";
 
 export default {
   name: "AdminPrograms",
@@ -273,25 +321,25 @@ export default {
     form: {
       projectId: { required },
       title: { required },
-      typeId: { required }
-    }
+      typeId: { required },
+    },
   },
   validationMessages: {
     form: {
       projectId: {
-        required: "Project is required"
+        required: "Project is required",
       },
-      title: { 
-        required: "Title is required"
+      title: {
+        required: "Title is required",
       },
       typeId: {
-        required: "Type is required"
-      }
-    }
+        required: "Type is required",
+      },
+    },
   },
   components: {
     draggable,
-    TiptapVuetify 
+    TiptapVuetify,
   },
   data: () => ({
     dialog: false,
@@ -300,11 +348,11 @@ export default {
         text: "Project",
         align: "start",
         sortable: false,
-        value: "projectId"
+        value: "projectId",
       },
       { text: "Title", value: "title" },
       { text: "Type", value: "typeName", sortable: false },
-      { text: "Actions", value: "actions", sortable: false }
+      { text: "Actions", value: "actions", sortable: false },
     ],
     resources: [],
     projects: [],
@@ -320,7 +368,7 @@ export default {
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],
-      items: [] // modules
+      items: [], // modules
     },
     search: null,
     form: {
@@ -334,10 +382,10 @@ export default {
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],
-      items: [] // modules
+      items: [], // modules
     },
     filters: {
-      isProgram: true
+      isProgram: true,
     },
     isLoading: false,
     deleteConfirmDialog: false,
@@ -362,40 +410,43 @@ export default {
       ListItem,
       BulletList,
       OrderedList,
-      [Heading, {
-        options: {
-          levels: [1, 2, 3]
-        }
-      }],
+      [
+        Heading,
+        {
+          options: {
+            levels: [1, 2, 3],
+          },
+        },
+      ],
       Bold,
       Code,
       HorizontalRule,
       Paragraph,
-      HardBreak
+      HardBreak,
     ],
     pagination: {
       pageSize: 15,
       pageIndex: 1,
-      total: null
+      total: null,
     },
     resourceKeyword: null,
     isModuleLoading: false,
     sort: {
       sortBy: null,
       isDescending: true,
-    }
+    },
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Add Program" : "Edit Program";
-    }
+    },
   },
 
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
 
   created() {
@@ -404,22 +455,29 @@ export default {
   },
 
   mounted() {
-    for (let i = 0; i < capabilityCodes.length; i ++) {
+    for (let i = 0; i < capabilityCodes.length; i++) {
       let code = capabilityCodes[i];
       let items = code.items.map((item, index) => {
-        return code.short + (index + 1)
+        return code.short + (index + 1);
       });
-      this.capabilityCodeItems = [...this.capabilityCodeItems, ...items]
+      this.capabilityCodeItems = [...this.capabilityCodeItems, ...items];
     }
   },
 
   methods: {
     ...mapActions("project", ["getProjects"]),
-    ...mapActions("resource", ["getResources", "filterResources", "addResource", "getResourceDetail", "deleteResource", "updateResource"]),
+    ...mapActions("resource", [
+      "getResources",
+      "filterResources",
+      "addResource",
+      "getResourceDetail",
+      "deleteResource",
+      "updateResource",
+    ]),
     ...mapActions("tag", ["getTags"]),
 
     keyDownHandler(event, index) {
-      console.log(event, index)
+      console.log(event, index);
     },
 
     onOptionUpdated(options) {
@@ -429,11 +487,12 @@ export default {
     },
 
     selectedItemKeyDownHandler(event, index) {
-      let selectedElement = this.$refs['selected-' + this.selectedModules[index].id][0];
+      let selectedElement =
+        this.$refs["selected-" + this.selectedModules[index].id][0];
       Array.prototype.move = function (from, to) {
         this.splice(to, 0, this.splice(from, 1)[0]);
       };
-      console.log(selectedElement)
+      console.log(selectedElement);
       // selectedElement.click();
       if (event.key == "ArrowUp") {
         if (index > 0) {
@@ -445,31 +504,39 @@ export default {
         }
       }
     },
-    
+
     async initialize() {
       this.isLoading = true;
       this.projects = await this.getProjects();
       let tagdata = await this.getTags();
       this.tags = tagdata.map((item, index) => {
-        let tagIndex = findIndex(this.tagTypeItems, function(o) { return o.key == item.tagType; });
-        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name }
+        let tagIndex = findIndex(this.tagTypeItems, function (o) {
+          return o.key == item.tagType;
+        });
+        return { ...item, index, tagLabel: this.tagTypeItems[tagIndex].name };
       });
-      var sortTags = function(a, b) {
+      var sortTags = function (a, b) {
         if (a.name > b.name) return 1;
         else return -1;
-      }
-      this.filterAudienceTags = this.tags.filter(item => item.tagLabel == "FilterAudience").sort(sortTags);
-      this.filterTypeTags = this.tags.filter(item => item.tagLabel == "FilterType").sort(sortTags);
-      this.filterModeTags = this.tags.filter(item => item.tagLabel == "FilterMode").sort(sortTags);
+      };
+      this.filterAudienceTags = this.tags
+        .filter((item) => item.tagLabel == "FilterAudience")
+        .sort(sortTags);
+      this.filterTypeTags = this.tags
+        .filter((item) => item.tagLabel == "FilterType")
+        .sort(sortTags);
+      this.filterModeTags = this.tags
+        .filter((item) => item.tagLabel == "FilterMode")
+        .sort(sortTags);
       this.loadPrograms();
-      let res = await this.filterResources({isProgram: false});
+      let res = await this.filterResources({ isProgram: false });
       this.totalResources = Object.assign([], res.results);
-      this.totalResources = this.totalResources.filter(item => {
+      this.totalResources = this.totalResources.filter((item) => {
         if (item.items == null || item.items.length == 0) {
           return item;
         }
       });
-      
+
       this.isLoading = false;
     },
 
@@ -478,7 +545,8 @@ export default {
       let res = await this.getResourceDetail(item.id);
       this.form = Object.assign({}, res);
       this.projectChanged();
-      this.selectedModules = this.form.items != null ? Object.assign([], this.form.items) : [];
+      this.selectedModules =
+        this.form.items != null ? Object.assign([], this.form.items) : [];
       this.dialog = true;
     },
 
@@ -500,13 +568,16 @@ export default {
       this.selectedTags = [];
       setTimeout(() => {
         this.$v.$reset();
-      }, 100)
+      }, 100);
     },
 
     async save() {
-      this.selectedModules = this.selectedModules.map((item, index) => ({ ...item, itemNum: index + 1}));
+      this.selectedModules = this.selectedModules.map((item, index) => ({
+        ...item,
+        itemNum: index + 1,
+      }));
       this.form.items = [];
-      for (let i = 0; i < this.selectedModules.length; i ++) {
+      for (let i = 0; i < this.selectedModules.length; i++) {
         this.form.items.push(this.selectedModules[i].id);
       }
       if (this.editedIndex > -1) {
@@ -544,8 +615,8 @@ export default {
       this.close();
     },
 
-    getProjectName (id) {
-      let project = this.projects.filter(item => item.id == id);
+    getProjectName(id) {
+      let project = this.projects.filter((item) => item.id == id);
       return project.length > 0 ? project[0].name : "";
     },
 
@@ -559,11 +630,11 @@ export default {
       this.selectedModules = [];
       let payload = {
         isProgram: false,
-        projectId: this.form.projectId
+        projectId: this.form.projectId,
       };
       let res = await this.filterResources(payload);
       this.totalResources = Object.assign([], res.results);
-      this.totalResources = this.totalResources.filter(item => {
+      this.totalResources = this.totalResources.filter((item) => {
         if (item.items == null || item.items.length == 0) {
           return item;
         }
@@ -574,14 +645,14 @@ export default {
     async loadPrograms() {
       this.isLoading = true;
       if (this.search && this.search.length > 0) {
-        this.filters['searchText'] = this.search;
+        this.filters["searchText"] = this.search;
       } else {
-        delete this.filters['searchText'];
+        delete this.filters["searchText"];
       }
       if (this.sort.sortBy) {
         this.filters = { ...this.filters, ...this.sort };
       }
-      this.filters['isProgram'] = true;
+      this.filters["isProgram"] = true;
       this.filters.pageIndex = this.pagination.pageIndex;
       this.filters.pageSize = this.pagination.pageSize;
       let res = await this.filterResources(this.filters);
@@ -599,15 +670,15 @@ export default {
 
     searchResource: debounce(async function () {
       let payload = {
-        isProgram: false, 
-        searchText: this.resourceKeyword
+        isProgram: false,
+        searchText: this.resourceKeyword,
       };
       if (this.form.projectId) {
         payload["projectId"] = this.form.projectId;
       }
       let res = await this.filterResources(payload);
       this.totalResources = Object.assign([], res.results);
-      this.totalResources = this.totalResources.filter(item => {
+      this.totalResources = this.totalResources.filter((item) => {
         if (!item.isProgram) {
           if (item.items == null || item.items.length == 0) {
             return item;
@@ -615,6 +686,6 @@ export default {
         }
       });
     }, 300),
-  }
+  },
 };
 </script>
