@@ -136,7 +136,16 @@ export default {
     },
 
     shareResource() {
-      this.copyTextToClipboard(this.resource.url || this.resource.projectUrl);
+      let url = this.resource.url;
+      if (!url) {
+        if (!this.resource.isProgram && this.resource.items != null && this.resource.items.length > 0) {
+          url = this.resource.items[0].url;
+        }
+        if (!url) {
+          url = this.resource.projectUrl;
+        }
+      }
+      this.copyTextToClipboard(url);
       this.$notify({
         text: 'Link copied!',
         type: 'success'

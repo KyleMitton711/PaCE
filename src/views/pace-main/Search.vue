@@ -631,9 +631,16 @@ export default {
       this.selectedCapabilities = [];
       this.selectedResourceFilter = null;
     }
+    var sortByName = function(a, b) {
+      if (a.name > b.name) return 1;
+      else return -1;
+    }
     this.audienceItems = await this.getTags('FilterAudience');
+    this.audienceItems = this.audienceItems.sort(sortByName);
     this.typeItems = await this.getTags('FilterType');
+    this.typeItems = this.typeItems.sort(sortByName);
     this.modeItems = await this.getTags('FilterMode');
+    this.modeItems = this.modeItems.sort(sortByName);
     this.validFilters();
     this.changeFilters();
 

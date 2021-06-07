@@ -106,7 +106,7 @@ export default {
       let res = await this.register(this.form);
       if (res === true) {
         this.$notify({
-          text: 'Check your inbox for the reset link and next steps',
+          text: 'Check your inbox for the verification link.',
           type: 'success'
         });
         this.$router.push({ path: "/auth/login" });
