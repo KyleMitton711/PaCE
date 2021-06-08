@@ -196,6 +196,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep blockquote {
+  border-left: .25em solid #dfe2e5;
+  color: #6a737d;
+  padding-left: 1em;
+  margin: 20px 0!important;
+}
+
 .resource {
   min-height: 100vh;
 }

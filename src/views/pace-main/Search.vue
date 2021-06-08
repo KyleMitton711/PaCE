@@ -220,7 +220,12 @@
                         />
                       </v-list>
                       <p class="no-more-text" v-else>
-                        Resources can be kept for later reference. Simply tap the bookmark (Symbol).
+                        Resources can be kept for later reference. Simply tap the bookmark 
+                        <v-icon
+                          class="pace-yellow--text bookmark-icon ml-auto"
+                          size="30"
+                          aria-controls
+                        >mdi-bookmark-outline</v-icon>.
                       </p>
                     </v-tab-item>
                   </v-tabs-items>
