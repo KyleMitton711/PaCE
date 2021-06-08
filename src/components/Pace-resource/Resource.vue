@@ -46,7 +46,7 @@
                     : "mdi-bookmark-outline"
                   }}</v-icon>
               </template>
-              <span>Add to 'My Resources'</span>
+              <span>{{ resource.isBookmark ? 'Remove from' : 'Add to' }} 'My Resources'</span>
             </v-tooltip>
           </div>
           <div class="d-none d-sm-block">
