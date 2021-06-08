@@ -1,6 +1,5 @@
 <template>
   <v-list-group
-    :group="group"
     :prepend-icon="item.icon"
     :sub-group="subGroup"
     :active-class="`primary white--text`"
@@ -59,11 +58,7 @@ export default {
     noAction: {
       type: Boolean,
       default: false,
-    },
-    group: {
-      type: Boolean,
-      default: false,
-    },
+    }
   },
 
   computed: {

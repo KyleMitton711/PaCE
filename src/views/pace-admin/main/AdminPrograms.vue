@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <div class="mt-4">
       <v-card>
         <v-data-table
@@ -26,7 +26,7 @@
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-dialog v-model="dialog" persistent max-width="800px">
+              <v-dialog v-model="dialog" persistent max-width="800px" v-hotkey="keymap">
                 <template v-slot:activator="{ on }">
                   <v-btn color="primary" dark class="mb-2" v-on="on">
                     <v-icon>mdi-select-group</v-icon>
@@ -124,12 +124,12 @@
                           </v-autocomplete>
                         </v-col>
                       </v-row>
-                      <v-row class="d-flex justify-center">
+                      <v-row class="d-flex justify-center" >
                         <v-col md="6" cols="12">
                           <v-list>
                             <v-subheader inset>Selected modules</v-subheader>
                             <draggable
-                              :list="selectedModules"
+                              v-model="selectedModules"
                               group="resources"
                               class="p-2 cursor-move"
                               style="min-height: 150px"
@@ -137,11 +137,11 @@
                               selectedClass="bg-pace-grey"
                             >
                               <v-list-item
-                                v-for="(listItem, index) in selectedModules"
+                                v-for="(listItem) in selectedModules"
                                 :key="listItem.id"
-                                :ref="`selected-${listItem.id}`"
-                                @click.prevent
-                                @keydown="selectedItemKeyDownHandler($event, index)"
+                                :id="listItem.id"
+                                :ref="`selected`"
+                                @click.stop
                               >
                                 <v-list-item-avatar>
                                   <img :src="listItem.projectLogo" />
@@ -189,10 +189,11 @@
                               selectedClass="bg-pace-grey"
                             >
                               <v-list-item
-                                v-for="(listItem, index) in totalResources"
+                                v-for="(listItem) in totalResources"
                                 :key="listItem.id"
+                                :id="listItem.id"
                                 @click.prevent
-                                @keydown="keyDownHandler($event, index)"
+                                :ref="`selectedtoimport`"
                               >
                                 <v-list-item-avatar>
                                   <img :src="listItem.projectLogo" />
@@ -435,12 +436,31 @@ export default {
       sortBy: null,
       isDescending: true,
     },
+    selectedOne: null
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Add Program" : "Edit Program";
     },
+
+    keymap () {
+      return {
+        // 'esc+ctrl' is OK.
+        'up': {
+          keydown: this.moveUp,
+        },
+        'down': {
+          keydown: this.moveDown,
+        },
+        'left': {
+          keydown: this.moveLeft
+        },
+        'right': {
+          keydown: this.moveRight
+        }
+      }
+    }
   },
 
   watch: {
@@ -475,32 +495,137 @@ export default {
       "updateResource",
     ]),
     ...mapActions("tag", ["getTags"]),
-
-    keyDownHandler(event, index) {
-      console.log(event, index);
-    },
-
+    
     onOptionUpdated(options) {
       this.sort.sortBy = options.sortBy[0];
       this.sort.isDescending = options.sortDesc[0];
       this.loadPrograms();
     },
 
-    selectedItemKeyDownHandler(event, index) {
-      let selectedElement =
-        this.$refs["selected-" + this.selectedModules[index].id][0];
-      Array.prototype.move = function (from, to) {
-        this.splice(to, 0, this.splice(from, 1)[0]);
-      };
-      console.log(selectedElement);
-      // selectedElement.click();
-      if (event.key == "ArrowUp") {
-        if (index > 0) {
-          this.selectedModules.move(index, index - 1);
+    moveUp() {
+      if (this.$refs.selected) {
+        let selectedCount = 0;
+        let selectedid = null;
+        this.$refs.selected.map((item, index) => {
+          if (item.$el.className.indexOf("bg-pace-grey") > -1) {
+            selectedCount ++;
+            selectedid = item.$el.id;
+          }
+        })
+        
+        if (selectedCount != 1) {
+          return;
         }
-      } else if (event.key == "ArrowDown") {
-        if (index < this.selectedModules.length - 1) {
-          this.selectedModules.move(index, index + 1);
+
+        this.selectedOne = findIndex(this.selectedModules, function (o) {
+          return o.id == selectedid;
+        });
+
+        Array.prototype.move = function (from, to) {
+          this.splice(to, 0, this.splice(from, 1)[0]);
+        };
+        if (this.selectedOne > 0) {
+          this.selectedModules.move(this.selectedOne, this.selectedOne - 1);
+          this.selectedModules = JSON.parse(JSON.stringify(this.selectedModules));
+          this.selectedOne --;
+        }
+      }
+    },
+
+    moveDown() {
+      if (this.$refs.selected) {
+        let selectedCount = 0;
+        let selectedid = null;
+        this.$refs.selected.map((item, index) => {
+          if (item.$el.className.indexOf("bg-pace-grey") > -1) {
+            selectedCount ++;
+            selectedid = item.$el.id;
+          }
+        })
+        
+        if (selectedCount != 1) {
+          return;
+        }
+
+        this.selectedOne = findIndex(this.selectedModules, function (o) {
+          return o.id == selectedid;
+        });
+        Array.prototype.move = function (from, to) {
+          this.splice(to, 0, this.splice(from, 1)[0]);
+        };
+        if (this.selectedOne < this.selectedModules.length - 1) {
+          this.selectedModules.move(this.selectedOne, this.selectedOne + 1);
+          this.selectedModules = JSON.parse(JSON.stringify(this.selectedModules));
+          this.selectedOne ++;
+        }
+      }
+    },
+
+    moveLeft() {
+      // selectedtoimport
+      if (this.$refs.selectedtoimport) {
+        let selectedCount = 0;
+        let selectedids = [];
+        this.$refs.selectedtoimport.map((item, index) => {
+          if (item.$el.className.indexOf("bg-pace-grey") > -1) {
+            selectedCount ++;
+            selectedids.push(item.$el.id);
+          }
+        })
+        
+        if (selectedids.length == 0) {
+          return;
+        }
+
+        let selectedItems = selectedids.map(id => {
+          let item = findIndex(this.totalResources, function (o) {
+            return o.id == id;
+          });
+          return this.totalResources[item];
+        })
+
+        this.selectedModules = [ ...this.selectedModules, ...selectedItems ];
+
+        for (let i = 0; i < selectedids.length; i ++) {
+          let item = findIndex(this.totalResources, function (o) {
+            return o.id == selectedids[i];
+          });
+          this.totalResources.splice(item, 1);
+          this.totalResources = JSON.parse(JSON.stringify(this.totalResources));
+        }
+      }
+    },
+
+    moveRight() {
+      if (this.$refs.selected) {
+        let selectedCount = 0;
+        let selectedids = [];
+        this.$refs.selected.map((item, index) => {
+          if (item.$el.className.indexOf("bg-pace-grey") > -1) {
+            selectedCount ++;
+            selectedids.push(item.$el.id);
+          }
+        })
+        
+        if (selectedids.length == 0) {
+          return;
+        }
+
+        let selectedItems = selectedids.map(id => {
+          let item = findIndex(this.selectedModules, function (o) {
+            return o.id == id;
+          });
+          return this.selectedModules[item];
+        })
+
+        this.totalResources = [ ...this.totalResources, ...selectedItems ];
+
+        for (let i = 0; i < selectedids.length; i ++) {
+          let item = findIndex(this.selectedModules, function (o) {
+            return o.id == selectedids[i];
+          });
+          this.selectedModules.splice(item, 1);
+          this.selectedModules = JSON.parse(JSON.stringify(this.selectedModules));
         }
       }
     },
