@@ -14,7 +14,7 @@ const capabilityCodes = [{
 }, {
     id: 3,
     name: "Care Worker",
-    short: "HC",
+    short: "CW",
     items: [{
         description: "Person-centred communication to build trust, show empathy and demonstrate support for individuals and carers living with a life-limiting illness."
     }, {
