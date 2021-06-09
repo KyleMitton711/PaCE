@@ -96,7 +96,10 @@
             <v-icon small class="pace-orange--text" @click="showDeleteConfirmDialog(item)">mdi-delete</v-icon>
           </template>
           <template slot="item.name" slot-scope="{ item }">
-            <span class="font-weight-title">{{ item.name }}</span>
+            <v-avatar v-if="form.tagType == 12" size="24" color="white">  
+              <v-icon size="18" color="black">{{ 'mdi-' + item.logo }}</v-icon>
+            </v-avatar>
+             <span class="font-weight-title">{{ item.name }}</span>
           </template>
           <template v-slot:no-data>
             <v-btn color="primary" @click="initialize">Reload</v-btn>

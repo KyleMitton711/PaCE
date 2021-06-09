@@ -9,7 +9,12 @@
     </v-list-item-avatar>
 
     <v-list-item-content ref="content">
-      <span v-if="!item.isProgram" class="black--text heading" @click="viewResource(item)" aria-controls>{{item.title}}</span>
+      <span v-if="!item.isProgram" class="black--text heading" @click="viewResource(item)" aria-controls>
+          <v-avatar size="24" color="white">  
+            <v-icon size="18" color="black">{{ 'mdi-' + item.typeLogo }}</v-icon>
+          </v-avatar>
+           {{item.title}}
+      </span>
       <span v-if="item.isProgram" class="black--text heading program" @click="viewResource(item)" aria-controls>{{item.title}}</span>
 
       <div v-html="item.overview" v-if="item.overview" class="mt-2 overview mb-0"></div>
@@ -99,7 +104,7 @@ export default {
 }
 
 .program {
-  font-style: all-small-caps;
+  text-transform: uppercase;
 }
 
 ::v-deep .v-list-item__avatar {
