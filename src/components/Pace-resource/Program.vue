@@ -67,7 +67,7 @@
               <h3 class="mt-4"><a :href="resource.url" target="_blank">{{ resource.title }}</a></h3>
               <div v-html="resource.overview" class="mt-6"></div>
               <p>{{ resource.endorsements }}</p>
-              <p v-if="resource.outcome" class="mb-2"><b>Learning theory / approach</b></p>
+              <p v-if="resource.outcome" class="mb-2"><b>Learning Outcomes</b></p>
               <div v-html="resource.outcome" class="mt-2"></div>
               <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0"><b>Audience:</b></p>
               <p class="mb-0">{{ selectedAudienceItems }}</p>
@@ -88,6 +88,9 @@
         </v-btn>
       </div>
     </v-col>
+    <v-dialog v-model="loginModal" content-class="login-modal" overlay-color="#939597" :overlay-opacity="1">
+      <Login :dialogView="true" @close-modal="loginModal = false" />
+    </v-dialog>
     <v-snackbar
       v-model="snackbar"
       :multi-line="true"
@@ -97,7 +100,8 @@
       <br/>
         <p class="mb-0 mt-2 text-center">
           <router-link to="/auth/register">Create an account</router-link> | 
-          <router-link to="/auth/login">Sign in</router-link> | 
+          <!-- <router-link to="/auth/login">Sign in</router-link> -->
+          <a @click="loginModal = true">Sign in</a> |
           <a @click="snackbar = false">No thanks</a>
         </p>
     </v-snackbar>
@@ -110,6 +114,7 @@ import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
 import { findIndex } from "lodash";
 import { mapGetters, mapActions } from 'vuex'
 import resourceDetailMixin from "@/mixins/resourceDetailMixin";
+import Login from "@/views/pace-auth/Login";
 
 export default {
   name: "Program",
@@ -124,6 +129,10 @@ export default {
     }
   },
 
+  components: {
+    Login
+  },
+
   data: () => ({
     tab: null,
     isBookmarked: true,
@@ -133,7 +142,8 @@ export default {
     audienceItems: [],
     typeItems: [],
     modeItems: [],
-    snackbar: false
+    snackbar: false,
+    loginModal: false
   }),
 
   computed: {

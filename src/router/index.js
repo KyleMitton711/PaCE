@@ -28,8 +28,15 @@ const router = new Router({
 router.beforeResolve((to, from, next) => {
   // If this isn't an initial page load.
   if (to.name) {
+    if (from.name) {
+      localStorage.setItem('previousRoute', from.name);
+    } else {
+      localStorage.removeItem('previousRoute');
+    }
     // Start the route progress bar.
     NProgress.start(800);
+  } else {
+    localStorage.removeItem('previousRoute');
   }
   next();
 });

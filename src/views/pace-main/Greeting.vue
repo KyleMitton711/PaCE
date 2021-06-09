@@ -56,6 +56,7 @@
               </div>
               <div v-else>
                 <h4 class="tab-title mt-4">Which capabilities would you like to develop?</h4>
+                <p>Your selection will be highlighted in yellow, tap to deselect.</p>
                 <div class="mt-4">
                   <v-list>
                     <v-list-item-group

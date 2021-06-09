@@ -8,7 +8,7 @@
             </v-col>
             <v-col lg="5" md="6">
               <div class="pa-0 px-1 d-flex justify-end">
-                <v-btn icon text @click="$router.push('/')">
+                <v-btn icon text @click="close">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </div>
@@ -68,6 +68,13 @@ import { mapActions } from 'vuex';
 export default {
   name: "Login",
 
+  props: {
+    dialogView: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   data: () => ({
     valid: true,
     password: "",
@@ -82,7 +89,6 @@ export default {
     ],
     checkbox: false
   }),
-  computed: {},
   methods: {
     ...mapActions("auth", ["login"]),
     submit(event) {
@@ -102,6 +108,19 @@ export default {
             });
           }
         });
+      }
+    },
+    close() {
+      // let previousRoute = localStorage.getItem('previousRoute');
+      // if (previousRoute && previousRoute != "null" && previousRoute != undefined) {
+      //   this.$router.push({ name: previousRoute });
+      // } else {
+      //   this.$router.push('/');
+      // }
+      if (this.dialogView) {
+        this.$emit('close-modal');
+      } else {
+        this.$router.push('/');
       }
     }
   }
