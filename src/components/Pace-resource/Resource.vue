@@ -76,6 +76,7 @@
               {{ resource.title }}
             </a>
           </h3>
+          <a :href="resource.projectUrl" target="_blank">{{ resource.projectName }}</a>
           <div v-html="resource.overview" class="mt-6"></div>
           <p v-if="resource.outcome" class="mb-2">
             <b>Learning Outcomes</b>

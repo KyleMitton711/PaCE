@@ -65,6 +65,7 @@
                 <h3 class="ml-4">{{ resourceType }}</h3>
               </div>
               <h3 class="mt-4"><a :href="resource.url" target="_blank">{{ resource.title }}</a></h3>
+              <a :href="resource.projectUrl" target="_blank">{{ resource.projectName }}</a>
               <div v-html="resource.overview" class="mt-6"></div>
               <p>{{ resource.endorsements }}</p>
               <p v-if="resource.outcome" class="mb-2"><b>Learning Outcomes</b></p>
