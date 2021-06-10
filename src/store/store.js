@@ -18,6 +18,7 @@ export default new Vuex.Store({
     SidebarBg: "",
     navbarColor: "primary",
     setHorizontalLayout: false, // Horizontal layout
+    authModal: ""
   },
   mutations: {
     SET_SIDEBAR_DRAWER(state, payload) {
@@ -35,9 +36,18 @@ export default new Vuex.Store({
     SET_LAYOUT(state, payload) {
       state.setHorizontalLayout = payload;
     },
+    SET_AUTH_MODAL(state, payload) {
+      state.authModal = payload;
+    },
   },
-  actions: {},
-  getters: {},
+  actions: {
+    toggleAuthModal({ commit }, show) {
+      commit('SET_AUTH_MODAL', show);
+    }
+  },
+  getters: {
+    authModal: (state) => state.authModal
+  },
   namespace: true,
   modules: {
     auth,

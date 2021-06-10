@@ -8,7 +8,7 @@
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
                   <a class="white--text ml-auto mr-3 mt-3 white--text signin-link" v-if="user">Hi {{ user.firstName + ' ' + user.lastName }} <span class="v-underline" @click="logout"> Sign out ></span></a>
-                  <router-link to="/auth" class="v-underline white--text ml-auto mr-3 mt-3 white--text signin-link" v-else>Sign in ></router-link>
+                  <a @click="login" class="v-underline white--text ml-auto mr-3 mt-3 white--text signin-link" v-else>Sign in ></a>
                 </div>
                 <h3 class="white--text page-title mt-4">Search</h3>
                 <v-text-field
@@ -46,7 +46,7 @@
                           </v-btn>
                         </div>
                       </div>
-                      <p class="tip mt-5">Tip: <router-link to="/auth/register" class="tip v-underline"> Create an account</router-link> to save your filters for future use<br>
+                      <p class="tip mt-5">Tip: <a @click="register" class="tip v-underline"> Create an account</a> to save your filters for future use<br>
                         Note: You can clear your filters at any time to see all results.
                       </p>
                     </v-card>
@@ -380,6 +380,15 @@ export default {
   methods: {
     ...mapActions("tag", ["getTags"]),
     ...mapActions("resource", ["getResourceCount", "filterResources", "getCurrentResources"]),
+    ...mapActions(['toggleAuthModal']),
+
+    login() {
+      this.toggleAuthModal('LOGIN');
+    },
+
+    register() {
+      this.toggleAuthModal('REGISTER');
+    },
 
     goToSearch() {
       this.$router.push({ name: 'Greeting' })
@@ -524,7 +533,7 @@ export default {
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
-      window.location.href = "/auth";
+      window.location.reload();
     },
 
     clearCapabilities() {

@@ -21,6 +21,7 @@ import AdminUserMetrics from "@/views/pace-admin/main/AdminUserMetrics";
 // layout
 import Adminlayout from "@/layouts/full-layout/Adminlayout";
 import Blanklayout from "@/layouts/blank-layout/Blanklayout";
+import Authlayout from "@/layouts/blank-layout/Authlayout";
 import Greetinglayout from "@/layouts/blank-layout/Greetinglayout";
 
 export const routes = [
@@ -68,30 +69,30 @@ export const routes = [
         redirect: "auth/login",
         component: Blanklayout,
         children: [
-            {
-                name: "Login",
-                path: "login",
-                component: Login,
-                meta: {
-                    publicRoute: true
-                }
-            },
-            {
-                name: "Register",
-                path: "register",
-                component: Register,
-                meta: {
-                    publicRoute: true
-                }
-            },
-            {
-                name: "ResetPassword",
-                path: "resetpassword",
-                component: ResetPassword,
-                meta: {
-                    publicRoute: true
-                }
-            },
+            // {
+            //     name: "Login",
+            //     path: "login",
+            //     component: Login,
+            //     meta: {
+            //         publicRoute: true
+            //     }
+            // },
+            // {
+            //     name: "Register",
+            //     path: "register",
+            //     component: Register,
+            //     meta: {
+            //         publicRoute: true
+            //     }
+            // },
+            // {
+            //     name: "ResetPassword",
+            //     path: "resetpassword",
+            //     component: ResetPassword,
+            //     meta: {
+            //         publicRoute: true
+            //     }
+            // },
             {
                 name: "NewPassword",
                 path: "newpassword",
@@ -106,7 +107,7 @@ export const routes = [
     {
         path: "/admin/auth",
         redirect: "admin/auth/login",
-        component: Blanklayout,
+        component: Authlayout,
         children: [
             {
                 name: "AdminLogin",

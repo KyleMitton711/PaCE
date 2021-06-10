@@ -8,7 +8,7 @@
             </v-col>
             <v-col lg="5" md="6" class="pr-0">
               <div class="pa-0 px-3 d-flex justify-end">
-                <v-btn icon text @click="$router.push('/auth/login')">
+                <v-btn icon text @click="close">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </div>
@@ -68,6 +68,12 @@ import { validPassword } from "@/utils/validators";
 
 export default {
   name: "Register",
+  props: {
+    dialogView: {
+      type: Boolean,
+      default: false
+    }
+  },
   mixins: [validationMixin],
   validations: {
     form: {
@@ -109,12 +115,19 @@ export default {
           text: 'Check your inbox for the verification link.',
           type: 'success'
         });
-        this.$router.push({ path: "/auth/login" });
+        this.close();
       } else {
         this.$notify({
           text: res.errors[0].errorMessage,
           type: 'error'
         });
+      }
+    },
+    close() {
+      if (this.dialogView) {
+        this.$emit('close-modal');
+      } else {
+        this.$router.push('/');
       }
     }
   }
