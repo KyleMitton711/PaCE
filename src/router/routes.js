@@ -69,30 +69,30 @@ export const routes = [
         redirect: "auth/login",
         component: Blanklayout,
         children: [
-            {
-                name: "Login",
-                path: "login",
-                component: Login,
-                meta: {
-                    publicRoute: true
-                }
-            },
-            {
-                name: "Register",
-                path: "register",
-                component: Register,
-                meta: {
-                    publicRoute: true
-                }
-            },
-            {
-                name: "ResetPassword",
-                path: "resetpassword",
-                component: ResetPassword,
-                meta: {
-                    publicRoute: true
-                }
-            },
+            // {
+            //     name: "Login",
+            //     path: "login",
+            //     component: Login,
+            //     meta: {
+            //         publicRoute: true
+            //     }
+            // },
+            // {
+            //     name: "Register",
+            //     path: "register",
+            //     component: Register,
+            //     meta: {
+            //         publicRoute: true
+            //     }
+            // },
+            // {
+            //     name: "ResetPassword",
+            //     path: "resetpassword",
+            //     component: ResetPassword,
+            //     meta: {
+            //         publicRoute: true
+            //     }
+            // },
             {
                 name: "NewPassword",
                 path: "newpassword",
