@@ -86,6 +86,7 @@
           <p class="mt-4" v-if="resource.duration">
             <b>Duration</b> {{ resource.duration }}
           </p>
+          <p class="mb-0" v-if="resource.endorsements"><b>Certifications</b></p>
           <p v-if="resource.endorsements">{{ resource.endorsements }}</p>
 
           <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0">

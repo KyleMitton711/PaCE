@@ -224,7 +224,6 @@
                         <v-icon
                           class="pace-yellow--text bookmark-icon ml-auto"
                           size="30"
-                          aria-controls
                         >mdi-bookmark-outline</v-icon>.
                       </p>
                     </v-tab-item>
@@ -752,6 +751,7 @@ export default {
 .no-more-text {
   font-size: 14px;
   padding: 0 40px;
+  margin-top: 20px;
   text-align: center;
 }
 
