@@ -161,11 +161,12 @@ export default {
 
   watch: {
     user: {
-      handler: function (val) {
+      handler: async function (val) {
         if (!val) {
           this.snackbar = true;
         } else {
           this.snackbar = false;
+          this.resource = await this.getResourceDetail(val);
         }
       }
     },
