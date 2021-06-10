@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-0">
+  <v-container class="py-0 resource-container">
     <v-row class="white resource">
       <v-col
         cols="12"
@@ -218,8 +218,12 @@ export default {
   margin: 20px 0 !important;
 }
 
+.resource-container {
+  min-height: 100%;
+}
+
 .resource {
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 ::v-deep .resource .v-tab {
