@@ -11,13 +11,15 @@
         v-if="authModalShow == 'LOGIN'"
         :dialogView="true"
         @close-modal="authModalShow = null"
-        @show-register="authModalShow = 'REGISTER'"
+        @show-register="authModalShow = 'REGISTER', fromLogin = true"
         @reset-password="authModalShow = 'RESETPASSWORD'"
       />
       <Register
         v-else-if="authModalShow == 'REGISTER'"
         :dialogView="true"
-        @close-modal="authModalShow = 'LOGIN'"
+        :fromLogin="fromLogin"
+        @close-modal="authModalShow = null, fromLogin = false"
+        @show-login="authModalShow = 'LOGIN', fromLogin = false"
       />
       <ResetPassword
         v-else-if="authModalShow == 'RESETPASSWORD'"
@@ -52,7 +54,6 @@
 <script>
 import Login from "@/views/pace-auth/Login";
 import Register from "@/views/pace-auth/Register";
-// import NewPassword from "@/views/pace-auth/NewPassword";
 import ResetPassword from "@/views/pace-auth/ResetPassword";
 import { mapActions, mapGetters } from "vuex";
 export default {
@@ -60,8 +61,12 @@ export default {
   components: {
     Login,
     Register,
-    // NewPassword,
     ResetPassword,
+  },
+  data() {
+    return {
+      fromLogin: false
+    };
   },
   computed: {
     ...mapGetters("auth", ["user"]),

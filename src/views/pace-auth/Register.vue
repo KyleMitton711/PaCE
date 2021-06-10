@@ -72,7 +72,11 @@ export default {
     dialogView: {
       type: Boolean,
       default: false
-    }
+    },
+    fromLogin: {
+      type: Boolean,
+      default: false
+    },
   },
   mixins: [validationMixin],
   validations: {
@@ -107,6 +111,7 @@ export default {
   }),
   methods: {
     ...mapActions("account", ["register"]),
+    ...mapActions(["toggleAuthModal"]),
     async submit(event) {
       event.preventDefault();
       let res = await this.register(this.form);
@@ -125,7 +130,11 @@ export default {
     },
     close() {
       if (this.dialogView) {
-        this.$emit('close-modal');
+        if (this.fromLogin) {
+          this.$emit('show-login');
+        } else {
+          this.$emit('close-modal');
+        }
       } else {
         this.$router.push('/');
       }

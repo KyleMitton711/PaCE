@@ -103,21 +103,25 @@
           <p class="mb-0">{{ selectedModeItems }}</p>
         </div>
         <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-end">
-          <v-btn color="bg-pace-yellow" small fab @click="shareResource">
-            <v-icon class="white--text" aria-controls>mdi-share-variant</v-icon>
-          </v-btn>
+          <v-tooltip left>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="bg-pace-yellow" small fab @click="shareResource" v-bind="attrs" v-on="on">
+                <v-icon
+                  class="white--text"
+                  aria-controls
+                >mdi-share-variant</v-icon>
+              </v-btn>
+            </template>
+            <span>Share resource</span>
+          </v-tooltip>
         </div>
       </v-col>
-      <v-dialog v-model="loginModal" content-class="login-modal" overlay-color="#939597" :overlay-opacity="1">
-        <Login :dialogView="true" @close-modal="loginModal = false" />
-      </v-dialog>
       <v-snackbar v-model="snackbar" :multi-line="true" :timeout="-1">
         To keep items for later in 'My Resources' and for PaCE to recall your
         filters you need to sign-in.
         <br />
         <p class="mb-0 mt-2 text-center">
           <a @click="register">Create an account</a> | 
-          <!-- <router-link to="/auth/login">Sign in</router-link> -->
           <a @click="login">Sign in</a> |
           <a @click="snackbar = false">No thanks</a>
         </p>
@@ -127,20 +131,14 @@
 </template>
 
 <script>
-import { resourceTypeEnumItems, tagTypeEnumItems } from "@/data/staticItems";
-import { findIndex } from "lodash";
+import { tagTypeEnumItems } from "@/data/staticItems";
 import { mapGetters, mapActions } from "vuex";
 import resourceDetailMixin from "@/mixins/resourceDetailMixin";
-import Login from "@/views/pace-auth/Login";
 
 export default {
   name: "Resource",
 
   mixins: [resourceDetailMixin],
-
-  components: {
-    Login
-  },
 
   props: {
     resourceId: String,
@@ -167,6 +165,8 @@ export default {
       handler: function (val) {
         if (!val) {
           this.snackbar = true;
+        } else {
+          this.snackbar = false;
         }
       },
     },
