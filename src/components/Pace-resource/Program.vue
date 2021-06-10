@@ -223,6 +223,7 @@ export default {
 
 .resource-container {
   min-height: 100%;
+  display: flex;
 }
 
 .resource {
