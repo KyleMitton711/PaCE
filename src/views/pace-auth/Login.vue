@@ -17,7 +17,7 @@
                 <h2 class="font-weight-bold mt-4 blue-grey--text text--darken-2">Sign in</h2>
                 <h6 class="subtitle-1">
                   Don't have an account?
-                  <a href="/auth/register" class="pace-orange--text">Sign Up</a>
+                  <a @click="register" class="pace-orange--text">Sign Up</a>
                 </h6>
 
                 <v-form ref="form" v-model="valid" @submit="submit">
@@ -42,7 +42,7 @@
 
                   <div class="d-block d-sm-flex align-center mb-4 mb-sm-0">
                     <div class="ml-auto text-right">
-                      <a href="/auth/resetpassword" class="link">Forgot your password</a>
+                      <a @click="forgotPassword" class="link">Forgot your password</a>
                     </div>
                   </div>
                   <v-btn
@@ -100,7 +100,7 @@ export default {
           Password: this.password
         }).then(res => {
           if (res.data) {
-            this.$router.push({ path: "/search" });
+            this.close();
           } else {
             this.$notify({
               text: res.errors[0].errorMessage,
@@ -121,6 +121,20 @@ export default {
         this.$emit('close-modal');
       } else {
         this.$router.push('/');
+      }
+    },
+    register() {
+      if (this.dialogView) {
+        this.$emit('show-register');
+      } else {
+        this.$router.push('/auth/register');
+      }
+    },
+    forgotPassword() {
+      if (this.dialogView) {
+        this.$emit('reset-password');
+      } else {
+        this.$router.push("/auth/resetpassword");
       }
     }
   }

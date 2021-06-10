@@ -18,11 +18,11 @@
                   <span>Hi {{ user.firstName + ' ' + user.lastName }}</span>&nbsp;
                   <span class="v-underline" @click="logout">Sign out ></span>
                 </a>
-                <router-link
-                  to="/auth"
+                <a
+                  @click="login"
                   class="v-underline ml-auto mr-3 black--text signin-link"
                   v-else
-                >Sign in ></router-link>
+                >Sign in ></a>
               </div>
               <div v-if="tab == 1">
                 <p class="statement text-wrap">What are you looking for today?</p>
@@ -132,6 +132,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(['toggleAuthModal']),
     selectResource(index) {
       this.selectedResource = index;
       this.selectedCapabilities = null;
@@ -149,7 +150,11 @@ export default {
     logout() {
       localStorage.removeItem("token");
       localStorage.removeItem("refreshToken");
-      window.location.href = "/auth";
+      window.location.reload();
+    },
+
+    login() {
+      this.toggleAuthModal('LOGIN');
     }
   },
 

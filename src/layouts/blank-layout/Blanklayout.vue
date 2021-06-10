@@ -1,20 +1,69 @@
 <template>
   <v-app id="blank">
+    <v-dialog
+      :value="authModalShow"
+      content-class="login-modal"
+      overlay-color="#939597"
+      :overlay-opacity="1"
+      persistent
+    >
+      <Login
+        v-if="authModalShow == 'LOGIN'"
+        :dialogView="true"
+        @close-modal="authModalShow = null"
+        @show-register="authModalShow = 'REGISTER'"
+        @reset-password="authModalShow = 'RESETPASSWORD'"
+      />
+      <Register
+        v-else-if="authModalShow == 'REGISTER'"
+        :dialogView="true"
+        @close-modal="authModalShow = 'LOGIN'"
+      />
+      <ResetPassword
+        v-else-if="authModalShow == 'RESETPASSWORD'"
+        :dialogView="true"
+        @close-modal="authModalShow = 'LOGIN'"
+      />
+    </v-dialog>
     <router-view />
   </v-app>
 </template>
 
 <script>
-  export default {
-    name: 'Blanklayout',
-    components: {
-      
+import Login from "@/views/pace-auth/Login";
+import Register from "@/views/pace-auth/Register";
+// import NewPassword from "@/views/pace-auth/NewPassword";
+import ResetPassword from "@/views/pace-auth/ResetPassword";
+import { mapActions, mapGetters } from "vuex";
+export default {
+  name: "Blanklayout",
+  components: {
+    Login,
+    Register,
+    // NewPassword,
+    ResetPassword
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters(["authModal"]),
+    authModalShow: {
+      get() {
+        return this.authModal;
+      },
+      set(val) {
+        this.toggleAuthModal(val);
+      },
     },
-  }
+  },
+  methods: {
+    ...mapActions(["toggleAuthModal"]),
+  },
+};
 </script>
 
 <style lang="scss">
-
 #blank::after {
   content: "";
   position: absolute;
@@ -23,7 +72,7 @@
   width: 100%;
   height: 100%;
   z-index: 0;
-  background: url('../../assets/PaCE_Spider_GraphicElement.png');
+  background: url("../../assets/PaCE_Spider_GraphicElement.png");
   background-size: 65% 85vh;
   background-position: -100px -100px;
   background-repeat: no-repeat;
@@ -41,7 +90,7 @@
 
 @media (max-width: 600px) {
   #blank {
-    background: #F15F35;
+    background: #f15f35;
   }
 
   #blank::after {

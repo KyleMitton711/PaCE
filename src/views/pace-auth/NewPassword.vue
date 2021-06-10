@@ -8,7 +8,7 @@
             </v-col>
             <v-col lg="5" md="6" class="pr-0">
               <div class="pa-0 px-4 d-flex justify-end">
-                <v-btn icon text @click="$router.push('/auth')">
+                <v-btn icon text @click="close">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </div>
@@ -69,6 +69,12 @@ import { mapActions } from 'vuex';
 
 export default {
   name: "NewPassword",
+  props: {
+    dialogView: {
+      type: Boolean,
+      default: false
+    }
+  },
   mixins: [validationMixin],
   validations: {
     password: {
@@ -115,12 +121,19 @@ export default {
           text: 'Password is reset successfully!',
           type: 'success'
         });
-        this.$router.push({ path: "/auth/login" });
+        this.close();
       } else {
         this.$notify({
           text: res.errors[0].errorMessage,
           type: 'error'
         });
+      }
+    },
+    close() {
+      if (this.dialogView) {
+        this.$emit('close-modal');
+      } else {
+        this.$router.push('/');
       }
     }
   }

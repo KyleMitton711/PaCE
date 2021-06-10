@@ -8,7 +8,7 @@
             </v-col>
             <v-col lg="5" md="6" class="pr-0">
               <div class="pa-0 px-4 d-flex justify-end">
-                <v-btn icon text @click="$router.go(-1)">
+                <v-btn icon text @click="close">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
               </div>
@@ -47,6 +47,12 @@
 import { mapActions } from 'vuex';
 export default {
   name: "ResetPassword",
+  props: {
+    dialogView: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: () => ({
     valid: true,
     email: "",
@@ -78,6 +84,13 @@ export default {
             type: 'error'
           });
         }
+      }
+    },
+    close() {
+      if (this.dialogView) {
+        this.$emit('close-modal');
+      } else {
+        this.$router.push('/');
       }
     }
   }

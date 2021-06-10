@@ -100,9 +100,9 @@
       To keep items for later in 'My Resources' and for PaCE to recall your filters you need to sign-in.
       <br/>
         <p class="mb-0 mt-2 text-center">
-          <router-link to="/auth/register">Create an account</router-link> | 
+          <a @click="register">Create an account</a> | 
           <!-- <router-link to="/auth/login">Sign in</router-link> -->
-          <a @click="loginModal = true">Sign in</a> |
+          <a @click="login">Sign in</a> |
           <a @click="snackbar = false">No thanks</a>
         </p>
     </v-snackbar>
@@ -189,9 +189,17 @@ export default {
 
   methods: {
     ...mapActions("resource", ["bookmarkResource", "unbookmarkResource", "getResourceDetail"]),
-
+    ...mapActions(["toggleAuthModal"]),
     goToModule(item) {
       this.$emit('view-module', item);
+    },
+
+    login() {
+      this.toggleAuthModal('LOGIN');
+    },
+
+    register() {
+      this.toggleAuthModal('REGISTER');
     }
   },
 
