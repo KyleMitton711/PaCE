@@ -64,7 +64,15 @@
                 </v-avatar>
                 <h3 class="ml-4">{{ resourceType }}</h3>
               </div>
-              <h3 class="mt-4"><a :href="resource.url" target="_blank">{{ resource.title }}</a></h3>
+
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <a :href="resource.url" target="_blank" class="title mt-4" v-bind="attrs" v-on="on">{{ resource.title }}</a>
+                </template>
+                <span>click here to view the resource on our project partner website</span>
+              </v-tooltip>
+              <br/>
+
               <a :href="resource.projectUrl" target="_blank">{{ resource.projectName }}</a>
               <div v-html="resource.overview" class="mt-6"></div>
               <p class="mb-0" v-if="resource.endorsements"><b>Certifications</b></p>
