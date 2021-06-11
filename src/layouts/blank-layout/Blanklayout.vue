@@ -3,8 +3,8 @@
     <v-dialog
       :value="authModalShow"
       content-class="login-modal"
-      overlay-color="#939597"
-      :overlay-opacity="1"
+      :overlay-color="'#333'"
+      :overlay-opacity="0.8"
       persistent
     >
       <Login
