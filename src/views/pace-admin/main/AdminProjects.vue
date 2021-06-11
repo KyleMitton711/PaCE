@@ -401,6 +401,8 @@ export default {
 >>>.vue-dropzone .dz-progress 
   display: none
 
+::v-deep .vue-dropzone .dz-message 
+  margin: 16px
 
 .subtitle
   color: #314b5f

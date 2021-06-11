@@ -35,6 +35,9 @@ export default class APIService {
         if(isRefreshToken) {
           return await this.get(url, headers, responseType);
         }
+      } else if (e.response.status == 403) {
+        document.location.href = "/";
+        return;
       }
       throw e.response;
     }
@@ -55,6 +58,9 @@ export default class APIService {
         if(isRefreshToken) {
           return await this.post(url, content, headers, responseType);
         }
+      } else if (e.response.status == 403) {
+        document.location.href = "/";
+        return;
       }
       throw e.response;
     }
@@ -74,6 +80,9 @@ export default class APIService {
         if(isRefreshToken) {
           return await this.put(url, content, headers);
         }
+      } else if (e.response.status == 403) {
+        document.location.href = "/";
+        return;
       }
       throw e.response;
     }
@@ -93,6 +102,9 @@ export default class APIService {
         if(isRefreshToken) {
           return await this.patch(url, content, headers);
         }
+      } else if (e.response.status == 403) {
+        document.location.href = "/";
+        return;
       }
       throw e.response;
     }
@@ -113,6 +125,9 @@ export default class APIService {
         if(isRefreshToken) {
           return await this.delete(url, content, headers);
         }
+      } else if (e.response.status == 403) {
+        document.location.href = "/";
+        return;
       }
       throw e.response;
     }
@@ -138,6 +153,9 @@ export default class APIService {
           await this.download(requestMethod, url, responseType, headers, payload);
           return;
         }
+      } else if (e.response.status == 403) {
+        document.location.href = "/";
+        return;
       }
       throw e.response;
     }
@@ -153,7 +171,7 @@ export default class APIService {
       if (window.location.pathname.indexOf('admin') > -1) {
         document.location.href = "/admin/auth";
       } else {
-        document.location.href = "/auth";
+        document.location.href = "/";
       }
     }
     return false;

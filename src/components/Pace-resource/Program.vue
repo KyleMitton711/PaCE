@@ -166,7 +166,7 @@ export default {
           this.snackbar = true;
         } else {
           this.snackbar = false;
-          this.resource = await this.getResourceDetail(val);
+          this.resource = await this.getResourceDetail(this.resourceId);
         }
       }
     },
