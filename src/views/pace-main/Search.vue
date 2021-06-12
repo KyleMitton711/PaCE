@@ -7,7 +7,9 @@
             <v-col lg="5" md="5" cols="12" class="pa-0 full-height-md d-flex flex-column pt-0 left-block">
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
-                  <a class="white--text ml-auto mr-3 mt-3 white--text signin-link" v-if="user">Hi {{ user.firstName + ' ' + user.lastName }} <span class="v-underline" @click="logout"> Sign out ></span></a>
+                  <a class="white--text ml-auto mr-3 mt-3 white--text signin-link d-flex justify-end flex-wrap" v-if="user">
+                    <span>Hi {{ user.firstName + ' ' + user.lastName }} </span>&nbsp;
+                    <span class="v-underline" @click="logout"> Sign out ></span></a>
                   <a @click="login" class="v-underline white--text ml-auto mr-3 mt-3 white--text signin-link" v-else>Sign in ></a>
                 </div>
                 <h3 class="white--text page-title mt-4">Search</h3>
@@ -196,7 +198,7 @@
                         </infinite-loading>
                       </v-list>
                       <template v-else>
-                        <div v-if="isLoadingResource" class="text-center">
+                        <div v-if="isLoadingResource" class="text-center mt-5">
                           <v-progress-circular
                             :size="70"
                             :width="7"
@@ -244,7 +246,7 @@
                     </infinite-loading>
                   </v-list>
                   <template v-else>
-                    <div v-if="isLoadingResource" class="text-center">
+                    <div v-if="isLoadingResource" class="text-center mt-5">
                       <v-progress-circular
                         :size="70"
                         :width="7"
@@ -446,6 +448,7 @@ export default {
       }
 
       if (this.user && !this.isMobile) {
+        this.myResources = [];
         let res = await this.getCurrentResources();
         this.myResources = Object.assign([], res.data);
       }
