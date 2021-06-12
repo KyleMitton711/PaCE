@@ -689,6 +689,9 @@ export default {
     close() {
       this.dialog = false;
       this.form = Object.assign({}, this.defaultItem);
+      this.selectedModules = [];
+      this.resourceKeyword = null;
+      this.searchResource();
       this.editedIndex = -1;
       this.selectedTags = [];
       setTimeout(() => {
@@ -806,7 +809,12 @@ export default {
       this.totalResources = this.totalResources.filter((item) => {
         if (!item.isProgram) {
           if (item.items == null || item.items.length == 0) {
-            return item;
+            let isSelected = findIndex(this.selectedModules, function (o) {
+              return o.id == item.id;
+            });
+            if (isSelected == -1) {
+              return item;
+            }
           }
         }
       });
