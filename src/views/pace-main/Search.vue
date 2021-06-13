@@ -212,22 +212,24 @@
                       </template>
                     </v-tab-item>
                     <v-tab-item>
-                      <v-list two-line subheader class="pa-2" v-if="myResources.length > 0">
-                        <ResourceListItem
-                          v-for="(item, i) in myResources"
-                          :key="i + 'bookmarked'"
-                          :item="item"
-                          @view-resource="viewResource(item)"
-                          @view-program="viewProgram(item)"
-                        />
-                      </v-list>
-                      <p class="no-more-text" v-else>
-                        Resources can be kept for later reference. Simply tap the bookmark 
-                        <v-icon
-                          class="pace-yellow--text bookmark-icon ml-auto"
-                          size="30"
-                        >mdi-bookmark-outline</v-icon>.
-                      </p>
+                      <template v-if="myResourceLoaded">
+                        <v-list two-line subheader class="pa-2" v-if="myResources.length > 0">
+                          <ResourceListItem
+                            v-for="(item, i) in myResources"
+                            :key="i + 'bookmarked'"
+                            :item="item"
+                            @view-resource="viewResource(item)"
+                            @view-program="viewProgram(item)"
+                          />
+                        </v-list>
+                        <p class="no-more-text" v-else>
+                          Resources can be kept for later reference. Simply tap the bookmark 
+                          <v-icon
+                            class="pace-yellow--text bookmark-icon ml-auto"
+                            size="30"
+                          >mdi-bookmark-outline</v-icon>.
+                        </p>
+                      </template>
                     </v-tab-item>
                   </v-tabs-items>
                 </template>
@@ -336,7 +338,8 @@ export default {
     resourceLoaded: false,
     moduleMode: false,
     isMobile: false,
-    resourceListTab: 0
+    resourceListTab: 0,
+    myResourceLoaded: false
   }),
 
   computed: {
@@ -383,8 +386,7 @@ export default {
     user: {
       handler: async function (val) {
         if (val) {
-          let res = await this.getCurrentResources();
-          this.myResources = res.data;
+          this.loadCurrentResources();
         }
       },
       deep: true
@@ -460,10 +462,18 @@ export default {
       }
 
       if (this.user && !this.isMobile) {
-        this.myResources = [];
-        let res = await this.getCurrentResources();
-        this.myResources = Object.assign([], res.data);
+        this.loadCurrentResources();
       }
+    },
+
+    async loadCurrentResources() {
+      this.myResourceLoaded = false;
+      this.myResources = [];
+      let res = await this.getCurrentResources();
+      this.myResources = JSON.parse(JSON.stringify(res.data));
+      setTimeout(() => {
+        this.myResourceLoaded = true;
+      }, 200)
     },
 
     async viewResourceList($state = null) {
@@ -598,12 +608,14 @@ export default {
       if (window.innerWidth < 600) {
         if (!this.isMobile) {
           if (this.user) {
+            this.myResourceLoaded = false;
             let res = await this.getCurrentResources();
             if (window.innerWidth < 600) {
               this.resources = res.data;
             } else {
               this.myResources = res.data;
             }
+            this.myResourceLoaded = true;
           }
           this.changeFilters();
         }
@@ -611,12 +623,14 @@ export default {
       } else {
         if (this.isMobile) {
           if (this.user) {
+            this.myResourceLoaded = false;
             let res = await this.getCurrentResources();
             if (window.innerWidth < 600) {
               this.resources = res.data;
             } else {
               this.myResources = res.data;
             }
+            this.myResourceLoaded = true;
           }
           this.changeFilters();
         }
@@ -673,8 +687,7 @@ export default {
     this.changeFilters();
 
     if (this.user) {
-      let res = await this.getCurrentResources();
-      this.myResources = res.data;
+      this.loadCurrentResources();
     }
   }
 };
