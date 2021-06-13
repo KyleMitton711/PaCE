@@ -387,6 +387,7 @@ export default {
           this.myResources = res.data;
         }
       },
+      deep: true
     }
   },
 
