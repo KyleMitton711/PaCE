@@ -379,6 +379,17 @@ export default {
     },
   },
 
+  watch: {
+    user: {
+      handler: async function (val) {
+        if (val) {
+          let res = await this.getCurrentResources();
+          this.myResources = res.data;
+        }
+      },
+    }
+  },
+
   methods: {
     ...mapActions("tag", ["getTags"]),
     ...mapActions("resource", ["getResourceCount", "filterResources", "getCurrentResources"]),
