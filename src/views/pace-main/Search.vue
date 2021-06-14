@@ -216,7 +216,7 @@
                         <v-list two-line subheader class="pa-2" v-if="myResources.length > 0">
                           <ResourceListItem
                             v-for="(item, i) in myResources"
-                            :key="i + 'bookmarked'"
+                            :key="i + 'bookmarked-desktop'"
                             :item="item"
                             @view-resource="viewResource(item)"
                             @view-program="viewProgram(item)"
@@ -410,18 +410,6 @@ export default {
       this.$router.push({ name: 'Greeting' })
     },
 
-    toggleResource(param, i) {
-      if (param) {
-        let tmp = Object.assign([], this.myResources);
-        tmp[i]['status'] = tmp[i]['status'] ? !tmp[i]['status'] : true;
-        this.myResources = Object.assign([], tmp);
-      } else {
-        let tmp = Object.assign([], this.resources);
-        tmp[i]['status'] = tmp[i]['status'] ? !tmp[i]['status'] : true;
-        this.resources = Object.assign([], tmp);
-      }
-    },
-
     viewResource(item) {
       this.selectedResource = Object.assign({}, item);
       this.selectedResource = JSON.parse(JSON.stringify(this.selectedResource));
@@ -473,7 +461,7 @@ export default {
       this.myResources = JSON.parse(JSON.stringify(res.data));
       setTimeout(() => {
         this.myResourceLoaded = true;
-      }, 200)
+      }, 500)
     },
 
     async viewResourceList($state = null) {

@@ -258,7 +258,7 @@ export default {
 
 @media (max-width: 600px) {
   .page-header-title-block {
-    width: 100%;
+    width: calc(100vw - 40px);
   }
 }
 </style>
