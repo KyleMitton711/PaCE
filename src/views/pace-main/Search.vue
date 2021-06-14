@@ -22,7 +22,7 @@
                   v-model="search"
                   @input="changeFilters"
                 ></v-text-field>
-                <p class="text-right"><a class="white--text v-underline" :style="`cursor: ` + (resourceCount && resourceCount > 0 ? 'pointer' : 'text')" @click="viewResourceList" >Browse {{ resourceCount && resourceCount > 0 ? resourceCount : 'no' }} result{{ resourceCount != 1 ? 's' : ''}} ></a></p>
+                <p class="text-right"><a class="white--text v-underline" :style="`cursor: ` + (resourceCount && resourceCount > 0 && isMobile ? 'pointer' : 'text')" @click="browseResourceList" >Browse {{ resourceCount && resourceCount > 0 ? resourceCount : 'no' }} result{{ resourceCount != 1 ? 's' : ''}} ></a></p>
               </div>
               <div class="search-info px-sm-10 px-1 pt-2">
                 <v-tabs
@@ -230,6 +230,14 @@
                           >mdi-bookmark-outline</v-icon>.
                         </p>
                       </template>
+                      <div v-else class="text-center mt-5">
+                        <v-progress-circular
+                          :size="70"
+                          :width="7"
+                          color="pace-yellow"
+                          indeterminate
+                        ></v-progress-circular>
+                      </div>
                     </v-tab-item>
                   </v-tabs-items>
                 </template>
@@ -462,6 +470,14 @@ export default {
       setTimeout(() => {
         this.myResourceLoaded = true;
       }, 500)
+    },
+
+    browseResourceList() {
+      if (window.innerWidth < 600) {
+        this.$router.push('/resources');
+      } else {
+        // this.resourceListTab = 0;
+      }
     },
 
     async viewResourceList($state = null) {
