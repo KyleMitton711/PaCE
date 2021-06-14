@@ -10,10 +10,10 @@
 
     <v-list-item-content ref="content">
       <span v-if="!item.isProgram" class="black--text heading" @click="viewResource(item)" aria-controls>
-          <v-avatar size="24" color="white">  
-            <v-icon size="18" color="black">{{ 'mdi-' + item.typeLogo }}</v-icon>
-          </v-avatar>
-           {{item.title}}
+        <v-avatar size="24" color="white">  
+          <v-icon size="18" color="black">{{ 'mdi-' + item.typeLogo }}</v-icon>
+        </v-avatar>
+          {{item.title}}
       </span>
       <span v-if="item.isProgram" class="black--text heading program" @click="viewResource(item)" aria-controls>{{item.title}}</span>
 
@@ -65,16 +65,20 @@ export default {
       } else {
         this.$refs.wrapper.$el.style.height = this.heightLimit + 'px';
       }
+    },
+
+    setContentHeight() {
+      this.$refs.wrapper.$el.style.height = this.heightLimit + 'px';
+      if (this.$refs.content.clientHeight > this.heightLimit) {
+        this.heightOverflowed = true;
+      } else {
+        let height = Math.max(this.$refs.avatar.$el.clientHeight + 32, this.$refs.content.clientHeight);
+        this.$refs.wrapper.$el.style.height = height + 'px';
+      }
     }
   },
   mounted() {
-    this.$refs.wrapper.$el.style.height = this.heightLimit + 'px';
-    if (this.$refs.content.clientHeight > this.heightLimit) {
-      this.heightOverflowed = true;
-    } else {
-      let height = Math.max(this.$refs.avatar.$el.clientHeight + 32, this.$refs.content.clientHeight);
-      this.$refs.wrapper.$el.style.height = height + 'px';
-    }
+    this.setContentHeight();
   }
 };
 </script>

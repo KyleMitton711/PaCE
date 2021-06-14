@@ -212,32 +212,34 @@
                       </template>
                     </v-tab-item>
                     <v-tab-item>
-                      <template v-if="myResourceLoaded">
-                        <v-list two-line subheader class="pa-2" v-if="myResources.length > 0">
-                          <ResourceListItem
-                            v-for="(item, i) in myResources"
-                            :key="i + 'bookmarked-desktop'"
-                            :item="item"
-                            @view-resource="viewResource(item)"
-                            @view-program="viewProgram(item)"
-                          />
-                        </v-list>
-                        <p class="no-more-text" v-else>
-                          Resources can be kept for later reference. Simply tap the bookmark 
-                          <v-icon
-                            class="pace-yellow--text bookmark-icon ml-auto"
-                            size="30"
-                          >mdi-bookmark-outline</v-icon>.
-                        </p>
+                      <template v-if="showMyResourcesTab">
+                        <template v-if="myResourceLoaded">
+                          <v-list two-line subheader class="pa-2" v-if="myResources.length > 0">
+                            <ResourceListItem
+                              v-for="(item, i) in myResources"
+                              :key="i + 'bookmarked-desktop' + item.title"
+                              :item="item"
+                              @view-resource="viewResource(item)"
+                              @view-program="viewProgram(item)"
+                            />
+                          </v-list>
+                          <p class="no-more-text" v-else>
+                            Resources can be kept for later reference. Simply tap the bookmark 
+                            <v-icon
+                              class="pace-yellow--text bookmark-icon ml-auto"
+                              size="30"
+                            >mdi-bookmark-outline</v-icon>.
+                          </p>
+                        </template>
+                        <div v-else class="text-center mt-5">
+                          <v-progress-circular
+                            :size="70"
+                            :width="7"
+                            color="pace-yellow"
+                            indeterminate
+                          ></v-progress-circular>
+                        </div>
                       </template>
-                      <div v-else class="text-center mt-5">
-                        <v-progress-circular
-                          :size="70"
-                          :width="7"
-                          color="pace-yellow"
-                          indeterminate
-                        ></v-progress-circular>
-                      </div>
                     </v-tab-item>
                   </v-tabs-items>
                 </template>
@@ -347,7 +349,8 @@ export default {
     moduleMode: false,
     isMobile: false,
     resourceListTab: 0,
-    myResourceLoaded: false
+    myResourceLoaded: false,
+    showMyResourcesTab: false
   }),
 
   computed: {
@@ -398,6 +401,15 @@ export default {
         }
       },
       deep: true
+    },
+
+    resourceListTab(val) {
+      if (val == 1) {
+        this.showMyResourcesTab = false;
+        this.$nextTick(() => {
+          this.showMyResourcesTab = true;
+        })
+      }
     }
   },
 
