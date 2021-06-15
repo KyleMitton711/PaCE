@@ -705,6 +705,7 @@ export default {
     if (this.user) {
       this.loadCurrentResources();
     }
+    
   }
 };
 </script>
