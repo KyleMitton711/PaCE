@@ -201,6 +201,7 @@ import {
   helpers 
 } from "vuelidate/lib/validators";
 import validationMixin from "@/mixins/validationMixin";
+import fileuploadMixin from "@/mixins/fileuploadMixin";
 import debounce from "debounce";
 import { upload } from "@/fileupload";
 import { validPassword } from "@/utils/validators"
@@ -212,7 +213,7 @@ const validateIf = (prop, validator) =>
 
 export default {
   name: "AdminUsers",
-  mixins: [validationMixin],
+  mixins: [validationMixin, fileuploadMixin],
   validations: {
     form: {
       firstName: { required },
@@ -298,16 +299,6 @@ export default {
     deleteConfirmDialog: false,
     selectedItemId: null,
     isLoading: false,
-    dropzoneOptions: {
-      url: 'https://httpbin.org/post',
-      thumbnailWidth: 150,
-      maxFilesize: 0.5,
-      headers: { "My-Awesome-Header": "header value" },
-      autoDiscover: false,
-      autoProcessQueue: false,
-      autoQueue: false,
-      acceptedFiles: "image/png, image/jpeg",
-    },
     userTypeItems: [{
         id: 0,
         name: 'User'
@@ -484,6 +475,9 @@ export default {
   border-radius: 50%
   margin: 0 auto
   overflow: hidden
+
+::v-deep .vue-dropzone .dz-message 
+  margin: 16px
 
 ::v-deep .dropzone .dz-preview
     margin: 0

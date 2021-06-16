@@ -184,31 +184,33 @@
 
                   <v-tabs-items v-model="resourceListTab">
                     <v-tab-item>
-                      <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0">
-                        <ResourceListItem
-                          v-for="(item, i) in resources"
-                          :key="i + item.title"
-                          :item="item"
-                          @view-resource="viewResource(item)"
-                          @view-program="viewProgram"
-                        />
-                        <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
-                          <div slot="no-more"></div>
-                          <div slot="no-results"></div>
-                        </infinite-loading>
-                      </v-list>
-                      <template v-else>
-                        <div v-if="isLoadingResource" class="text-center mt-5">
-                          <v-progress-circular
-                            :size="70"
-                            :width="7"
-                            color="pace-yellow"
-                            indeterminate
-                          ></v-progress-circular>
-                        </div>
-                        <p v-else class="no-more-text">
-                          There are no matching results. Please try clearing some filters and keywords from your search.
-                        </p>
+                      <template v-if="!showMyResourcesTab">
+                        <v-list two-line subheader class="pt-5 mb-10" v-if="resources.length > 0">
+                          <ResourceListItem
+                            v-for="(item, i) in resources"
+                            :key="i + item.title"
+                            :item="item"
+                            @view-resource="viewResource(item)"
+                            @view-program="viewProgram"
+                          />
+                          <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
+                            <div slot="no-more"></div>
+                            <div slot="no-results"></div>
+                          </infinite-loading>
+                        </v-list>
+                        <template v-else>
+                          <div v-if="isLoadingResource" class="text-center mt-5">
+                            <v-progress-circular
+                              :size="70"
+                              :width="7"
+                              color="pace-yellow"
+                              indeterminate
+                            ></v-progress-circular>
+                          </div>
+                          <p v-else class="no-more-text">
+                            There are no matching results. Please try clearing some filters and keywords from your search.
+                          </p>
+                        </template>
                       </template>
                     </v-tab-item>
                     <v-tab-item>
@@ -408,6 +410,11 @@ export default {
         this.showMyResourcesTab = false;
         this.$nextTick(() => {
           this.showMyResourcesTab = true;
+        })
+      } else {
+        this.showMyResourcesTab = true;
+        this.$nextTick(() => {
+          this.showMyResourcesTab = false;
         })
       }
     }
