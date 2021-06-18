@@ -222,7 +222,7 @@
                               :key="i + 'bookmarked-desktop' + item.title"
                               :item="item"
                               @view-resource="viewResource(item)"
-                              @view-program="viewProgram(item)"
+                              @view-program="viewProgram"
                             />
                           </v-list>
                           <p class="no-more-text" v-else>
@@ -252,7 +252,7 @@
                       :key="i + item.title"
                       :item="item"
                       @view-resource="viewResource(item)"
-                      @view-program="viewProgram(item)"
+                      @view-program="viewProgram"
                     />
                     <infinite-loading @infinite="infiniteHandler" spinner="bubbles">
                       <div slot="no-more"></div>
