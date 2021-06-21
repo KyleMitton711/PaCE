@@ -40,7 +40,7 @@
           grow
         >
           <v-tab>
-            Modules
+            Resources
           </v-tab>
           <v-tab>
             Summary
@@ -51,7 +51,13 @@
           <v-tab-item>
             <div class="pa-4">
               <div v-for="(item, index) in programModules" :key="index">
-                <h3 aria-controls @click="goToModule(item)">{{item.title}}</h3>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <h3 aria-controls class="pace-orange--text" @click="goToModule(item)" v-bind="attrs" v-on="on">{{item.title}}</h3>
+                  </template>
+                  <span>click here to view the resource</span>
+                </v-tooltip>
+                
                 <p class="pace-grey--text" v-html="item.overview"></p>
               </div>
             </div>
@@ -79,6 +85,19 @@
               <p>{{ resource.endorsements }}</p>
               <p v-if="resource.outcome" class="mb-2"><b>Learning Outcomes</b></p>
               <div v-html="resource.outcome" class="mt-2"></div>
+              <template v-if="resource.capabilityCodes.length > 0">
+                <p class="mt-4 mb-0"><b>Capabilities:</b></p>
+
+                <div>
+                  <v-chip
+                    class="ma-2"
+                    v-for="(code, index) in resource.capabilityCodes"
+                    :key="index"
+                  >
+                    {{ code }}
+                  </v-chip>
+                </div>
+              </template>
               <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0"><b>Audience:</b></p>
               <p class="mb-0">{{ selectedAudienceItems }}</p>
               <p class="mt-2 mb-0" v-if="selectedTypeItems.length > 0"><b>Type:</b></p>
@@ -139,7 +158,7 @@ export default {
   },
 
   data: () => ({
-    tab: null,
+    tab: 1,
     isBookmarked: true,
     resourceTypeItems: resourceTypeEnumItems,
     tagTypeItems: tagTypeEnumItems,

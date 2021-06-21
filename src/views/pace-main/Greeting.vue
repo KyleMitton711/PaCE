@@ -39,7 +39,7 @@
                           <span class="white--text headline">{{ item.short }}</span>
                         </v-list-item-avatar>
 
-                        <v-list-item-content>
+                        <v-list-item-content class="my-auto">
                           <p class="text">{{item.name}}</p>
                           <span class="subtext">{{item.subtext}}</span>
                         </v-list-item-content>
@@ -75,17 +75,15 @@
                           >{{ capabilityCodes[selectedResource].short }}{{i + 1}}</span>
                         </v-list-item-avatar>
 
-                        <v-list-item-content>
-                          <p class="subtext">{{item.description}}</p>
+                        <v-list-item-content class="my-auto">
+                          <p class="subtext mb-0">{{item.description}}</p>
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
                   </v-list>
                 </div>
                 <div class="d-block d-sm-flex align-center mb-4 mt-4">
-                  <div class="ml-3 mr-3">
-                    <span @click="tab = 1" aria-controls>&lt;- back</span>
-                  </div>
+                  <v-btn class="ml-3 mr-3" text @click="tab = 1"> <v-icon>mdi-arrow-left</v-icon> back </v-btn>
                   <div class="text-right">
                     <span
                       class="selected-count mr-2"

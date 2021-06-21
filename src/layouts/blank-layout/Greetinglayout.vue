@@ -30,7 +30,7 @@
     <a
       class="white--text ml-auto mr-3 mt-3 signin-link d-block d-sm-none"
       v-if="user"
-      >Hi {{ user.firstName + " " + user.lastName }}
+      >Hi {{ user.firstName + " " + user.lastName }} &nbsp;
       <span class="v-underline" @click="logout"> Sign out ></span></a
     >
     <a

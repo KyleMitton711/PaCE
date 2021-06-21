@@ -12,7 +12,7 @@ export default {
       abbreviation: null,
       logo: null,
       url: null,
-      projectLead: null,
+      // projectLead: null,
     },
     dropzoneOptions: {
       url: "https://httpbin.org/post",

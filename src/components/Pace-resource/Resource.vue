@@ -95,6 +95,20 @@
           <p class="mb-0" v-if="resource.endorsements"><b>Certifications</b></p>
           <p v-if="resource.endorsements">{{ resource.endorsements }}</p>
 
+          <template v-if="resource.capabilityCodes.length > 0">
+            <p class="mt-4 mb-0"><b>Capabilities:</b></p>
+
+            <div>
+              <v-chip
+                class="ma-2"
+                v-for="(code, index) in resource.capabilityCodes"
+                :key="index"
+              >
+                {{ code }}
+              </v-chip>
+            </div>
+          </template>
+
           <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0">
             <b>Audience:</b>
           </p>

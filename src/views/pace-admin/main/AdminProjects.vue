@@ -63,11 +63,11 @@
                               <span>Abbreviation</span><span class="red--text ml-1">*</span>
                             </template>
                           </v-text-field>
-                          <v-text-field
+                          <!-- <v-text-field
                             label="ProjectLead"
                             v-model="form.projectLead"
                           >
-                          </v-text-field>
+                          </v-text-field> -->
                           <v-textarea
                             label="Description"
                             v-model="form.description"
@@ -256,7 +256,7 @@ export default {
       },
       { text: "Name", value: "name" },
       { text: "Abbreviation", value: "abbreviation" },
-      { text: "Lead", value: "projectLead" },
+      // { text: "Lead", value: "projectLead" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     projects: [],
@@ -267,7 +267,7 @@ export default {
       abbreviation: null,
       logo: null,
       url: null,
-      projectLead: null,
+      // projectLead: null,
     },
     search: null,
     form: {
@@ -276,7 +276,7 @@ export default {
       abbreviation: null,
       logo: null,
       url: null,
-      projectLead: null,
+      // projectLead: null,
     },
     deleteConfirmDialog: false,
     selectedItemId: null,
