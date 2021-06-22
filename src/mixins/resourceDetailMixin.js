@@ -11,6 +11,12 @@ export default {
     audienceItems: [],
     typeItems: [],
     modeItems: [],
+    contextItems: [],
+    illnessItems: [],
+    pedagogyItems: [],
+    roleItems: [],
+    symptomItems: [],
+    topicItems: [],
     snackbar: false
   }),
 
@@ -67,6 +73,90 @@ export default {
           for (let i = 0; i < this.modeItems.length ; i ++) {
             if (this.modeItems[i].id == id) {
               return this.modeItems[i].name;
+            }
+          }
+        });
+
+        return nameArray.join(', ');
+      } else return "";
+    },
+
+    selectedContextItems() {
+      if (this.resource && this.resource.tagContentContextIds) {
+        let nameArray = this.resource.tagContentContextIds.map(id => {
+          for (let i = 0; i < this.contextItems.length ; i ++) {
+            if (this.contextItems[i].id == id) {
+              return this.contextItems[i].name;
+            }
+          }
+        });
+
+        return nameArray.join(', ');
+      } else return "";
+    },
+
+    selectedIllnessItems() {
+      if (this.resource && this.resource.tagContentIllnessIds) {
+        let nameArray = this.resource.tagContentIllnessIds.map(id => {
+          for (let i = 0; i < this.illnessItems.length ; i ++) {
+            if (this.illnessItems[i].id == id) {
+              return this.illnessItems[i].name;
+            }
+          }
+        });
+
+        return nameArray.join(', ');
+      } else return "";
+    },
+
+    selectedPedagogyItems() {
+      if (this.resource && this.resource.tagContentPedagogyIds) {
+        let nameArray = this.resource.tagContentPedagogyIds.map(id => {
+          for (let i = 0; i < this.pedagogyItems.length ; i ++) {
+            if (this.pedagogyItems[i].id == id) {
+              return this.pedagogyItems[i].name;
+            }
+          }
+        });
+
+        return nameArray.join(', ');
+      } else return "";
+    },
+
+    selectedRoleItems() {
+      if (this.resource && this.resource.tagContentRoleIds) {
+        let nameArray = this.resource.tagContentRoleIds.map(id => {
+          for (let i = 0; i < this.roleItems.length ; i ++) {
+            if (this.roleItems[i].id == id) {
+              return this.roleItems[i].name;
+            }
+          }
+        });
+
+        return nameArray.join(', ');
+      } else return "";
+    },
+
+    selectedSymptomItems() {
+      if (this.resource && this.resource.tagContentSymptomIds) {
+        let nameArray = this.resource.tagContentSymptomIds.map(id => {
+          for (let i = 0; i < this.symptomItems.length ; i ++) {
+            if (this.symptomItems[i].id == id) {
+              return this.symptomItems[i].name;
+            }
+          }
+        });
+
+        return nameArray.join(', ');
+      } else return "";
+    },
+
+    selectedTopicItems() {
+      if (this.resource && this.resource.tagContentTopicIds) {
+        let nameArray = this.resource.tagContentTopicIds.map(id => {
+          for (let i = 0; i < this.topicItems.length ; i ++) {
+            if (this.topicItems[i].id == id) {
+              return this.topicItems[i].name;
             }
           }
         });
@@ -157,8 +247,15 @@ export default {
     if (this.resourceId) {
       this.resource = await this.getResourceDetail(this.resourceId);
     }
-    this.audienceItems = await this.getTags('FilterAudience');
-    this.typeItems = await this.getTags('FilterType');
-    this.modeItems = await this.getTags('FilterMode');
+    let res = await this.getTags();
+    this.audienceItems = res.filter(item => item.tagType == 11);
+    this.typeItems = res.filter(item => item.tagType == 12);
+    this.modeItems = res.filter(item => item.tagType == 13);
+    this.contextItems = res.filter(item => item.tagType == 25);
+    this.illnessItems = res.filter(item => item.tagType == 24);
+    this.pedagogyItems = res.filter(item => item.tagType == 21);
+    this.roleItems = res.filter(item => item.tagType == 26);
+    this.symptomItems = res.filter(item => item.tagType == 23);
+    this.topicItems = res.filter(item => item.tagType == 22);
   }
 };

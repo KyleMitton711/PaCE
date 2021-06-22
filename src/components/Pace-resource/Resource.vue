@@ -112,18 +112,51 @@
             </div>
           </template>
 
-          <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0">
-            <b>Audience:</b>
-          </p>
-          <p class="mb-0">{{ selectedAudienceItems }}</p>
-          <p class="mt-2 mb-0" v-if="selectedTypeItems.length > 0">
-            <b>Type:</b>
-          </p>
-          <p class="mb-0">{{ selectedTypeItems }}</p>
-          <p class="mt-2 mb-0" v-if="selectedModeItems.length > 0">
-            <b>Mode:</b>
-          </p>
-          <p class="mb-0">{{ selectedModeItems }}</p>
+          <template v-if="selectedAudienceItems.length > 0">
+            <p class="mt-2 mb-0">
+              <b class="text-uppercase">Audience: </b> {{ selectedAudienceItems }}
+            </p>
+          </template>
+          <template v-if="selectedTypeItems.length > 0">
+            <p class="mt-2 mb-0">
+              <b class="text-uppercase">Type: </b> {{ selectedTypeItems }}
+            </p>
+          </template>
+          <template v-if="selectedModeItems.length > 0">
+            <p class="mt-2 mb-0">
+              <b class="text-uppercase">Mode: </b> {{ selectedModeItems }}
+            </p>
+          </template>
+          <template v-if="selectedContextItems.length > 0">
+            <p class="mt-2 mb-0">
+              <b class="text-uppercase">Context: </b> {{ selectedContextItems }}
+            </p>
+          </template>
+          <template v-if="selectedIllnessItems.length > 0">
+            <p class="mt-2 mb-0">
+              <b class="text-uppercase">Illness: </b> {{ selectedIllnessItems }}
+            </p>
+          </template>
+          <template v-if="selectedPedagogyItems.length > 0">
+            <p class="mt-2 mb-0">
+              <b class="text-uppercase">Pedagogy: </b> {{ selectedPedagogyItems }}
+            </p>
+          </template>
+          <template v-if="selectedRoleItems.length > 0">
+            <p class="mt-2 mb-0">
+              <b class="text-uppercase">Role: </b> {{ selectedRoleItems }}
+            </p>
+          </template>
+          <template v-if="selectedSymptomItems.length > 0">
+            <p class="mt-2 mb-0">
+              <b class="text-uppercase">Symptom: </b> {{ selectedSymptomItems }}
+            </p>
+          </template>
+          <template v-if="selectedTopicItems.length > 0">
+            <p class="mt-2 mb-0">
+              <b class="text-uppercase">Topic: </b> {{ selectedTopicItems }}
+            </p>
+          </template>
         </div>
         <div class="pa-4 mb-0 mb-sm-10 mt-auto d-flex justify-end align-end">
           <v-tooltip left>
