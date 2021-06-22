@@ -14,8 +14,8 @@
             <v-col lg="7" md="7" class="pl-md-10">
               <div class="d-none d-sm-flex mt-10 mb-16 flex-lg-nowrap flex-sm-wrap">
                 <img class="logo" src="@/assets/PaCE_Logo_RGB.png" />
-                <a class="black--text ml-auto mr-3 mt-3 signin-link d-flex justify-end flex-wrap" v-if="user">
-                  <span>Hi {{ user.firstName + ' ' + user.lastName }}</span>&nbsp;
+                <a class="black--text ml-auto mr-3 mt-3 signin-link text-right" v-if="user">
+                  <span>{{ user.email }}</span> <br/>
                   <span class="v-underline" @click="logout">Sign out ></span>
                 </a>
                 <a

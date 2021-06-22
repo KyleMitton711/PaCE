@@ -18,7 +18,7 @@
                 <v-text-field
                   v-model="search"
                   append-icon="mdi-magnify"
-                  label="Search Users"
+                  :label="`Search ${pagination.total} Users`"
                   single-line
                   hide-details
                   clearable

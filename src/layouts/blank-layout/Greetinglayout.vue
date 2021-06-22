@@ -28,11 +28,11 @@
       />
     </v-dialog>
     <a
-      class="white--text ml-auto mr-3 mt-3 signin-link d-block d-sm-none"
+      class="white--text ml-auto mr-3 mt-3 signin-link d-block d-sm-none text-right"
       v-if="user"
-      >Hi {{ user.firstName + " " + user.lastName }} &nbsp;
-      <span class="v-underline" @click="logout"> Sign out ></span></a
-    >
+    >{{ user.email }} <br/>
+      <span class="v-underline" @click="logout"> Sign out ></span>
+    </a>
     <a
       @click="login"
       class="
@@ -45,8 +45,8 @@
         d-block d-sm-none
       "
       v-else
-      >Sign in ></a
-    >
+      >Sign in >
+    </a>
     <router-view />
   </v-app>
 </template>

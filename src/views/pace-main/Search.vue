@@ -7,9 +7,10 @@
             <v-col lg="5" md="5" cols="12" class="pa-0 full-height-md d-flex flex-column pt-0 left-block">
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
-                  <a class="white--text ml-auto mr-3 mt-3 white--text signin-link d-flex justify-end flex-wrap" v-if="user">
-                    <span>Hi {{ user.firstName + ' ' + user.lastName }} </span>&nbsp;
-                    <span class="v-underline" @click="logout"> Sign out ></span></a>
+                  <a class="white--text ml-auto mt-3 signin-link text-right" v-if="user">
+                    <span>{{ user.email }} </span> <br/>
+                    <span class="v-underline" @click="logout"> Sign out ></span>
+                  </a>
                   <a @click="login" class="v-underline white--text ml-auto mr-3 mt-3 white--text signin-link" v-else>Sign in ></a>
                 </div>
                 <h3 class="white--text page-title mt-4">Search</h3>
@@ -97,7 +98,7 @@
                       >
                         <v-checkbox
                           v-model="audience"
-                          @change="changeFilters()"
+                          @change="changeFilters"
                           :label="item.name"
                           :value="item.id"
                           hide-details
@@ -120,7 +121,7 @@
                       >
                         <v-checkbox
                           v-model="type"
-                          @change="changeFilters()"
+                          @change="changeFilters"
                           :label="item.name"
                           :value="item.id"
                           hide-details
@@ -143,7 +144,7 @@
                       >
                         <v-checkbox
                           v-model="mode"
-                          @change="changeFilters()"
+                          @change="changeFilters"
                           :label="item.name"
                           :value="item.id"
                           hide-details
@@ -292,6 +293,7 @@
               @close-modal="closeResource" 
               :resourceId="selectedResource.id" 
               :isModuleView="moduleMode" 
+              @view-program="viewProgram"
               v-else 
             />
           </v-dialog>
@@ -523,9 +525,11 @@ export default {
           this.$router.push('/resources');
         } else {
           let res = await this.filterResources(payload);
-          this.resources = [ ...this.resources, ...res.results];
           if ($state) {
+            this.resources = [ ...this.resources, ...res.results ];
             $state.loaded();
+          } else {
+            this.resources = [ ...res.results ];
           }
           this.pagination.pageSize = res.pageSize;
           this.pagination.total = res.total;
@@ -569,6 +573,9 @@ export default {
     }, 500),
 
     infiniteHandler($state) {
+      if (this.isLoadingResource) {
+        return;
+      }
       let totalPages = Math.ceil(this.pagination.total / this.pagination.pageSize);
       if (totalPages > this.pagination.pageIndex) {
         this.pagination.pageIndex ++;

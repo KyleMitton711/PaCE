@@ -76,7 +76,8 @@
               v-else
               @close-modal="closeResource" 
               :resourceId="selectedResource.id" 
-              :isModuleView="moduleMode" 
+              :isModuleView="moduleMode"
+              @view-program="viewProgram"
             />
           </v-dialog>
         </v-card>

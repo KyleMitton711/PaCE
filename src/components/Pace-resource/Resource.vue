@@ -84,6 +84,9 @@
           
           <a :href="resource.projectUrl" target="_blank">{{ resource.projectName }}</a>
           <div v-html="resource.overview" class="mt-6"></div>
+          <p v-if="!resource.isProgram && resource.items && resource.items.length > 0" class="mt-6">
+            Resource {{ resource.items[0].itemNum }} of <a @click="viewProgram(resource.items[0].id, 'SUMMARY')">{{ resource.items[0].title }}</a>
+          </p>
           <p v-if="resource.outcome" class="mb-2">
             <b>Learning Outcomes</b>
           </p>
@@ -219,7 +222,11 @@ export default {
 
     register() {
       this.toggleAuthModal('REGISTER');
-    }
+    },
+
+    viewProgram(item, viewMode) {
+      this.$emit('view-program', item, viewMode);
+    },
   },
 
   async mounted() {
