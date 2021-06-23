@@ -85,7 +85,7 @@
               <p>{{ resource.endorsements }}</p>
               <p v-if="resource.outcome" class="mb-2"><b>Learning Outcomes</b></p>
               <div v-html="resource.outcome" class="mt-2"></div>
-              <template v-if="resource.capabilityCodes.length > 0">
+              <!-- <template v-if="resource.capabilityCodes.length > 0">
                 <p class="mt-4 mb-0"><b>Capabilities:</b></p>
 
                 <div>
@@ -97,13 +97,22 @@
                     {{ code }}
                   </v-chip>
                 </div>
+              </template> -->
+              <template v-if="selectedAudienceItems.length > 0">
+                <p class="mt-2 mb-0">
+                  <b class="text-uppercase">Audience: </b> {{ selectedAudienceItems }}
+                </p>
               </template>
-              <p class="mt-4 mb-0" v-if="selectedAudienceItems.length > 0"><b>Audience:</b></p>
-              <p class="mb-0">{{ selectedAudienceItems }}</p>
-              <p class="mt-2 mb-0" v-if="selectedTypeItems.length > 0"><b>Type:</b></p>
-              <p class="mb-0">{{ selectedTypeItems }}</p>
-              <p class="mt-2 mb-0" v-if="selectedModeItems.length > 0"><b>Mode:</b></p>
-              <p class="mb-0">{{ selectedModeItems }}</p>
+              <template v-if="selectedTypeItems.length > 0">
+                <p class="mt-2 mb-0">
+                  <b class="text-uppercase">Type: </b> {{ selectedTypeItems }}
+                </p>
+              </template>
+              <template v-if="selectedModeItems.length > 0">
+                <p class="mt-2 mb-0">
+                  <b class="text-uppercase">Mode: </b> {{ selectedModeItems }}
+                </p>
+              </template>
             </div>
           </v-tab-item>
         </v-tabs-items>

@@ -99,17 +99,17 @@
           <p v-if="resource.endorsements">{{ resource.endorsements }}</p>
 
           <template v-if="resource.capabilityCodes.length > 0">
-            <p class="mt-4 mb-0"><b>Capabilities:</b></p>
-
-            <div>
-              <v-chip
-                class="ma-2"
-                v-for="(code, index) in resource.capabilityCodes"
-                :key="index"
-              >
-                {{ code }}
-              </v-chip>
-            </div>
+            <p class="mt-4 mb-0">
+              <b class="text-uppercase">Capabilities:</b>
+                <v-chip
+                  class="ma-2"
+                  v-for="(code, index) in resource.capabilityCodes"
+                  :key="index"
+                >
+                  {{ code }}
+                </v-chip>
+            </p>
+            
           </template>
 
           <template v-if="selectedAudienceItems.length > 0">
