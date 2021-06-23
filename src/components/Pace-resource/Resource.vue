@@ -224,6 +224,7 @@ export default {
         } else {
           this.snackbar = false;
           this.resource = await this.getResourceDetail(this.resourceId);
+          this.resource.capabilityCodes.sort(this.codeSort);
         }
       },
     },
@@ -232,6 +233,7 @@ export default {
       handler: async function (val) {
         if (val) {
           this.resource = await this.getResourceDetail(val);
+          this.resource.capabilityCodes.sort(this.codeSort);
         }
       },
     },

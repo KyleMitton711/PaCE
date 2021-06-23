@@ -240,12 +240,27 @@ export default {
         text: 'Link copied!',
         type: 'success'
       });
-    }
+    },
+
+    codeSort(a, b) {
+      let correctOrder = ['HP', 'CW', 'E', 'S'];
+      let firstNumber = a[a.length - 1];
+      let secondNumber = b[b.length - 1];
+      let firstIndex = correctOrder.indexOf(a.substring(0, a.length - 1));
+      let secondIndex = correctOrder.indexOf(b.substring(0, b.length - 1));
+      if (firstIndex > secondIndex) return 1;
+      else if (firstIndex == secondIndex) {
+        if (firstNumber > secondNumber) return 1;
+        else return -1;
+      }
+      else return -1;
+    },
   },
 
   async mounted() {
     if (this.resourceId) {
       this.resource = await this.getResourceDetail(this.resourceId);
+      this.resource.capabilityCodes.sort(this.codeSort);
     }
     let res = await this.getTags();
     this.audienceItems = res.filter(item => item.tagType == 11);

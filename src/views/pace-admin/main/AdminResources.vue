@@ -117,6 +117,7 @@
                             multiple
                             :error-messages="fieldErrors('form.capabilityCodes')"
                             @blur="$v.form.capabilityCodes.$touch()"
+                            @change="sortCapabilityCode"
                           >
                             <template v-slot:label>
                               <span>Capability Codes</span><span class="red--text ml-1">*</span>
@@ -465,10 +466,27 @@ export default {
     ...mapActions("tag", ["getTags"]),
 
     onOptionUpdated(options) {
-      console.log(options)
       this.sort.sortBy = options.sortBy[0];
       this.sort.isDescending = options.sortDesc[0];
       this.loadResources();
+    },
+
+    codeSort(a, b) {
+      let correctOrder = ['HP', 'CW', 'E', 'S'];
+      let firstNumber = a[a.length - 1];
+      let secondNumber = b[b.length - 1];
+      let firstIndex = correctOrder.indexOf(a.substring(0, a.length - 1));
+      let secondIndex = correctOrder.indexOf(b.substring(0, b.length - 1));
+      if (firstIndex > secondIndex) return 1;
+      else if (firstIndex == secondIndex) {
+        if (firstNumber > secondNumber) return 1;
+        else return -1;
+      }
+      else return -1;
+    },
+
+    sortCapabilityCode() {
+      this.form.capabilityCodes.sort(this.codeSort);
     },
     
     async initialize() {
@@ -500,6 +518,7 @@ export default {
       this.editedIndex = this.resources.indexOf(item);
       let res = await this.getResourceDetail(item.id);
       this.form = Object.assign({}, res);
+      this.form.capabilityCodes.sort(this.codeSort);
       this.dialog = true;
     },
 

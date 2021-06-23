@@ -30,7 +30,7 @@
     <a
       class="white--text ml-auto mr-3 mt-3 signin-link d-block d-sm-none text-right"
       v-if="user"
-    >{{ user.email }} <br/>
+    >{{ userInfo }} <br/>
       <span class="v-underline" @click="logout"> Sign out ></span>
     </a>
     <a
@@ -56,8 +56,13 @@ import Login from "@/views/pace-auth/Login";
 import Register from "@/views/pace-auth/Register";
 import ResetPassword from "@/views/pace-auth/ResetPassword";
 import { mapActions, mapGetters } from "vuex";
+import userInfoDisplayMixin from "@/mixins/userInfoDisplayMixin";
+
 export default {
   name: "Greetinglayout",
+
+  mixins: [userInfoDisplayMixin],
+
   components: {
     Login,
     Register,
