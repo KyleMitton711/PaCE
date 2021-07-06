@@ -8,7 +8,7 @@
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
                   <a class="white--text ml-auto mt-3 signin-link text-right" v-if="user">
-                    <span>{{ userInfo }} </span> <br/>
+                    <span><small>{{ userInfo }}</small></span> <br/>
                     <span class="v-underline" @click="logout"> Sign out ></span>
                   </a>
                   <a @click="login" class="v-underline white--text ml-auto mr-3 mt-3 white--text signin-link" v-else>Sign in ></a>

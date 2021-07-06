@@ -30,7 +30,7 @@
     <a
       class="white--text ml-auto mr-3 mt-3 signin-link d-block d-sm-none text-right"
       v-if="user"
-    >{{ userInfo }} <br/>
+    ><small>{{ userInfo }}</small><br/>
       <span class="v-underline" @click="logout"> Sign out ></span>
     </a>
     <a
