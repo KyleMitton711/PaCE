@@ -62,7 +62,11 @@ const actions = {
     async getCurrentResources ({commit}) {
         let result = await ResourceService.getCurrentResources()
         return result;
-    }
+    },
+    async refreshSearch ({commit}) {
+        let result = await ResourceService.refreshSearch()
+        return result;
+    },
 };
 
 export default {

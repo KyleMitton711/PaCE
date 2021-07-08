@@ -56,5 +56,11 @@ export default {
     let headers = { "Content-Type": "application/json-patch+json" };
     let res = await API.delete(`/api/bookmarks`, payload, headers);
     return res.data;
+  },
+
+  async refreshSearch () {
+    let headers = { "Content-Type": "application/json-patch+json" };
+    let res = await API.post(`/api/resource-search/refresh`, null, headers);
+    return res.data;
   }
 }

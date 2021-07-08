@@ -26,6 +26,7 @@
                 ></v-text-field>
               </v-toolbar-title>
               <v-spacer></v-spacer>
+              <v-btn color="primary" dark class="mb-2 mr-2" @click="refreshSearchResult"><v-icon>mdi-autorenew</v-icon>Re-index</v-btn>
               <v-dialog v-model="dialog" persistent max-width="800px">
                 <template v-slot:activator="{ on }">
                   <v-btn color="primary" dark class="mb-2" v-on="on"><v-icon>mdi-dots-grid</v-icon>Add Resource</v-btn>
@@ -462,7 +463,7 @@ export default {
 
   methods: {
     ...mapActions("project", ["getProjects"]),
-    ...mapActions("resource", ["filterResources", "addResource", "getResourceDetail", "deleteResource", "updateResource"]),
+    ...mapActions("resource", ["filterResources", "addResource", "getResourceDetail", "deleteResource", "updateResource", "refreshSearch"]),
     ...mapActions("tag", ["getTags"]),
 
     onOptionUpdated(options) {
@@ -617,7 +618,11 @@ export default {
     searchInput: debounce(async function () {
       this.pagination.pageIndex = 1;
       this.loadResources();
-    }, 500)
+    }, 500),
+
+    async refreshSearchResult() {
+      let res = await this.refreshSearch();
+    }
   }
 };
 </script>
