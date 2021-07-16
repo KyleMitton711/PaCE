@@ -13,7 +13,7 @@ const capabilityCodes = [{
     }]
 }, {
     id: 3,
-    name: "Care Workers",
+    name: "Care workers",
     short: "CW",
     items: [{
         description: "Person-centred communication to build trust, show empathy and demonstrate support for individuals and carers living with a life-limiting illness."
@@ -29,7 +29,7 @@ const capabilityCodes = [{
     name: "Educators",
     short: "E",
     items: [{
-        description: "Develop discipline-specific intended learning outcomes based on graduate capabilities in palliative care."
+        description: "Develop discipline-specific intended learning outcomes based on palliative care capabilities."
     }, {
         description: "Use reputable learning and teaching resources to support learners development of palliative care capabilities."
     }, {
