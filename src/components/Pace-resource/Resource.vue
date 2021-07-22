@@ -1,8 +1,7 @@
 <template>
-  <v-container class="py-0 resource-container">
-    <v-row class="white resource">
-      <v-col
-        cols="12"
+  <div class="py-0 resource-container">
+    <div class="white resource">
+      <div
         class="pa-0 full-height-md d-flex flex-column pt-0"
         v-if="resource"
       >
@@ -171,7 +170,7 @@
             <span>Share resource</span>
           </v-tooltip>
         </div>
-      </v-col>
+      </div>
       <v-snackbar v-model="snackbar" :multi-line="true" :timeout="-1">
         To keep items for later in 'My Resources' and for PaCE to recall your
         filters you need to sign-in.
@@ -182,8 +181,8 @@
           <a @click="snackbar = false">No thanks</a>
         </p>
       </v-snackbar>
-    </v-row>
-  </v-container>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -282,7 +281,7 @@ export default {
 
 .resource-container {
   min-height: 100%;
-  display: flex;
+  display: inline;
 }
 
 .resource {

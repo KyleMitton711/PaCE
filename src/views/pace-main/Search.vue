@@ -1,10 +1,10 @@
 <template>
   <v-container id="login" class="justify-center mt-0 pt-0 pb-0 full-height" tag="section">
     <v-row justify="center" class="full-height">
-      <v-col lg="11" md="11" sm="8" xl="7" class="pl-2 pr-2 pt-0 pb-0">
+      <v-col lg="11" md="11" sm="12" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4">
           <v-row class="bg-pace-yellow">
-            <v-col lg="5" md="5" cols="12" class="pa-0 full-height-md d-flex flex-column pt-0 left-block">
+            <v-col lg="5" md="5" sm="6" cols="12" class="pa-0 full-height-md d-flex flex-column pt-0 left-block">
               <div class="bg-pace-orange py-4 px-10">
                 <div class="text-right">
                   <a class="white--text ml-auto mt-3 signin-link text-right" v-if="user">
@@ -175,7 +175,7 @@
               </div>
             </v-col>
             
-            <v-col lg="7" md="7" cols="12" class="resource-block pa-2 white pa-md-5 d-flex flex-column">
+            <v-col lg="7" md="7" sm="6" cols="12" class="resource-block pa-2 white pa-md-5 d-flex flex-column">
               <div v-if="!isMobile">
                 <template v-if="user">
                   <v-tabs grow v-model="resourceListTab" color="white" slider-color="#FDBB2A" background-color="bg-pace-grey">

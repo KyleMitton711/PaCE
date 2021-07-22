@@ -1,7 +1,7 @@
 <template>
-<v-container class="py-0 resource-container">
-  <v-row class="white resource">
-    <v-col cols="12" class="pa-0 full-height-md d-flex flex-column pt-0" v-if="resource">
+<div class="py-0 resource-container">
+  <div class="white resource">
+    <div cols="12" class="pa-0 full-height-md d-flex flex-column pt-0" v-if="resource">
       <div class="bg-pace-orange py-3 px-4 page-header d-flex justify-space-between">
         <div class="page-header-title-block d-flex align-center">
           <v-icon
@@ -130,7 +130,7 @@
           <span>Share resource</span>
         </v-tooltip>
       </div>
-    </v-col>
+    </div>
     <v-snackbar
       v-model="snackbar"
       :multi-line="true"
@@ -144,8 +144,8 @@
           <a @click="snackbar = false">No thanks</a>
         </p>
     </v-snackbar>
-  </v-row>
-</v-container>
+  </div>
+</div>
 </template>
 
 <script>
@@ -259,7 +259,7 @@ export default {
 
 .resource-container {
   min-height: 100%;
-  display: flex;
+  display: inline;
 }
 
 .resource {
