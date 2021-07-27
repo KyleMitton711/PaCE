@@ -31,7 +31,7 @@
                   fixed-tabs
                 >
                   <v-tab>Filters:</v-tab>
-                  <v-tab>Audience {{ audience.length > 0 ? `(${audience.length})` : '' }}</v-tab>
+                  <v-tab>Audience&nbsp;{{ audience.length > 0 ? `(${audience.length})` : '' }}</v-tab>
                   <v-tab>Type {{ type.length > 0 ? `(${type.length})` : '' }}</v-tab>
                   <v-tab>Mode {{ mode.length > 0 ? `(${mode.length})` : '' }}</v-tab>
                 </v-tabs>
