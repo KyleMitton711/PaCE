@@ -3,9 +3,10 @@
     id="login"
     class="justify-center mt-10 mt-sm-0 pt-3 pt-sm-0 pb-3 pb-sm-0"
     tag="section"
+    :fluid="$vuetify.breakpoint.name != 'xl' && $vuetify.breakpoint.name != 'lg'"
   >
     <v-row justify="center">
-      <v-col lg="11" md="11" sm="8" xl="7" class="pl-2 pr-2 pt-0 pb-0">
+      <v-col lg="12" md="12" sm="12" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4 pl-2 pr-2">
           <v-row>
             <v-col lg="5" md="5" class="d-none d-md-flex pa-0 full-height left-panel">

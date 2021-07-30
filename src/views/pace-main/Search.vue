@@ -1,7 +1,7 @@
 <template>
-  <v-container id="login" class="justify-center mt-0 pt-0 pb-0 full-height" tag="section">
+  <v-container id="login" class="justify-center mt-0 pt-0 pb-0 full-height" tag="section" :fluid="$vuetify.breakpoint.name != 'xl' && $vuetify.breakpoint.name != 'lg'">
     <v-row justify="center" class="full-height">
-      <v-col lg="11" md="11" sm="12" xl="7" class="pl-2 pr-2 pt-0 pb-0">
+      <v-col lg="12" md="12" sm="12" xl="7" class="pl-2 pr-2 pt-0 pb-0">
         <v-card class="elevation-4">
           <v-row class="bg-pace-yellow">
             <v-col lg="5" md="5" sm="6" cols="12" class="pa-0 full-height-md d-flex flex-column pt-0 left-block">
