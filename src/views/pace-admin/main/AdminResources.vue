@@ -545,8 +545,8 @@ export default {
     },
 
     async save() {
-      this.form.overview = this.form.overview.replaceAll('rel=', 'target="_blank" rel=');
-      this.form.outcome = this.form.outcome.replaceAll('rel=', 'target="_blank" rel=');
+      this.form.overview = this.form.overview && this.form.overview.replaceAll('rel=', 'target="_blank" rel=');
+      this.form.outcome = this.form.outcome && this.form.outcome.replaceAll('rel=', 'target="_blank" rel=');
       if (this.editedIndex > -1) {
         if (this.form.items) {
           this.form.items = this.form.items.map(item => item.id);

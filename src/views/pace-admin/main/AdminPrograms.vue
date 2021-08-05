@@ -700,7 +700,7 @@ export default {
     },
 
     async save() {
-      this.form.overview = this.form.overview.replaceAll('rel=', 'target="_blank" rel=');
+      this.form.overview = this.form.overview && this.form.overview.replaceAll('rel=', 'target="_blank" rel=');
       this.selectedModules = this.selectedModules.map((item, index) => ({
         ...item,
         itemNum: index + 1,
