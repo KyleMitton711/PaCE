@@ -1,7 +1,7 @@
 <template>
   <v-container id="login" class="fill-height justify-center" tag="section">
     <v-row justify="center">
-      <v-col lg="11" sm="8" xl="7">
+      <v-col lg="11" md="11" sm="8" xl="7">
         <v-card class="elevation-4">
           <v-row>
             <v-col lg="7" md="6" class="d-none d-md-flex login-image">
