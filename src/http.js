@@ -1,6 +1,5 @@
 import axios from 'axios';
 import router from '@/router';
-// import Vue from 'vue'
 
 const VUE_APP_API_URL = process.env.VUE_APP_API_URL;
 

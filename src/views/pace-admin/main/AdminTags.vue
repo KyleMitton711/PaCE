@@ -199,9 +199,7 @@ export default {
 
   watch: {
     dialog(val) {
-      if (val) {
-        // this.$v.$touch();
-      } else {
+      if (val) {} else {
         this.close();
       }
     },

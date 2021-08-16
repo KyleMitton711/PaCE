@@ -409,7 +409,6 @@ export default {
     async save() {
       if (this.editedIndex > -1) {
         let res = await this.updateUser(this.form);
-        console.log(res)
         if (res === true) {
           this.$notify({
             text: 'User updated successfully',

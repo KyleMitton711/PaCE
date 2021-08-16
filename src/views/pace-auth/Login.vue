@@ -111,12 +111,6 @@ export default {
       }
     },
     close() {
-      // let previousRoute = localStorage.getItem('previousRoute');
-      // if (previousRoute && previousRoute != "null" && previousRoute != undefined) {
-      //   this.$router.push({ name: previousRoute });
-      // } else {
-      //   this.$router.push('/');
-      // }
       if (this.dialogView) {
         this.$emit('close-modal');
       } else {

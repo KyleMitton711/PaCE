@@ -369,7 +369,7 @@ export default {
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],
-      items: [], // modules
+      items: [],
     },
     search: null,
     form: {
@@ -383,7 +383,7 @@ export default {
       tagFilterAudienceIds: [],
       tagFilterTypeIds: [],
       tagFilterModeIds: [],
-      items: [], // modules
+      items: [],
     },
     filters: {
       isProgram: true,
@@ -446,7 +446,6 @@ export default {
 
     keymap () {
       return {
-        // 'esc+ctrl' is OK.
         'up': {
           keydown: this.moveUp,
         },
@@ -562,7 +561,6 @@ export default {
     },
 
     moveLeft() {
-      // selectedtoimport
       if (this.$refs.selectedtoimport) {
         let selectedCount = 0;
         let selectedids = [];

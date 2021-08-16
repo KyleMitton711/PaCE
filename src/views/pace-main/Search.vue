@@ -500,8 +500,6 @@ export default {
     browseResourceList() {
       if (window.innerWidth < 600) {
         this.$router.push('/resources');
-      } else {
-        // this.resourceListTab = 0;
       }
     },
 

@@ -23,7 +23,6 @@ const actions = {
     async login ({ commit }, payload) {
         return Auth.signIn(payload).then(result => {
             var status;
-            console.log(result)
             if (result.data == null) {
                 status = { successful: false, error: result.errors[0].errorMessage };
             }

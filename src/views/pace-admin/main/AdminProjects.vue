@@ -256,7 +256,6 @@ export default {
       },
       { text: "Name", value: "name" },
       { text: "Abbreviation", value: "abbreviation" },
-      // { text: "Lead", value: "projectLead" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     projects: [],
@@ -267,7 +266,6 @@ export default {
       abbreviation: null,
       logo: null,
       url: null,
-      // projectLead: null,
     },
     search: null,
     form: {
@@ -276,7 +274,6 @@ export default {
       abbreviation: null,
       logo: null,
       url: null,
-      // projectLead: null,
     },
     deleteConfirmDialog: false,
     selectedItemId: null,
