@@ -1,7 +1,7 @@
 const { GenerateSW } = require("workbox-webpack-plugin");
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === "development" ? "/vuejs-pwa/" : "/",
+  publicPath: "/",
   transpileDependencies: ["vuetify"],
   chainWebpack: (config) => {
     config.plugins.delete("prefetch");
