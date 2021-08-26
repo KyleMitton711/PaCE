@@ -32,7 +32,7 @@ module.exports = {
     iconPaths: {
       favicon32: null,
       favicon16: null,
-      appleTouchIcon: null,
+      appleTouchIcon: "./img/icons/64x64px-PIcon.png",
       maskIcon: null,
       msTileImage: null
     }
