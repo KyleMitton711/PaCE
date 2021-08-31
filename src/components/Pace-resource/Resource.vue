@@ -23,11 +23,6 @@
               @click="closeDialog"
             >mdi-arrow-left</v-icon>
             <span class="white--text page-header-title mr-3">
-              {{
-                isModuleView
-                  ? "Module " + (resource && resource.items[0].itemNum) + " : "
-                  : ""
-              }}
               {{ resource && resource.title }}
             </span>
             <v-tooltip bottom>
@@ -69,11 +64,6 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
               <a :href="resource.url" class="title mt-4" target="_blank" v-bind="attrs" v-on="on">
-                {{
-                  isModuleView
-                    ? "Module " + (resource && resource.items[0].itemNum) + " : "
-                    : ""
-                }}
                 {{ resource.title }}
               </a>
             </template>
