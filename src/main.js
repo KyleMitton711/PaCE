@@ -15,6 +15,8 @@ import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
 import 'tiptap-vuetify/dist/main.css'
 import InfiniteLoading from 'vue-infinite-loading';
 import VueHotkey from 'v-hotkey'
+import wb from "./registerServiceWorker";
+Vue.prototype.$workbox = wb;
 
 Vue.use(VueHotkey)
 Vue.use(InfiniteLoading, { /* options */ });

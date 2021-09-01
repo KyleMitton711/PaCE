@@ -10,12 +10,27 @@
 import { mapActions } from 'vuex';
 export default {
   name: 'App',
+
+  data() {
+    return {
+      showUpdateUI: false
+    }
+  },
   
   methods: {
-    ...mapActions("user", ["getCurrent"])
+    ...mapActions("user", ["getCurrent"]),
+    async accept() {
+      this.showUpdateUI = false;
+      await this.$workbox.messageSW({ type: "SKIP_WAITING" });
+    }
   },
 
   async created() {
+    if (this.$workbox) {
+      this.$workbox.addEventListener("waiting", () => {
+        this.showUpdateUI = true;
+      });
+    }
     let res = await this.getCurrent()
   }
 
