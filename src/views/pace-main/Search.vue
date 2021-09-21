@@ -41,6 +41,7 @@
                     <v-card class="elevation-1 pa-5 tab-content" v-if="!user && selectedCapabilities.length == 0 && audience.length == 0 && type.length == 0 && mode.length == 0">
                       <p class="mb-1">Welcome to the Palliative Care Education Directory</p> <br>
                       <p>To help you find what you need, take a moment to set your search filters</p>
+                      <p class="mb-0"><router-link to="/" class="capability-link"><b>Back to capability options</b></router-link></p>
                       <div class="mt-10">
                         <div class="text-right">
                           <span class="more-filters mr-5">Ok, show me</span>
